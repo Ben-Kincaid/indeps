@@ -1,6 +1,6 @@
-## **Depalyzer**
+## **Indeps**
 
-### Visualize the dependencies & sub-dependencies in your application.
+Visualize the dependencies & sub-dependencies in your application.
 
 ---
 
