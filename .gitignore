@@ -1,0 +1,8 @@
+# Ignore node packages.
+node_modules
+
+# Don't include the built library, stupid.
+lib
+
+# cuz Macos.
+.DS_STORE
