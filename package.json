@@ -9,7 +9,11 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "tsc --watch"
+    "build:watch": "tsc --watch",
+    "start": "node lib/cli.js",
+    "start:watch": "nodemon lib/cli.js",
+    "debug": "node --inspect-brk lib/cli.js",
+    "debug:watch": "nodemon --inspect-brk lib/cli.js"
   },
   "keywords": [
     "dependency",
@@ -30,6 +34,7 @@
     "@types/js-yaml": "^4.0.3",
     "@types/node": "^16.11.0",
     "@types/yargs": "^17.0.4",
+    "nodemon": "^2.0.13",
     "tsc": "^2.0.3",
     "typescript": "^4.4.4"
   }
