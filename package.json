@@ -2,8 +2,8 @@
   "name": "indeps",
   "version": "0.0.1",
   "description": "🔍 Visualize the dependencies & sub-dependencies in your Javascript application.",
-  "main": "index.js",
-  "bin": "cli/cli.js",
+  "main": "lib/index.js",
+  "bin": "lib/cli.js",
   "engines": {
     "node": "~16.10.0"
   },

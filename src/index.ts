@@ -30,13 +30,16 @@ interface ParsedData {
 
 const parseLock = ({ data, type }: ParseLockArgs) => {
   const doc = yarnParser(data);
-
-  console.log("Starting doc output: " + doc);
+  return doc;
 };
 
-const parseDeps = ({ data }: ParseDepsArgs) => {};
+const parseDeps = ({ data }: ParseDepsArgs) => {
+  return null;
+};
 
-const processParsedData = ({ deps, lock }: ParsedData) => {};
+const processParsedData = async ({ deps, lock }: ParsedData) => {
+  console.table({ deps, lock });
+};
 
 const initialize = async (depFiles: DepFiles) => {
   const { lock, deps } = depFiles;
@@ -44,21 +47,15 @@ const initialize = async (depFiles: DepFiles) => {
   const { type: lockType, path: lockPath } = lock;
   const { path: depsPath } = deps;
 
+  // parse the data for the lock file
   const lockData = fs.readFileSync(lockPath, "utf8");
   const parsedLock = parseLock({ data: lockData, type: lockType });
 
+  // parse the data for the package.json file
   const depsData = fs.readFileSync(depsPath, "utf8");
   const parsedDeps = parseDeps({ data: depsData });
 
   await processParsedData({ deps: parsedDeps, lock: parsedLock });
 };
 
-initialize({
-  lock: {
-    type: "yarn",
-    path: "/Users/benkincaid/Projects/npm-depviz/yarn.lock"
-  },
-  deps: {
-    path: "/Users/benkincaid/Projects/npm-depviz/package.json"
-  }
-});
+export default initialize;
