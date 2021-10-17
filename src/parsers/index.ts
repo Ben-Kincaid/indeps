@@ -1,5 +1,4 @@
-import yarnParser, { getYarnVersion } from "./yarnParser";
-import yarnV1Parser from "./yarnV1Parser";
+import yarnV1 from "./yarnV1";
+import { ParsedLock, LockType } from "./types";
 
-export { getYarnVersion, yarnV1Parser };
-export default yarnParser;
+export { yarnV1, ParsedLock, LockType };
