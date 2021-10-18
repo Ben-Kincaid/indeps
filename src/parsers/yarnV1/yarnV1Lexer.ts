@@ -55,7 +55,7 @@ interface Token {
   category: CategoryTypes;
 }
 
-type Lexed = Array<Token>;
+type LexedLock = Array<Token>;
 
 function computeTokenCategory(type: TokenTypes): CategoryTypes {
   switch (type) {
@@ -150,6 +150,7 @@ function tokenise(input: string): Array<Token> {
         chop++;
       }
     } else if (input[0] === '"') {
+      // handle commas
       let i = 1;
 
       for (; i < input.length; i++) {
@@ -167,22 +168,28 @@ function tokenise(input: string): Array<Token> {
 
       tokens.push(createToken("STRING", line, col, val));
     } else if (/^[0-9]/.test(input)) {
+      // handle numbers
       const val = /^[0-9]/.exec(input)![0];
       chop = val.length;
       tokens.push(createToken("NUMBER", line, col, Number(val)));
     } else if (/^true/.test(input)) {
+      // handle true booleans
       tokens.push(createToken("BOOLEAN", line, col, true));
       chop = 4;
     } else if (/^false/.test(input)) {
+      // handle false booleans
       tokens.push(createToken("BOOLEAN", line, col, false));
       chop = 5;
     } else if (input[0] === ":") {
+      // handle colons
       tokens.push(createToken("COLON", line, col));
       chop++;
     } else if (input[0] === ",") {
+      // handle commas
       tokens.push(createToken("COMMA", line, col));
       chop++;
     } else if (input[0]) {
+      // handle all other non-explicit, non-terminal strings
       let i = 0;
 
       for (; i < input.length; i++) {
@@ -200,24 +207,30 @@ function tokenise(input: string): Array<Token> {
       tokens.push(createToken("INVALID", line, col));
     }
 
+    // if no column diffrence was detected, throw invalid token 
     if (!chop) {
       tokens.push(createToken("INVALID", line, col));
     }
 
+    // adjust column to match chop
     col += chop;
+    
+
     lastNewLine = ["\n", "\r"].includes(input[0]) || input[1] === "\n";
     input = input.slice(chop);
   }
 
+  // push an EOF token
   tokens.push(createToken("EOF", line, col));
 
+  // return array of tokens
   return tokens;
 }
 
-const yarnV1Lexer = (data: string): Lexed => {
+const yarnV1Lexer = (data: string): LexedLock => {
   const lexed = tokenise(data);
   return lexed;
 };
 
-export { Lexed as YarnV1Lexed };
+export { LexedLock as YarnV1Lexed };
 export default yarnV1Lexer;

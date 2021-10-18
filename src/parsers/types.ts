@@ -15,7 +15,7 @@ interface LockDependencyFull extends LockDependency {
 interface ParsedLock {
   type: LockType;
   version: number;
-  dependencies: Array<LockDependencyFull>;
+  dependencies: Array<Partial<LockDependencyFull>>;
 }
 
 export { LockType, LockDependency, LockDependencyFull, ParsedLock };

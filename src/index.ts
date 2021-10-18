@@ -1,8 +1,5 @@
 import fs from "fs";
-import yaml from "js-yaml";
-import { yarnV1 as yarnV1Parser, ParsedLock, LockType } from "./parsers";
-
-interface ParsedDeps {}
+import { yarnV1 as yarnV1Parser, LockType, ParsedLock } from "./parsers";
 
 interface DepFiles {
   lock: {
@@ -19,13 +16,8 @@ interface ParseLockArgs {
   type: LockType;
 }
 
-interface ParseDepsArgs {
-  data: string;
-}
-
 interface ParsedData {
-  deps: any; //fix
-  lock: any; //fix
+  lock: ParsedLock; //fix
 }
 
 // parse the lock file into an object
@@ -41,31 +33,23 @@ const parseLock = ({ data, type }: ParseLockArgs): any => {
   return parsed;
 };
 
-// parse the explicit dependencies into an object
-const parseDeps = ({ data }: ParseDepsArgs) => {
-  return null;
-};
-
-// process the deps and lock for usage in client
+// process the parsed lockfile for usage in client
 // @FIX tbd - need to figure out best way to serve this data to the separated client
-const processParsedData = async ({ deps, lock }: ParsedData) => {
-  console.table({ deps, lock });
+const processParsedData = async ({ lock }: ParsedData) => {
+  // do something with the parsed lock data
 };
 
 // start indeps.
-const initialize = async (depFiles: DepFiles) => {
-  const { lock, deps } = depFiles;
-
+const start = async (depFiles: DepFiles) => {
+  const { lock } = depFiles;
   const { type: lockType, path: lockPath } = lock;
-  const { path: depsPath } = deps;
+
   // parse the data for the lock file
   const lockData = fs.readFileSync(lockPath, "utf8");
   const parsedLock = parseLock({ data: lockData, type: lockType });
-  // parse the data for the package.json file
-  const depsData = fs.readFileSync(depsPath, "utf8");
-  const parsedDeps = parseDeps({ data: depsData });
 
-  await processParsedData({ deps: parsedDeps, lock: parsedLock });
+  // handle the parsed lock file data
+  await processParsedData({ lock: parsedLock });
 };
 
-export default initialize;
+export default start;
