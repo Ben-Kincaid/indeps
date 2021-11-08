@@ -124,7 +124,7 @@ function tokenise(input: string): Array<Token> {
         nextNewline = input.length;
       }
 
-      const val = input.substr(chop, nextNewline);
+      const val = input.substr(chop, nextNewline).trim();
       chop = nextNewline;
       tokens.push(createToken("COMMENT", line, col, val));
     } else if (input[0] === " ") {
@@ -182,11 +182,11 @@ function tokenise(input: string): Array<Token> {
       chop = 5;
     } else if (input[0] === ":") {
       // handle colons
-      tokens.push(createToken("COLON", line, col));
+      tokens.push(createToken("COLON", line, col, ":"));
       chop++;
     } else if (input[0] === ",") {
       // handle commas
-      tokens.push(createToken("COMMA", line, col));
+      tokens.push(createToken("COMMA", line, col, ","));
       chop++;
     } else if (input[0]) {
       // handle all other non-explicit, non-terminal strings
@@ -207,14 +207,13 @@ function tokenise(input: string): Array<Token> {
       tokens.push(createToken("INVALID", line, col));
     }
 
-    // if no column diffrence was detected, throw invalid token 
+    // if no column diffrence was detected, throw invalid token
     if (!chop) {
       tokens.push(createToken("INVALID", line, col));
     }
 
     // adjust column to match chop
     col += chop;
-    
 
     lastNewLine = ["\n", "\r"].includes(input[0]) || input[1] === "\n";
     input = input.slice(chop);
@@ -232,5 +231,5 @@ const yarnV1Lexer = (data: string): LexedLock => {
   return lexed;
 };
 
-export { LexedLock as YarnV1Lexed };
+export { LexedLock as YarnV1Lexed, createToken as createYarnV1LexerToken };
 export default yarnV1Lexer;

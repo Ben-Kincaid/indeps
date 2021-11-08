@@ -8,6 +8,7 @@ const yarnV1 = (data: string): ParsedLock => {
 
   // parse & return the parsed lock data
   const parsed = parser(lexed);
+
   return parsed;
 };
 

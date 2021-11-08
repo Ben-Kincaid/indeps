@@ -1,43 +1,48 @@
-import { string } from "yargs";
 import { ParsedLock } from "..";
-import { YarnV1Lexed } from "./";
+import { YarnV1Lexed } from ".";
 
 const cleanLexem = (lexem: string): string => {
   return lexem.replace(/(^\"|\"$)/g, "");
 };
 
-const parsePackageTitle = (title: string): { name: string; range: string } => {
-  const cleanedTitle = cleanLexem(title);
+const parsePackageDeclarations = (
+  declarations: Array<string>
+): { name: string; specifications: Array<string> } => {
+  let packageName = "";
+  let packageSpecifications: Array<string> = [];
 
-  const nameMatches = cleanedTitle.match(/.+?(?=@)/g);
-  const rangeMatches = cleanedTitle.match(/[^@]+$/g);
+  declarations.forEach(declaration => {
+    const cleanedDeclaration = cleanLexem(declaration);
 
-  if (
-    !nameMatches ||
-    !rangeMatches ||
-    nameMatches.length > 1 ||
-    rangeMatches.length > 1
-  ) {
-    throw new Error(`There was an error while parsing package name: ${title}`);
-  }
+    const nameMatches = cleanedDeclaration.match(/.+?(?=@)/g);
+    const specMatches = cleanedDeclaration.match(/[^@]+$/g);
 
-  const name = nameMatches[0];
-  const range = rangeMatches[0];
+    if (
+      !nameMatches ||
+      !specMatches ||
+      nameMatches.length > 1 ||
+      specMatches.length > 1
+    ) {
+      throw new Error(
+        `There was an error while parsing package name: ${declaration}`
+      );
+    }
+
+    packageName = nameMatches[0];
+    packageSpecifications.push(specMatches[0]);
+  });
 
   return {
-    name,
-    range
+    name: packageName,
+    specifications: packageSpecifications
   };
 };
 
 const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
-  const deps: any = {
-    type: "yarn",
-    version: 1,
-    dependencies: []
-  };
+  const deps = [];
 
   let currentPackage: any = null;
+  let currentPackageDeclarations: any = [];
   let indentLevel = 0;
   for (var i = 0; i < lexed.length; i++) {
     const prevToken = lexed[i - 1];
@@ -60,10 +65,6 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
       continue;
     }
 
-    if (currentToken.type === "EOF") {
-      break;
-    }
-
     if (currentToken.type === "INDENT") {
       indentLevel = currentToken.lexem as number;
     }
@@ -72,17 +73,19 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
       indentLevel = 0;
     }
 
-    // if string following a newline, this is a new package
-    if (
-      currentToken.type === "STRING" &&
-      prevToken.type === "NEWLINE" &&
-      nextToken.type === "COLON"
-    ) {
-      const { name, range } = parsePackageTitle(currentToken.lexem as string);
+    // if string within
+    if (currentToken.type === "STRING" && indentLevel === 0) {
+      currentPackageDeclarations.push(currentToken.lexem);
+    }
+
+    if (currentToken.type === "COLON" && indentLevel === 0) {
+      const { name, specifications } = parsePackageDeclarations(
+        currentPackageDeclarations
+      );
 
       currentPackage = {
-        package: name,
-        range
+        name,
+        specifications
       };
     }
 
@@ -116,19 +119,25 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
       currentPackage.dependencies
     ) {
       currentPackage.dependencies.push({
-        package: cleanLexem(currentToken.lexem as string),
+        name: cleanLexem(currentToken.lexem as string),
         range: cleanLexem(nextToken.lexem as string)
       });
     }
 
     // if new line is met and the next token is string, the previous package object is complete and should be pushed to dependencies array
     if (
-      currentToken.type === "NEWLINE" &&
-      nextToken.type === "STRING" &&
-      currentPackage
+      (currentToken.type === "NEWLINE" &&
+        nextToken.type === "STRING" &&
+        currentPackage) ||
+      currentToken.type === "EOF"
     ) {
-      deps.dependencies.push(currentPackage);
+      if (currentPackage) deps.push(currentPackage);
+      currentPackageDeclarations = [];
       currentPackage = null;
+    }
+
+    if (currentToken.type === "EOF") {
+      break;
     }
   }
   return deps;
