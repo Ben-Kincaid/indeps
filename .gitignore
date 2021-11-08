@@ -1,8 +1,20 @@
 # Ignore node packages.
 node_modules
 
-# Don't include the built library, stupid.
-lib
+# Yarn 2 BS
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
+# Don't include the built library, stupid.
+lib/**/*
+
+# Generated jest files.
+coverage
+)
 # cuz Macos.
 .DS_STORE
