@@ -53,7 +53,7 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
     // throw error
     if (currentToken.type === "INVALID") {
       throw {
-        message: "Syntax Error in lexed data.",
+        msg: "Syntax Error in lexed data.",
         line: currentToken.position.line,
         col: currentToken.position.col,
         lexem: currentToken.lexem

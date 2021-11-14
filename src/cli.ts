@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-import startIndeps from "./index";
+import startIndeps from "./api";
 
 // @FIX add logic for automatically detecting lock/package.json
 // and for arg overrides

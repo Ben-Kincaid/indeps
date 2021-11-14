@@ -12,9 +12,10 @@ node_modules
 
 # Don't include the built library, stupid.
 lib/**/*
+public/**/*
 
 # Generated jest files.
 coverage
-)
+
 # cuz Macos.
 .DS_STORE
