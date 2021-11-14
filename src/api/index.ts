@@ -8,11 +8,14 @@ import {
 } from "./parsers";
 import Viewer from "./viewer";
 
-interface DepFiles {
-  lock: {
-    type: LockType;
-    path: string;
-  };
+interface LockInfo {
+  type: LockType;
+  path: string;
+}
+
+interface StartOpts {
+  lock: LockInfo;
+  port: number;
 }
 
 interface ParseLockArgs {
@@ -20,8 +23,9 @@ interface ParseLockArgs {
   type: LockType;
 }
 
-interface ParsedData {
-  lock: ParsedLock; //fix
+interface StartViewerOpts {
+  data: ParsedLock;
+  port: number;
 }
 
 function getYarnVersion(data: string): number {
@@ -57,15 +61,16 @@ const parseLock = ({ data, type }: ParseLockArgs): any => {
 };
 
 // process the parsed lockfile for usage in client
-const startViewer = async ({ lock }: ParsedData) => {
-  const viewer = new Viewer({ lockData: lock, port: 8123 });
+const startViewer = async ({ data, port }: StartViewerOpts) => {
+  const viewer = new Viewer({ lockData: data, port: port });
 
   await viewer.startServer();
 };
 
 // start indeps.
-const start = async (depFiles: DepFiles) => {
-  const { lock } = depFiles;
+const start = async (startOpts: StartOpts) => {
+  const { port } = startOpts;
+  const { lock } = startOpts;
   const { type: lockType, path: lockPath } = lock;
 
   let lockData: string;
@@ -93,7 +98,7 @@ const start = async (depFiles: DepFiles) => {
   debugger;
 
   // handle the parsed lock file data
-  await startViewer({ lock: parsedLock });
+  await startViewer({ data: parsedLock, port });
 };
 
 export default start;

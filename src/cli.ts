@@ -17,7 +17,10 @@ const argv = require("yargs")
   .describe(
     "f",
     "The yarn.lock to use for the visualization. Defaults to yarn.lock in current directory."
-  ).argv;
+  )
+  .alias("p", "port")
+  .nargs("p", 1)
+  .describe("p", "The port used to serve the visualizer client.").argv;
 
 const checkIfExists = (filePath: string): boolean => {
   const exists = fs.existsSync(filePath);
@@ -62,5 +65,6 @@ const getLockInfo = (): { path: string; type: LockType } => {
 const lock = getLockInfo();
 
 startIndeps({
-  lock: lock
+  lock: lock,
+  port: argv.p || 8008
 });
