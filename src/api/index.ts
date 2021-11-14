@@ -13,9 +13,6 @@ interface DepFiles {
     type: LockType;
     path: string;
   };
-  deps: {
-    path: string;
-  };
 }
 
 interface ParseLockArgs {
