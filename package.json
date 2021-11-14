@@ -8,6 +8,8 @@
     "node": "~16.10.0"
   },
   "scripts": {
+    "prepare": "husky install",
+    "lint:client": "eslint client -c client/.eslintrc.json",
     "build:node": "PKG_ENV=prod rollup -c",
     "build:client": "webpack --mode production",
     "dev:node": "PKG_ENV=dev rollup -c",
@@ -62,6 +64,7 @@
     "eslint": "^8.2.0",
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^7.0.4",
     "jest": "^27.3.0",
     "nodemon": "^2.0.13",
     "rollup": "^2.60.0",
