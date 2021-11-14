@@ -1,4 +1,5 @@
 import fs from "fs";
+import logger from "./logger";
 import {
   yarnV1 as parseYarnV1,
   yarnNext as parseYarnNext,
@@ -59,7 +60,6 @@ const parseLock = ({ data, type }: ParseLockArgs): any => {
 };
 
 // process the parsed lockfile for usage in client
-// @FIX tbd - need to figure out best way to serve this data to the separated client
 const startViewer = async ({ lock }: ParsedData) => {
   const viewer = new Viewer({ lockData: lock, port: 8123 });
 
@@ -75,6 +75,10 @@ const start = async (depFiles: DepFiles) => {
 
   // parse the data for the lock file
   try {
+    logger.log({
+      level: "info",
+      msg: "🔍 Beginning dependency analyzation..."
+    });
     lockData = fs.readFileSync(lockPath, "utf8");
   } catch (error) {
     throw new Error(
@@ -83,6 +87,11 @@ const start = async (depFiles: DepFiles) => {
   }
 
   const parsedLock = parseLock({ data: lockData, type: lockType });
+
+  logger.log({
+    level: "info",
+    msg: "🔍 Succesfully parsed dependencies..."
+  });
 
   debugger;
 
