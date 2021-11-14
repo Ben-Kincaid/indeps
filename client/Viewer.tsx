@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 const Viewer = () => {
   useEffect(() => {
-    const lockData = (window as any).lockData;
+    const lockData = (window as any).lockData; //eslint-disable-line
     console.log({ lockData });
   }, []);
 
