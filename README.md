@@ -59,8 +59,8 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage (as a CLI utility)</a></li>
-    <li><a href="#usage">Usage (as a function)</a></li>
+    <li><a href="#usage-as-a-cli-utility">Usage (as a CLI utility)</a></li>
+    <li><a href="#usage-as-a-function">Usage (as a function)</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -70,8 +70,6 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 <!-- Add image of viewer here once complete -->
 
