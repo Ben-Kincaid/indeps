@@ -1,0 +1,10 @@
+# ignore source files
+client
+src
+
+# ignore development files
+node_modules
+nodemon.json
+rollup.config.js
+webpack.config.js
+.husky
