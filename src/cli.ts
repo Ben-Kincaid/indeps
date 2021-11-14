@@ -66,5 +66,5 @@ const lock = getLockInfo();
 
 startIndeps({
   lock: lock,
-  port: argv.p || 8008
+  port: argv.p
 });

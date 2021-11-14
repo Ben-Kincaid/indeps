@@ -15,7 +15,7 @@ interface LockInfo {
 
 interface StartOpts {
   lock: LockInfo;
-  port: number;
+  port?: number;
 }
 
 interface ParseLockArgs {
@@ -98,7 +98,7 @@ const start = async (startOpts: StartOpts) => {
   debugger;
 
   // handle the parsed lock file data
-  await startViewer({ data: parsedLock, port });
+  await startViewer({ data: parsedLock, port: port || 8008 });
 };
 
 export default start;
