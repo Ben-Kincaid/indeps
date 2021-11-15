@@ -24,6 +24,12 @@ interface ParsedData {
   lock: ParsedLock; //fix
 }
 
+interface StartViewerOpts {
+  lock: ParsedLock;
+  indepsVersion: string;
+  packageName?: string;
+}
+
 function getYarnVersion(data: string): number {
   const lines = data.split("\n");
   if (!lines || lines.length < 2) {
@@ -57,8 +63,17 @@ const parseLock = ({ data, type }: ParseLockArgs): any => {
 };
 
 // process the parsed lockfile for usage in client
-const startViewer = async ({ lock }: ParsedData) => {
-  const viewer = new Viewer({ lockData: lock, port: 8123 });
+const startViewer = async ({
+  lock,
+  packageName,
+  indepsVersion
+}: StartViewerOpts) => {
+  const viewer = new Viewer({
+    lockData: lock,
+    port: 8123,
+    packageName,
+    indepsVersion
+  });
 
   await viewer.startServer();
 };
@@ -93,7 +108,7 @@ const start = async (depFiles: DepFiles) => {
   debugger;
 
   // handle the parsed lock file data
-  await startViewer({ lock: parsedLock });
+  await startViewer({ lock: parsedLock, packageName: "", indepsVersion: "" });
 };
 
 export default start;

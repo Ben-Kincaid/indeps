@@ -2,37 +2,41 @@ import { ParsedLock } from "./parsers";
 import http from "http";
 import path, { dirname } from "path";
 import logger from "./logger";
-import { fileURLToPath } from "url";
 import sirv from "sirv";
 
 interface ViewerOpts {
   port: number;
-  lockData?: ParsedLock;
+  lockData: ParsedLock;
+  indepsVersion: string;
+  packageName?: string;
 }
 
 const projectRoot = path.join(__dirname, "..");
 
 const renderTemplate = ({
   lockData,
-  title
+  packageName,
+  indepsVersion
 }: {
   lockData: ParsedLock;
-  title: string;
+  packageName?: string;
+  indepsVersion: string;
 }) => {
-  const appPath = path.join(__dirname, "../public");
   return `
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Indeps - ${title}</title>
+    <title>Indeps - ${packageName}</title>
     <script src="/bundle.js" type="text/javascript"></script>
   </head>
   <body>
     <div id="app"></div>
     <script type="text/javascript">
-      window.lockData = ${JSON.stringify(lockData)};
+      window.indeps__VERSION = ${indepsVersion || '""'};
+      window.indeps__PACKAGE_NAME = ${packageName || '""'};
+      window.indeps__LOCK_DATA = ${JSON.stringify(lockData)};
     </script>
   </body>
 </html>`;
@@ -40,20 +44,24 @@ const renderTemplate = ({
 
 class Viewer {
   viewerPort: number;
-  lockData?: ParsedLock;
+  lockData: ParsedLock;
+  indepsVersion: string;
+  packageName?: string;
 
   constructor(opts: ViewerOpts) {
     this.viewerPort = opts.port;
     this.lockData = opts.lockData;
-
+    this.packageName = opts.packageName;
+    this.indepsVersion = opts.indepsVersion;
     this.handleServerRequest = this.handleServerRequest.bind(this);
   }
 
   handleServerRequest(req: http.IncomingMessage, res: http.ServerResponse) {
     if (req.method === "GET" && req.url === "/") {
       const doc = renderTemplate({
-        lockData: this.lockData as ParsedLock,
-        title: "Test Project"
+        lockData: this.lockData,
+        packageName: this.packageName,
+        indepsVersion: this.indepsVersion
       });
 
       res.writeHead(200, { "content-type": "text/html" });
