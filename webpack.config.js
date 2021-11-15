@@ -72,6 +72,10 @@ const config = {
         test: /\.(sc|c)ss$/,
         exclude: ["/node_modules/", /\.module\.(sc|c)ss$/],
         use: [styleLoader, CSSLoader, postCSSLoader, sassLoader]
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        type: "asset/resource"
       }
     ]
   },
@@ -83,5 +87,15 @@ const config = {
     filename: "bundle.js"
   }
 };
+
+if (isDev) {
+  config.devServer = {
+    hot: true,
+    open: true,
+    proxy: {
+      "/": "http://localhost:8123"
+    }
+  };
+}
 
 module.exports = config;
