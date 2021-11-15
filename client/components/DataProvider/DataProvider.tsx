@@ -7,10 +7,24 @@ interface Props {
 }
 
 function DataProvider({ children }: Props): ReactElement {
-  const lockData = useRef(window.lockData);
+  const lockData = useRef(window.indeps__LOCK_DATA);
+  const version = useRef(window.indeps__VERSION);
+  const packageName = useRef(window.indeps__PACKAGE_NAME);
+
+  if (!lockData) {
+    throw new Error(
+      "No lockdata was found - something went wrong when analyzing your lockfile. Does it have proper syntax?"
+    );
+  }
 
   return (
-    <DataContext.Provider value={{ data: lockData.current }}>
+    <DataContext.Provider
+      value={{
+        lockData: lockData.current,
+        version: version.current,
+        packageName: packageName.current
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

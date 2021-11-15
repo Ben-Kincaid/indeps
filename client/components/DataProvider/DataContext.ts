@@ -1,8 +1,6 @@
 import React from "react";
-import { ParsedLock } from "../../api/parsers";
+import { GlobalData } from "./types";
 
-const context = React.createContext<{ data: ParsedLock | null }>({
-  data: null
-});
+const context = React.createContext<Partial<GlobalData>>({});
 
 export default context;
