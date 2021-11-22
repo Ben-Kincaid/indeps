@@ -47,6 +47,7 @@ const isDev = process.env.NODE_ENV !== "production";
 const styleLoader = isDev ? "style-loader" : MiniCssExtractPlugin.loader;
 
 const config = {
+  devtool: "inline-source-map",
   entry: path.resolve(__dirname, "./client/index.tsx"),
   module: {
     rules: [
