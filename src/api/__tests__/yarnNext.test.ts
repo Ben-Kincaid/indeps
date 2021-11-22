@@ -29,15 +29,15 @@ describe("yarnNext", () => {
           "bff48714944d67b160db71ba244fb0f3fe72e77ef2ec8414e2eeb56f2d926e404a13456b8b83a5392e217ba47dec2ec0c368801b31481813e94d185276c3e964",
         dependencies: [
           {
-            package: "domelementtype",
+            name: "domelementtype",
             range: "^2.0.1"
           },
           {
-            package: "domhandler",
+            name: "domhandler",
             range: "^4.2.0"
           },
           {
-            package: "entities",
+            name: "entities",
             range: "^2.0.0"
           }
         ]
@@ -63,11 +63,11 @@ describe("yarnNext", () => {
         integrity: undefined,
         dependencies: [
           {
-            package: "nan",
+            name: "nan",
             range: "^2.9.2"
           },
           {
-            package: "node-pre-gyp",
+            name: "node-pre-gyp",
             range: "^0.10.0"
           }
         ]
@@ -81,15 +81,15 @@ describe("yarnNext", () => {
           "bff48714944d67b160db71ba244fb0f3fe72e77ef2ec8414e2eeb56f2d926e404a13456b8b83a5392e217ba47dec2ec0c368801b31481813e94d185276c3e964",
         dependencies: [
           {
-            package: "domelementtype",
+            name: "domelementtype",
             range: "^2.0.1"
           },
           {
-            package: "domhandler",
+            name: "domhandler",
             range: "^4.2.0"
           },
           {
-            package: "entities",
+            name: "entities",
             range: "^2.0.0"
           }
         ]
@@ -106,11 +106,11 @@ describe("yarnNext", () => {
           "a1ce9b8f68a58c3bb735a669c00503317bc31014d0082d67e5537c9f2118e28e746ee9afced53be18e0fa5ff10b0d1fa450eb58676878e3e715332c920956e6d",
         dependencies: [
           {
-            package: "highlight.js",
+            name: "highlight.js",
             range: "^9.15.6"
           },
           {
-            package: "marked",
+            name: "marked",
             range: "^0.8.0"
           }
         ]
@@ -131,47 +131,47 @@ describe("yarnNext", () => {
         integrity: undefined,
         dependencies: [
           {
-            package: "@rollup/plugin-commonjs",
+            name: "@rollup/plugin-commonjs",
             range: "^18.0.0"
           },
           {
-            package: "@rollup/plugin-node-resolve",
+            name: "@rollup/plugin-node-resolve",
             range: "^11.0.1"
           },
           {
-            package: "@types/vscode",
+            name: "@types/vscode",
             range: "^1.54.0"
           },
           {
-            package: "@yarnpkg/fslib",
+            name: "@yarnpkg/fslib",
             range: "workspace:^"
           },
           {
-            package: "@yarnpkg/libzip",
+            name: "@yarnpkg/libzip",
             range: "workspace:^"
           },
           {
-            package: "esbuild",
+            name: "esbuild",
             range: "npm:esbuild-wasm@^0.11.20"
           },
           {
-            package: "rollup",
+            name: "rollup",
             range: "^2.43.0"
           },
           {
-            package: "rollup-plugin-esbuild",
+            name: "rollup-plugin-esbuild",
             range: "^3.0.2"
           },
           {
-            package: "rollup-plugin-terser",
+            name: "rollup-plugin-terser",
             range: "^7.0.2"
           },
           {
-            package: "tslib",
+            name: "tslib",
             range: "^1.13.0"
           },
           {
-            package: "vsce",
+            name: "vsce",
             range: "^1.85.1"
           }
         ]
