@@ -45,7 +45,7 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
             return [
               ...acc,
               {
-                package: dependencyName,
+                name: dependencyName,
                 range: pkg.dependencies[dependencyName]
               }
             ];

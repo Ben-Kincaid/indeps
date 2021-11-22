@@ -10,7 +10,7 @@ interface LockDependency {
 }
 
 interface SubDependency {
-  package: string;
+  name: string;
   range: string;
 }
 
