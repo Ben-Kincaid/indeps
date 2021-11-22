@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { LockDependency, ParsedLock } from "../../api/parsers";
+import { LockDependency } from "../../api/parsers";
 import useData from "../../hooks/useData";
 import useFilterSidebar from "../../hooks/useFilterSidebar";
 import useQueryFilter from "../../hooks/useQueryFilter";
@@ -12,7 +12,7 @@ const Row = ({ index, style, data, active, onClick }: any) => {
 
   const { name, specifications, version, resolved, integrity, dependencies } =
     item;
-  debugger;
+
   return (
     <DepsListItem
       onClick={onClick}
