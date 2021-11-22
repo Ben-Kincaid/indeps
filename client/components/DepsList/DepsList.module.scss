@@ -1,0 +1,18 @@
+@import "theme.scss";
+
+.container {
+  position: relative;
+}
+
+.listContainer {
+  margin-top: 1rem;
+}
+
+.badge {
+  text-align: right;
+}
+
+.badgeText {
+  color: $gray-200;
+  font-weight: 500;
+}
