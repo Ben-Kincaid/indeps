@@ -5,13 +5,16 @@ import Viewer from "./components/Viewer";
 
 import "./app.scss";
 import NavBar from "./components/NavBar";
+import { HashRouter } from "react-router-dom";
 
 function App() {
   return (
-    <DataProvider>
-      <NavBar />
-      <Viewer />
-    </DataProvider>
+    <HashRouter>
+      <DataProvider>
+        <NavBar />
+        <Viewer />
+      </DataProvider>
+    </HashRouter>
   );
 }
 
