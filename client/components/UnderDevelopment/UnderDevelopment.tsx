@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+
 import React, { ReactElement } from "react";
 
 import styles from "./UnderDevelopment.module.scss";
@@ -19,7 +21,7 @@ function UnderDevelopment(): ReactElement {
      |   _______   |  /
     /|  (_______)  | /
    ( |_____________|/
-  \.=======================.
+  \.=======================. 
   | ::::::::::::::::  ::: |
   | ::::::::::::::[]  ::: |
   |   -----------     ::: |
