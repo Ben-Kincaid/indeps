@@ -8,11 +8,14 @@ import {
 } from "./parsers";
 import Viewer from "./viewer";
 
-interface DepFiles {
-  lock: {
-    type: LockType;
-    path: string;
-  };
+interface LockInfo {
+  type: LockType;
+  path: string;
+}
+
+interface StartOpts {
+  lock: LockInfo;
+  port?: number;
 }
 
 interface ParseLockArgs {
@@ -20,13 +23,10 @@ interface ParseLockArgs {
   type: LockType;
 }
 
-interface ParsedData {
-  lock: ParsedLock; //fix
-}
-
 interface StartViewerOpts {
   lock: ParsedLock;
   indepsVersion: string;
+  port: number;
   packageName?: string;
 }
 
@@ -66,21 +66,24 @@ const parseLock = ({ data, type }: ParseLockArgs): any => {
 const startViewer = async ({
   lock,
   packageName,
-  indepsVersion
+  indepsVersion,
+  port
 }: StartViewerOpts) => {
   const viewer = new Viewer({
     lockData: lock,
-    port: 8123,
+    port: port,
     packageName,
     indepsVersion
   });
+
 
   await viewer.startServer();
 };
 
 // start indeps.
-const start = async (depFiles: DepFiles) => {
-  const { lock } = depFiles;
+const start = async (startOpts: StartOpts) => {
+  const { port } = startOpts;
+  const { lock } = startOpts;
   const { type: lockType, path: lockPath } = lock;
 
   let lockData: string;
@@ -108,7 +111,8 @@ const start = async (depFiles: DepFiles) => {
   debugger;
 
   // handle the parsed lock file data
-  await startViewer({ lock: parsedLock, packageName: "", indepsVersion: "" });
+
+  await startViewer({ lock: parsedLock, packageName: "", indepsVersion: "", port: port || 8008 });
 };
 
 export default start;
