@@ -69,7 +69,7 @@ indeps@v1.1.0, indeps@v2.2.0, indeps@v3.3.0:
 
     const quoteLexed = [
       createYarnV1LexerToken("NEWLINE", 2, 0, ""),
-      createYarnV1LexerToken("STRING", 2, 1, '"i n s i d e"'),
+      createYarnV1LexerToken("STRING", 2, 1, "i n s i d e"),
       createYarnV1LexerToken("STRING", 2, 15, "outside"),
       createYarnV1LexerToken("NEWLINE", 3, 0, ""),
       createYarnV1LexerToken("EOF", 3, 1, "")

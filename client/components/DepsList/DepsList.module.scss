@@ -1,0 +1,27 @@
+@import "styles/theme.scss";
+
+.container {
+  position: relative;
+}
+
+.listWrapper {
+  position: relative;
+}
+
+.topWrapper {
+  position: relative;
+  padding: 1rem;
+}
+
+.topWrapperInner {
+  @include container();
+}
+
+.badge {
+  text-align: right;
+}
+
+.badgeText {
+  color: $gray-200;
+  font-weight: 500;
+}

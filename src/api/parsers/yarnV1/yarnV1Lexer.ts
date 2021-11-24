@@ -163,7 +163,7 @@ function tokenise(input: string): Array<Token> {
         }
       }
 
-      const val = input.substring(0, i);
+      const val = input.substring(1, i - 1);
       chop = i;
 
       tokens.push(createToken("STRING", line, col, val));

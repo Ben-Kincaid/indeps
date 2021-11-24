@@ -14,7 +14,11 @@ export default [
       exports: "default",
       name: "main.ts"
     },
-    plugins: [typescript(), commonjs(), nodeResolve()]
+    plugins: [
+      typescript({ sourceMap: env !== "prod" }),
+      commonjs(),
+      nodeResolve()
+    ]
   },
   {
     input: `src/cli.ts`,
@@ -26,6 +30,10 @@ export default [
       exports: "none",
       name: "main.ts"
     },
-    plugins: [typescript(), commonjs(), nodeResolve()]
+    plugins: [
+      typescript({ sourceMap: env !== "prod" }),
+      commonjs(),
+      nodeResolve()
+    ]
   }
 ];
