@@ -76,7 +76,6 @@ const startViewer = async ({
     indepsVersion
   });
 
-
   await viewer.startServer();
 };
 
@@ -112,7 +111,12 @@ const start = async (startOpts: StartOpts) => {
 
   // handle the parsed lock file data
 
-  await startViewer({ lock: parsedLock, packageName: "", indepsVersion: "", port: port || 8008 });
+  await startViewer({
+    lock: parsedLock,
+    packageName: "",
+    indepsVersion: "",
+    port: port || 8008
+  });
 };
 
 export default start;
