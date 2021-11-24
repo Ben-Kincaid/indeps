@@ -1,4 +1,9 @@
-import React, { ChangeEvent, ReactElement, useState } from "react";
+import React, {
+  ChangeEvent,
+  ReactElement,
+  useState,
+  createContext
+} from "react";
 import Input from "../Input";
 import styles from "./FilterSidebar.module.scss";
 
@@ -16,7 +21,7 @@ interface Props {
   children: React.ReactNode | React.ReactNode[] | ChildrenRenderFn;
 }
 
-export const FilterSidebarContext = React.createContext<FilterSidebarState>({
+export const FilterSidebarContext = createContext<FilterSidebarState>({
   searchValue: "",
   filters: []
 });

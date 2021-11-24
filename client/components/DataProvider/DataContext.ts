@@ -1,6 +1,6 @@
-import React from "react";
+import { createContext } from "react";
 import { GlobalData } from "./types";
 
-const context = React.createContext<Partial<GlobalData>>({});
+const context = createContext<Partial<GlobalData>>({});
 
 export default context;

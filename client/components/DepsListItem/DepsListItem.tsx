@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React, { MouseEventHandler, ReactElement } from "react";
 
-import { LockDependency } from "../../api/parsers";
+import { LockDependency } from "src/api/parsers";
 import useElementSize from "../../hooks/useElementSize";
 import Divider from "../Divider";
 import Grow from "../Grow";

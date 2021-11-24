@@ -1,5 +1,5 @@
 import React, { forwardRef, ReactElement, useEffect, useState } from "react";
-import { LockDependency } from "../../api/parsers";
+import { LockDependency } from "src/api/parsers";
 import useData from "../../hooks/useData";
 import useFilterSidebar from "../../hooks/useFilterSidebar";
 import useQueryFilter from "../../hooks/useQueryFilter";

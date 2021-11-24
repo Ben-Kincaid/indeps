@@ -1,4 +1,4 @@
-import { ParsedLock } from "../api/parsers";
+import { ParsedLock } from "src/api/parsers";
 
 declare global {
   // add typings for server-side injected data
