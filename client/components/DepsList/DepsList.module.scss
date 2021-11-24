@@ -1,11 +1,20 @@
-@import "theme.scss";
+@import "styles/theme.scss";
 
 .container {
   position: relative;
 }
 
-.listContainer {
-  margin-top: 1rem;
+.listWrapper {
+  position: relative;
+}
+
+.topWrapper {
+  position: relative;
+  padding: 1rem;
+}
+
+.topWrapperInner {
+  @include container();
 }
 
 .badge {
@@ -15,4 +24,9 @@
 .badgeText {
   color: $gray-200;
   font-weight: 500;
+}
+
+.vListWrapper {
+  > * {
+  }
 }

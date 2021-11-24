@@ -1,23 +1,30 @@
-import React, { ReactElement } from "react";
+import classNames from "classnames";
+import React, { forwardRef, ReactElement } from "react";
 
 import styles from "./Grow.module.scss";
 
 interface Props {
   height: number | "auto";
   children: React.ReactNode | Array<React.ReactNode>;
+  className?: string;
 }
 
-function Grow({ height, children }: Props): ReactElement {
-  return (
-    <div
-      className={styles.grow}
-      style={{
-        height
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+const Grow = forwardRef<HTMLDivElement, Props>(
+  ({ height, className, children }, ref): ReactElement => {
+    return (
+      <div
+        className={classNames(styles.grow, className)}
+        ref={ref}
+        style={{
+          height
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+Grow.displayName = "Grow";
 
 export default Grow;
