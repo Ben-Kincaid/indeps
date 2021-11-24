@@ -1,7 +1,11 @@
+import React, { ReactElement, forwardRef } from "react";
+
 import classNames from "classnames";
-import React, { forwardRef, ReactElement } from "react";
 
 import styles from "./Grow.module.scss";
+
+
+
 
 interface Props {
   height: number | "auto";

@@ -1,10 +1,13 @@
-import classNames from "classnames";
 import React, { MouseEventHandler, ReactElement } from "react";
 
+import classNames from "classnames";
+
 import { LockDependency } from "src/api/parsers";
+
 import useElementSize from "../../hooks/useElementSize";
 import Divider from "../Divider";
 import Grow from "../Grow";
+
 import styles from "./DepsListItem.module.scss";
 
 interface Props extends LockDependency {

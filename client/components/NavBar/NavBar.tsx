@@ -1,9 +1,14 @@
 import React, { ReactElement } from "react";
+
+
 import { NavLink } from "react-router-dom";
 
 import logoLight from "../../assets/logo-light.png";
 
 import styles from "./NavBar.module.scss";
+
+
+
 
 function NavBar(): ReactElement {
   return (

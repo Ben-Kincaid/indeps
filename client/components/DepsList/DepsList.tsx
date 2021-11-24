@@ -1,12 +1,18 @@
-import React, { forwardRef, ReactElement, useEffect, useState } from "react";
-import { LockDependency } from "src/api/parsers";
-import useData from "../../hooks/useData";
-import useFilterSidebar from "../../hooks/useFilterSidebar";
-import useQueryFilter from "../../hooks/useQueryFilter";
-import DepsListItem from "../DepsListItem";
-import styles from "./DepsList.module.scss";
-import { Virtuoso, Components, ListProps } from "react-virtuoso";
+import React, { ReactElement, forwardRef, useEffect, useState } from "react";
+
+
 import classNames from "classnames";
+import { Components, ListProps, Virtuoso } from "react-virtuoso";
+
+import { LockDependency } from "src/api/parsers";
+import useData from "client/hooks/useData";
+import useFilterSidebar from "client/hooks/useFilterSidebar";
+import useQueryFilter from "client/hooks/useQueryFilter";
+import DepsListItem from "client/components/DepsListItem";
+
+import styles from "./DepsList.module.scss";
+
+
 
 interface VirtuosoListProps extends ListProps {
   className?: string;

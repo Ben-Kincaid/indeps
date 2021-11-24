@@ -1,11 +1,15 @@
 import React, {
   ChangeEvent,
   ReactElement,
-  useState,
-  createContext
+  createContext,
+  useState
 } from "react";
+
 import Input from "../Input";
+
 import styles from "./FilterSidebar.module.scss";
+
+
 
 export interface FilterSidebarState {
   searchValue: string;

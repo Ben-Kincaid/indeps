@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { DataContext } from "../../components/DataProvider";
 import { GlobalData } from "../../components/DataProvider/types";
 
