@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
-import { DataContext } from "../../components/DataProvider";
-import { GlobalData } from "../../components/DataProvider/types";
+import { DataContext } from "client/components/DataProvider";
+import { GlobalData } from "client/components/DataProvider/types";
 
 const useData = (): GlobalData => {
   const ctx = useContext(DataContext);

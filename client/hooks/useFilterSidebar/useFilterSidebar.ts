@@ -3,7 +3,7 @@ import { useContext } from "react";
 import {
   FilterSidebarContext,
   FilterSidebarState
-} from "../../components/FilterSidebar/FilterSidebar";
+} from "client/components/FilterSidebar";
 
 const useFilterSidebar = (): FilterSidebarState => {
   const { searchValue, filters } = useContext(FilterSidebarContext);

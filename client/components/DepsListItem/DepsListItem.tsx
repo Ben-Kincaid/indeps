@@ -3,10 +3,9 @@ import React, { MouseEventHandler, ReactElement } from "react";
 import classNames from "classnames";
 
 import { LockDependency } from "src/api/parsers";
-
-import useElementSize from "../../hooks/useElementSize";
-import Divider from "../Divider";
-import Grow from "../Grow";
+import useElementSize from "client/hooks/useElementSize";
+import Divider from "client/components/Divider";
+import Grow from "client/components/Grow";
 
 import styles from "./DepsListItem.module.scss";
 
