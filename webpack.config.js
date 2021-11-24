@@ -81,7 +81,11 @@ const config = {
     ]
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".scss"]
+    extensions: [".tsx", ".ts", ".js", ".scss"],
+    modules: [
+      path.resolve(__dirname, "node_modules"),
+      path.resolve(__dirname, "./")
+    ]
   },
   output: {
     path: path.resolve(__dirname, "public"),
@@ -94,7 +98,7 @@ if (isDev) {
     hot: true,
     open: true,
     proxy: {
-      "/": "http://localhost:8123"
+      "/": `http://localhost:8998`
     }
   };
 }
