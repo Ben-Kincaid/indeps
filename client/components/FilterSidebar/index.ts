@@ -3,6 +3,6 @@ import FilterSidebar, {
   FilterSidebarContext
 } from "./FilterSidebar";
 
-export { FilterSidebar, FilterSidebarState, FilterSidebarContext };
+export { FilterSidebarState, FilterSidebarContext };
 
 export default FilterSidebar;
