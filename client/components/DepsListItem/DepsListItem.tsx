@@ -1,10 +1,12 @@
 import classNames from "classnames";
-import React, { MouseEventHandler, ReactElement, useState } from "react";
+import React, { MouseEventHandler, ReactElement } from "react";
+
 import { LockDependency } from "../../api/parsers";
 import useElementSize from "../../hooks/useElementSize";
 import Divider from "../Divider";
 import Grow from "../Grow";
 import styles from "./DepsListItem.module.scss";
+
 interface Props extends LockDependency {
   active?: boolean;
   style?: React.CSSProperties;
@@ -14,7 +16,6 @@ interface Props extends LockDependency {
 
 function DepsListItem({
   name,
-  resolved,
   specifications,
   version,
   dependencies,

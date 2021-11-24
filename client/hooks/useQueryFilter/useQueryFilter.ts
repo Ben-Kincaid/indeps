@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-function useQueryFilter<T extends { [key: string]: any }>(
+function useQueryFilter<T extends object>(
   query: string,
   items: Array<T>,
   searchKey: string
@@ -8,7 +8,9 @@ function useQueryFilter<T extends { [key: string]: any }>(
   const filteredItems = useMemo(
     () =>
       items.filter(obj => {
-        if (String(obj[searchKey]).includes(query)) {
+        if (
+          String((obj as { [key: string]: unknown })[searchKey]).includes(query)
+        ) {
           return true;
         }
         return false;

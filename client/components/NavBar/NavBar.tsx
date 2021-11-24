@@ -1,8 +1,9 @@
 import React, { ReactElement } from "react";
-import styles from "./NavBar.module.scss";
-import logoLight from "../../assets/logo-light.png";
-import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+
+import logoLight from "../../assets/logo-light.png";
+
+import styles from "./NavBar.module.scss";
 
 function NavBar(): ReactElement {
   return (

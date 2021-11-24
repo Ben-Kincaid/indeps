@@ -12,30 +12,8 @@ interface VirtuosoListProps extends ListProps {
   className?: string;
 }
 
-const Row = ({ index, style, data, active, onClick, className }: any) => {
-  const item = data[index];
-
-  const { name, specifications, version, resolved, integrity, dependencies } =
-    item;
-
-  return (
-    <DepsListItem
-      onClick={onClick}
-      active={active}
-      style={style}
-      name={name}
-      specifications={specifications}
-      version={version}
-      resolved={resolved}
-      integrity={integrity}
-      dependencies={dependencies}
-      className={className}
-    />
-  );
-};
-
-const generateActiveStatesFromDeps = (deps: LockDependency[]) => {
-  return deps.map((dep, i) => {
+const generateInitialActiveStates = (deps: LockDependency[]) => {
+  return deps.map(() => {
     return false;
   });
 };
@@ -57,7 +35,7 @@ VirtuosoList.displayName = "VirtuosoList";
 
 function DepsList(): ReactElement {
   const { lockData } = useData();
-  const { searchValue, filters } = useFilterSidebar();
+  const { searchValue } = useFilterSidebar();
 
   const { items: deps } = useQueryFilter<LockDependency>(
     searchValue,
@@ -66,11 +44,11 @@ function DepsList(): ReactElement {
   );
 
   const [activeStates, setActiveStates] = useState(
-    generateActiveStatesFromDeps(deps)
+    generateInitialActiveStates(deps)
   );
 
   useEffect(() => {
-    setActiveStates(generateActiveStatesFromDeps(deps));
+    setActiveStates(generateInitialActiveStates(deps));
   }, [deps]);
 
   const handleItemClick = (index: number) => {
@@ -102,16 +80,32 @@ function DepsList(): ReactElement {
             height: "calc(100vh - 175px)",
             overflowX: "visible"
           }}
-          totalCount={deps.length}
-          itemContent={(index: number) => {
+          data={deps}
+          itemContent={(index: number, data) => {
             const active = activeStates[index];
-            return Row({
-              index,
-              data: deps,
-              active,
-              onClick: handleItemClick.bind(null, index),
-              className: styles.listItem
-            });
+            const item = data;
+            const {
+              name,
+              specifications,
+              version,
+              resolved,
+              integrity,
+              dependencies
+            } = item;
+
+            return (
+              <DepsListItem
+                onClick={handleItemClick.bind(null, index)}
+                active={active}
+                name={name}
+                specifications={specifications}
+                version={version}
+                resolved={resolved}
+                integrity={integrity}
+                dependencies={dependencies}
+                className={styles.listItem}
+              />
+            );
           }}
           components={{ List: VirtuosoList }}
         />

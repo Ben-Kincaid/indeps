@@ -1,10 +1,10 @@
-import React, { ChangeEvent, Children, ReactElement, useState } from "react";
+import React, { ChangeEvent, ReactElement, useState } from "react";
 import Input from "../Input";
 import styles from "./FilterSidebar.module.scss";
 
 export interface FilterSidebarState {
   searchValue: string;
-  filters: Array<any>;
+  filters: Array<unknown>;
 }
 
 type ChildrenRenderFn = (vals: {
@@ -23,7 +23,7 @@ export const FilterSidebarContext = React.createContext<FilterSidebarState>({
 
 function FilterSidebar({ children }: Props): ReactElement {
   const [searchValue, setSearchValue] = useState("");
-  const [filters, setFilters] = useState([]);
+  const [filters] = useState([]);
 
   const handleSearchChange = (evt: ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault();
