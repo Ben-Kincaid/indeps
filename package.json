@@ -16,7 +16,7 @@
     "build": "yarn clean && yarn build:client && yarn build:node",
     "build:node": "PKG_ENV=prod rollup -c",
     "build:client": "webpack --mode production",
-    "dev": "concurrently -s -n \"api,client,dev-server\" --prefix-colors 'yellow,blue,green' \"yarn dev:node\" \"yarn dev:client\" \"yarn start:watch\"",
+    "dev": "concurrently -s -n \"api,client,dev-server\" --prefix-colors 'yellow,blue,green' \"yarn dev:node\" \"yarn dev:client\" \"yarn start:watch --p=8008\"",
     "dev:node": "PKG_ENV=dev rollup -c --watch",
     "dev:client": "webpack serve --mode development",
     "start": "node lib/cli.js",
