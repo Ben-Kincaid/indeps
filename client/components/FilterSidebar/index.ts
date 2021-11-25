@@ -3,7 +3,7 @@ import FilterSidebar, {
   FilterSidebarContext
 } from "./FilterSidebar";
 
-export { FilterSidebar, FilterSidebarContext };
+export { FilterSidebarContext };
 export type { FilterSidebarState };
 
 export default FilterSidebar;
