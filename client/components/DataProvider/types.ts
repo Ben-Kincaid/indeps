@@ -1,7 +1,7 @@
-import { ParsedLock } from "src/api/parsers";
+import { ParsedData } from "src/api";
 
 export interface GlobalData {
-  lockData: ParsedLock;
+  data: ParsedData;
   version: string;
   packageName?: string;
 }

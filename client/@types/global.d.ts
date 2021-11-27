@@ -1,9 +1,9 @@
-import { ParsedLock } from "src/api/parsers";
+import { ParsedData } from "src/api";
 
 declare global {
   // add typings for server-side injected data
   interface Window {
-    indeps__LOCK_DATA: ParsedLock; // the parsed lock data
+    indeps__DATA: ParsedData; // the parsed lock data
     indeps__PACKAGE_NAME?: string; // the package name for this analyzation
     indeps__VERSION: string; // the current Indeps version
   }
