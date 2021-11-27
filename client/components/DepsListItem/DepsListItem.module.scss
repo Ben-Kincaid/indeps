@@ -62,6 +62,24 @@
 }
 
 .topMetaExpand {
+  > svg {
+    transform-origin: 50% 45%;
+    transform: rotate(0deg);
+    transition: 0.15s ease-out transform;
+    > polygon {
+      transition: 0.3s ease-out fill;
+      fill: $gray-400;
+    }
+  }
+}
+
+.topMetaExpandActive {
+  > svg {
+    transform: rotate(-180deg);
+    > polygon {
+      fill: $primary;
+    }
+  }
 }
 
 .topMetaExpandIcon {

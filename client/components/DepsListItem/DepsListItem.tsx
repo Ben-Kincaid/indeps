@@ -45,7 +45,11 @@ function DepsListItem({
               {dependencies ? dependencies.length : 0}
             </p>
           </div>
-          <div className={styles.topMetaExpand}>
+          <div
+            className={classNames(styles.topMetaExpand, {
+              [styles.topMetaExpandActive]: active
+            })}
+          >
             <svg
               className={styles.topMetaExpandIcon}
               version="1.1"
