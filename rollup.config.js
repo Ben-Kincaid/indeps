@@ -11,11 +11,11 @@ export default [
       dir: "lib",
       format: "cjs",
       sourcemap: env !== "prod",
-      exports: "default",
+      exports: "named",
       name: "main.ts"
     },
     plugins: [
-      typescript({ sourceMap: env !== "prod" }),
+      typescript({ sourceMap: env !== "prod", sourceRoot: __dirname }),
       commonjs(),
       nodeResolve()
     ]
@@ -31,7 +31,7 @@ export default [
       name: "main.ts"
     },
     plugins: [
-      typescript({ sourceMap: env !== "prod" }),
+      typescript({ sourceMap: env !== "prod", sourceRoot: __dirname }),
       commonjs(),
       nodeResolve()
     ]
