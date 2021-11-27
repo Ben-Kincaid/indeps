@@ -1,3 +1,7 @@
-import startIndeps from "./api";
+import { initializeIndeps } from "./api";
 
-export default startIndeps;
+const fns = {
+  initializeIndeps // start the indeps process
+};
+
+export { initializeIndeps };

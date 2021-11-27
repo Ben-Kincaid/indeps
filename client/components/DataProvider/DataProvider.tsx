@@ -2,17 +2,16 @@ import React, { ReactElement, useRef } from "react";
 
 import DataContext from "./DataContext";
 
-
 interface Props {
   children: React.ReactNode;
 }
 
 function DataProvider({ children }: Props): ReactElement {
-  const lockData = useRef(window.indeps__LOCK_DATA);
+  const data = useRef(window.indeps__DATA);
   const version = useRef(window.indeps__VERSION);
   const packageName = useRef(window.indeps__PACKAGE_NAME);
 
-  if (!lockData) {
+  if (!data) {
     throw new Error(
       "No lockdata was found - something went wrong when analyzing your lockfile. Does it have proper syntax?"
     );
@@ -21,7 +20,7 @@ function DataProvider({ children }: Props): ReactElement {
   return (
     <DataContext.Provider
       value={{
-        lockData: lockData.current,
+        data: data.current,
         version: version.current,
         packageName: packageName.current
       }}

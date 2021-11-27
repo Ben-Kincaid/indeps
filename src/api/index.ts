@@ -4,9 +4,34 @@ import {
   yarnV1 as parseYarnV1,
   yarnNext as parseYarnNext,
   LockType,
-  ParsedLock
+  ParsedLock,
+  LockDependency
 } from "./parsers";
 import Viewer from "./viewer";
+
+const TAG_DEPENDENCY = "TAG_DEPENDENCY";
+const TAG_DEV_DEPENDENCY = "TAG_DEV_DEPENDENCY";
+
+type PackageTag = typeof TAG_DEPENDENCY | typeof TAG_DEV_DEPENDENCY;
+
+interface FullLockDependency extends LockDependency {
+  tags: Array<PackageTag>;
+}
+
+export type ParsedData = Array<FullLockDependency>;
+
+interface ParsedDataArgs {
+  pkg?: PackageJson;
+  lock: ParsedLock;
+}
+
+interface ParsePkgArgs {
+  data: string;
+}
+
+interface PkgInfo {
+  path: string;
+}
 
 interface LockInfo {
   type: LockType;
@@ -15,6 +40,7 @@ interface LockInfo {
 
 interface StartOpts {
   lock: LockInfo;
+  pkg?: PkgInfo;
   port?: number;
 }
 
@@ -24,10 +50,15 @@ interface ParseLockArgs {
 }
 
 interface StartViewerOpts {
-  lock: ParsedLock;
+  data: ParsedData;
   indepsVersion: string;
   port: number;
   packageName?: string;
+}
+
+interface CreatePackageTagData {
+  deps: Array<string>;
+  devDeps: Array<string>;
 }
 
 function getYarnVersion(data: string): number {
@@ -41,9 +72,62 @@ function getYarnVersion(data: string): number {
   return lines[1] === "# yarn lockfile v1" ? 1 : 2;
 }
 
+const computePackageTags = (
+  name: string,
+  { deps, devDeps }: CreatePackageTagData
+): Array<PackageTag> => {
+  let tags: Array<PackageTag> = [];
+
+  for (var i = 0; i < deps.length; i++) {
+    const dep = deps[i];
+    if (dep === name) {
+      tags.push(TAG_DEPENDENCY);
+    }
+  }
+
+  for (var i = 0; i < devDeps.length; i++) {
+    const devDep = devDeps[i];
+    if (devDep === name) {
+      tags.push(TAG_DEV_DEPENDENCY);
+    }
+  }
+
+  return tags;
+};
+
+const parseData = ({ pkg, lock }: ParsedDataArgs) => {
+  let pkgDeps: Array<string>;
+  let pkgDevDeps: Array<string>;
+  let parsedData: ParsedData;
+
+  if (pkg) {
+    pkgDeps = Object.keys(pkg.dependencies || {});
+    pkgDevDeps = Object.keys(pkg.devDependencies || {});
+  }
+
+  parsedData = lock.map(lockItem => {
+    const pkgTags = computePackageTags(lockItem.name, {
+      deps: pkgDeps || [],
+      devDeps: pkgDevDeps || []
+    });
+
+    return {
+      ...lockItem,
+      tags: pkgTags
+    };
+  });
+
+  return parsedData;
+};
+
+const parsePkg = ({ data }: ParsePkgArgs): PackageJson => {
+  const parsed: PackageJson = JSON.parse(data);
+  return parsed;
+};
+
 // parse the lock file into an object
-const parseLock = ({ data, type }: ParseLockArgs): any => {
-  let parsed;
+const parseLock = ({ data, type }: ParseLockArgs): ParsedLock => {
+  let parsed: ParsedLock = [];
 
   if (type === "yarn") {
     const version = getYarnVersion(data);
@@ -64,13 +148,13 @@ const parseLock = ({ data, type }: ParseLockArgs): any => {
 
 // process the parsed lockfile for usage in client
 const startViewer = async ({
-  lock,
+  data,
   packageName,
   indepsVersion,
   port
 }: StartViewerOpts) => {
   const viewer = new Viewer({
-    lockData: lock,
+    data,
     port: port,
     packageName,
     indepsVersion
@@ -80,18 +164,20 @@ const startViewer = async ({
 };
 
 // start indeps.
-const start = async (startOpts: StartOpts) => {
-  const { port } = startOpts;
-  const { lock } = startOpts;
+const initializeIndeps = async (startOpts: StartOpts) => {
+  const { lock, pkg, port } = startOpts;
   const { type: lockType, path: lockPath } = lock;
 
   let lockData: string;
+  let pkgData: string;
+
+  let parsedPkg: PackageJson | undefined;
 
   // parse the data for the lock file
   try {
     logger.log({
       level: "info",
-      msg: "🔍 Beginning dependency analyzation..."
+      msg: "🔍 Starting dependency analysis..."
     });
     lockData = fs.readFileSync(lockPath, "utf8");
   } catch (error) {
@@ -100,23 +186,41 @@ const start = async (startOpts: StartOpts) => {
     );
   }
 
+  // get contents of pkg file
+  if (pkg) {
+    const { path: pkgPath } = pkg;
+    try {
+      logger.log({
+        level: "info",
+        msg: "🔍 Starting package.json analysis..."
+      });
+      pkgData = fs.readFileSync(pkgPath, "utf8");
+    } catch (error) {
+      throw new Error(
+        `There was an error parsing your package.json file at: ${pkgPath} \n${error}`
+      );
+    }
+
+    parsedPkg = parsePkg({ data: pkgData });
+  }
+
   const parsedLock = parseLock({ data: lockData, type: lockType });
 
+  const parsedData = parseData({ lock: parsedLock, pkg: parsedPkg });
+  debugger;
   logger.log({
     level: "info",
     msg: "🔍 Succesfully parsed dependencies..."
   });
 
-  debugger;
-
   // handle the parsed lock file data
 
   await startViewer({
-    lock: parsedLock,
+    data: parsedData,
     packageName: "",
     indepsVersion: "",
     port: port || 8008
   });
 };
 
-export default start;
+export { initializeIndeps };

@@ -3,25 +3,24 @@ import http from "http";
 import path, { dirname } from "path";
 import logger from "./logger";
 import sirv from "sirv";
+import { ParsedData } from "src/api";
 
 interface ViewerOpts {
   port: number;
-  lockData: ParsedLock;
+  data: ParsedData;
   indepsVersion: string;
   packageName?: string;
 }
 
-const projectRoot = path.join(__dirname, "..");
-
-const renderTemplate = ({
-  lockData,
-  packageName,
-  indepsVersion
-}: {
-  lockData: ParsedLock;
+interface RenderOpts {
+  data: ParsedData;
   packageName?: string;
   indepsVersion: string;
-}) => {
+}
+
+const projectRoot = path.join(__dirname, "..");
+
+const renderTemplate = ({ data, packageName, indepsVersion }: RenderOpts) => {
   return `
 <!DOCTYPE html>
 <html>
@@ -36,7 +35,7 @@ const renderTemplate = ({
     <script type="text/javascript">
       window.indeps__VERSION = ${indepsVersion || '""'};
       window.indeps__PACKAGE_NAME = ${packageName || '""'};
-      window.indeps__LOCK_DATA = ${JSON.stringify(lockData)};
+      window.indeps__DATA = ${JSON.stringify(data)};
     </script>
   </body>
 </html>`;
@@ -44,13 +43,13 @@ const renderTemplate = ({
 
 class Viewer {
   viewerPort: number;
-  lockData: ParsedLock;
+  data: ParsedData;
   indepsVersion: string;
   packageName?: string;
 
   constructor(opts: ViewerOpts) {
     this.viewerPort = opts.port;
-    this.lockData = opts.lockData;
+    this.data = opts.data;
     this.packageName = opts.packageName;
     this.indepsVersion = opts.indepsVersion;
     this.handleServerRequest = this.handleServerRequest.bind(this);
@@ -59,7 +58,7 @@ class Viewer {
   handleServerRequest(req: http.IncomingMessage, res: http.ServerResponse) {
     if (req.method === "GET" && req.url === "/") {
       const doc = renderTemplate({
-        lockData: this.lockData,
+        data: this.data,
         packageName: this.packageName,
         indepsVersion: this.indepsVersion
       });
@@ -79,7 +78,7 @@ class Viewer {
       msg: "🔍 Warming up server..."
     });
 
-    if (!this.lockData) {
+    if (!this.data || this.data.length === 0) {
       throw new Error("No lockdata found.");
     }
     const server = http
