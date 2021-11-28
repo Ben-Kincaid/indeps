@@ -1,6 +1,6 @@
 {
   "name": "indeps",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "🔍 Visualize the dependencies & sub-dependencies in your Javascript application.",
   "main": "lib/index.js",
   "bin": "lib/cli.js",
