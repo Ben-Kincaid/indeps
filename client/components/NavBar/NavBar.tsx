@@ -3,20 +3,25 @@ import React, { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
 
 import logoLight from "client/assets/logo-light.png";
+import useData from "client/hooks/useData";
 
 import styles from "./NavBar.module.scss";
 
 function NavBar(): ReactElement {
+  const { version, packageName } = useData();
+
   return (
     <div className={styles.nav}>
       <nav className={styles.mainNav} aria-label="primary">
         <div className={styles.branding}>
           <img className={styles.brandImage} src={logoLight} alt="Indeps" />
-          <span className={styles.brandVersion}>v0.6.0</span>
+          <span className={styles.brandVersion}>{version}</span>
         </div>
-        <div className={styles.name}>
-          <h6>project-name!</h6>
-        </div>
+        {packageName && (
+          <div className={styles.name}>
+            <h6>{packageName}</h6>
+          </div>
+        )}
       </nav>
       <nav className={styles.subNav}>
         <ul className={styles.subNavList}>
