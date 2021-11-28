@@ -4,12 +4,14 @@ import path, { dirname } from "path";
 import logger from "./logger";
 import sirv from "sirv";
 import { ParsedData } from "src/api";
+import open from "open";
 
 interface ViewerOpts {
   port: number;
   data: ParsedData;
   indepsVersion: string;
   packageName?: string;
+  open?: boolean;
 }
 
 interface RenderOpts {
@@ -46,12 +48,15 @@ class Viewer {
   data: ParsedData;
   indepsVersion: string;
   packageName?: string;
+  open?: boolean;
 
   constructor(opts: ViewerOpts) {
     this.viewerPort = opts.port;
     this.data = opts.data;
     this.packageName = opts.packageName;
     this.indepsVersion = opts.indepsVersion;
+    this.open = opts.open === undefined ? true : opts.open;
+
     this.handleServerRequest = this.handleServerRequest.bind(this);
   }
 
@@ -84,6 +89,10 @@ class Viewer {
     const server = http
       .createServer(this.handleServerRequest)
       .listen(this.viewerPort, "localhost", () => {
+        // open browser to the server
+        if (this.open)
+          open(`http://localhost:${this.viewerPort}`, { wait: false });
+
         logger.log({
           level: "info",
           msg: `🟢  Indeps started. Visit at http://localhost:${this.viewerPort}`
