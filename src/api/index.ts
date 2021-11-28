@@ -8,6 +8,7 @@ import {
   LockDependency
 } from "./parsers";
 import Viewer from "./viewer";
+import indepsPkg from "package.json";
 
 const TAG_DEPENDENCY = "TAG_DEPENDENCY";
 const TAG_DEV_DEPENDENCY = "TAG_DEV_DEPENDENCY";
@@ -213,12 +214,13 @@ const initializeIndeps = async (startOpts: StartOpts) => {
     msg: "🔍 Succesfully parsed dependencies..."
   });
 
-  // handle the parsed lock file data
+  // get current version specified in internal package.json
+  const indepsVersion = indepsPkg.version;
 
   await startViewer({
     data: parsedData,
-    packageName: "",
-    indepsVersion: "",
+    packageName: parsedPkg ? parsedPkg.name : "",
+    indepsVersion,
     port: port || 8008
   });
 };
