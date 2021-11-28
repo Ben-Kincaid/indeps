@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Redirect, Route, Switch } from "react-router";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 import ListViewer from "client/components/ListViewer";
 import TreeViewer from "client/components/TreeViewer";
