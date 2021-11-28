@@ -25,7 +25,9 @@ const argv = require("yargs")
   .describe(
     "pkg",
     "the package.json to use for the visualization. Defaults to package.json in current directory."
-  ).argv;
+  )
+  .boolean("no-open")
+  .describe("no-open", "Disable opening of browser on server start.").argv;
 
 const checkIfExists = (filePath: string): boolean => {
   const exists = fs.existsSync(filePath);
@@ -96,5 +98,6 @@ const pkg = getPkgInfo();
 initializeIndeps({
   lock: lock,
   pkg: pkg,
-  port: argv.p
+  port: argv.p,
+  open: argv.open
 });

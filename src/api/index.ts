@@ -43,6 +43,7 @@ interface StartOpts {
   lock: LockInfo;
   pkg?: PkgInfo;
   port?: number;
+  open?: boolean;
 }
 
 interface ParseLockArgs {
@@ -55,6 +56,7 @@ interface StartViewerOpts {
   indepsVersion: string;
   port: number;
   packageName?: string;
+  open?: boolean;
 }
 
 interface CreatePackageTagData {
@@ -152,13 +154,15 @@ const startViewer = async ({
   data,
   packageName,
   indepsVersion,
-  port
+  port,
+  open
 }: StartViewerOpts) => {
   const viewer = new Viewer({
     data,
     port: port,
     packageName,
-    indepsVersion
+    indepsVersion,
+    open
   });
 
   await viewer.startServer();
@@ -166,7 +170,7 @@ const startViewer = async ({
 
 // start indeps.
 const initializeIndeps = async (startOpts: StartOpts) => {
-  const { lock, pkg, port } = startOpts;
+  const { lock, pkg, port, open } = startOpts;
   const { type: lockType, path: lockPath } = lock;
 
   let lockData: string;
@@ -208,7 +212,7 @@ const initializeIndeps = async (startOpts: StartOpts) => {
   const parsedLock = parseLock({ data: lockData, type: lockType });
 
   const parsedData = parseData({ lock: parsedLock, pkg: parsedPkg });
-  debugger;
+
   logger.log({
     level: "info",
     msg: "🔍 Succesfully parsed dependencies..."
@@ -221,7 +225,8 @@ const initializeIndeps = async (startOpts: StartOpts) => {
     data: parsedData,
     packageName: parsedPkg ? parsedPkg.name : "",
     indepsVersion,
-    port: port || 8008
+    port: port || 8008,
+    open
   });
 };
 
