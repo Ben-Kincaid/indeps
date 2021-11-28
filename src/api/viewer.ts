@@ -33,8 +33,8 @@ const renderTemplate = ({ data, packageName, indepsVersion }: RenderOpts) => {
   <body>
     <div id="app"></div>
     <script type="text/javascript">
-      window.indeps__VERSION = ${indepsVersion || '""'};
-      window.indeps__PACKAGE_NAME = ${packageName || '""'};
+      window.indeps__VERSION = "${indepsVersion || ""}";
+      window.indeps__PACKAGE_NAME = "${packageName || ""}";
       window.indeps__DATA = ${JSON.stringify(data)};
     </script>
   </body>
