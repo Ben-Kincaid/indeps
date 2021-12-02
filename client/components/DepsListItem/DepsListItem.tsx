@@ -21,7 +21,7 @@ function DepsListItem({
   specifications,
   version,
   dependencies,
-  tags,
+  tags, //eslint-disable-line
   style,
   active,
   onClick,
