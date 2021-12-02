@@ -1,9 +1,15 @@
-import React, { ReactElement, forwardRef, useEffect, useState } from "react";
+import React, {
+  ReactElement,
+  forwardRef,
+  useEffect,
+  useState,
+  useMemo
+} from "react";
 
 import classNames from "classnames";
 import { Components, ListProps, Virtuoso } from "react-virtuoso";
 
-import { FullLockDependency } from "src/api";
+import { FullLockDependency, ParsedData } from "src/api";
 import useQueryFilter from "client/hooks/useQueryFilter";
 import DepsListItem from "client/components/DepsListItem";
 import useFilterSidebar from "client/hooks/useFilterSidebar";
@@ -38,7 +44,7 @@ VirtuosoList.displayName = "VirtuosoList";
 
 function DepsList(): ReactElement {
   const { data } = useData();
-  const { searchValue } = useFilterSidebar();
+  const { searchValue, filters } = useFilterSidebar();
 
   const { items: deps } = useQueryFilter<FullLockDependency>(
     searchValue,
@@ -46,13 +52,26 @@ function DepsList(): ReactElement {
     "name"
   );
 
+  const filteredItems = useMemo(() => {
+    if (filters.length === 0) return deps;
+
+    const filtered: ParsedData = [];
+
+    deps.forEach(item => {
+      const matched = item.tags.some(tag => filters.includes(tag));
+      if (matched) filtered.push(item);
+    });
+
+    return filtered;
+  }, [deps, filters]);
+
   const [activeStates, setActiveStates] = useState(
-    generateInitialActiveStates(deps)
+    generateInitialActiveStates(filteredItems)
   );
 
   useEffect(() => {
-    setActiveStates(generateInitialActiveStates(deps));
-  }, [deps]);
+    setActiveStates(generateInitialActiveStates(filteredItems));
+  }, [filteredItems]);
 
   const handleItemClick = (index: number) => {
     setActiveStates([
@@ -69,9 +88,9 @@ function DepsList(): ReactElement {
           <div className={styles.badge}>
             <small className={styles.badgeText}>
               (
-              {deps.length === 0
+              {filteredItems.length === 0
                 ? "No items found"
-                : `${deps.length} Dependencies`}
+                : `${filteredItems.length} Dependencies`}
               )
             </small>
           </div>
@@ -83,7 +102,7 @@ function DepsList(): ReactElement {
             height: "calc(100vh - 175px)",
             overflowX: "visible"
           }}
-          data={deps}
+          data={filteredItems}
           itemContent={(index: number, data) => {
             const active = activeStates[index];
             const item = data;
