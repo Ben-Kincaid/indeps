@@ -3,7 +3,7 @@ import React, { ReactElement, forwardRef, useEffect, useState } from "react";
 import classNames from "classnames";
 import { Components, ListProps, Virtuoso } from "react-virtuoso";
 
-import { LockDependency } from "src/api/parsers";
+import { FullLockDependency } from "src/api";
 import useQueryFilter from "client/hooks/useQueryFilter";
 import DepsListItem from "client/components/DepsListItem";
 import useFilterSidebar from "client/hooks/useFilterSidebar";
@@ -15,7 +15,7 @@ interface VirtuosoListProps extends ListProps {
   className?: string;
 }
 
-const generateInitialActiveStates = (deps: LockDependency[]) => {
+const generateInitialActiveStates = (deps: FullLockDependency[]) => {
   return deps.map(() => {
     return false;
   });
@@ -36,11 +36,10 @@ const VirtuosoList: Components["List"] = forwardRef<
 
 VirtuosoList.displayName = "VirtuosoList";
 
-function DepsList(): ReactElement {
-  const { data } = useData();
+function DepsList({ items }): ReactElement {
   const { searchValue } = useFilterSidebar();
 
-  const { items: deps } = useQueryFilter<LockDependency>(
+  const { items: deps } = useQueryFilter<FullLockDependency>(
     searchValue,
     data,
     "name"
@@ -93,7 +92,8 @@ function DepsList(): ReactElement {
               version,
               resolved,
               integrity,
-              dependencies
+              dependencies,
+              tags
             } = item;
 
             return (
@@ -103,6 +103,7 @@ function DepsList(): ReactElement {
                 name={name}
                 specifications={specifications}
                 version={version}
+                tags={tags}
                 resolved={resolved}
                 integrity={integrity}
                 dependencies={dependencies}
