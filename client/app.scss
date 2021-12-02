@@ -4,11 +4,18 @@ body {
   margin: 0;
   font-family: "Open Sans", sans-serif;
   min-width: 650px;
+  line-height: 1;
   > *,
   *:before,
   *:after {
     box-sizing: border-box;
   }
+}
+
+h3 {
+  font-size: 2.25rem;
+  font-weight: 500;
+  font-family: "Open Sans", sans-serif;
 }
 
 h4 {
