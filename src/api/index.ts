@@ -15,7 +15,7 @@ const TAG_DEV_DEPENDENCY = "TAG_DEV_DEPENDENCY";
 
 type PackageTag = typeof TAG_DEPENDENCY | typeof TAG_DEV_DEPENDENCY;
 
-interface FullLockDependency extends LockDependency {
+export interface FullLockDependency extends LockDependency {
   tags: Array<PackageTag>;
 }
 
@@ -60,8 +60,8 @@ interface StartViewerOpts {
 }
 
 interface CreatePackageTagData {
-  deps: Array<string>;
-  devDeps: Array<string>;
+  deps: { [key: string]: string | unknown };
+  devDeps: { [key: string]: string | unknown };
 }
 
 function getYarnVersion(data: string): number {
@@ -76,47 +76,50 @@ function getYarnVersion(data: string): number {
 }
 
 const computePackageTags = (
-  name: string,
+  lockDep: LockDependency,
   { deps, devDeps }: CreatePackageTagData
 ): Array<PackageTag> => {
   let tags: Array<PackageTag> = [];
 
-  for (var i = 0; i < deps.length; i++) {
-    const dep = deps[i];
-    if (dep === name) {
-      tags.push(TAG_DEPENDENCY);
-    }
-  }
+  Object.keys(deps).forEach(depName => {
+    const depSpec = deps[depName] as string;
 
-  for (var i = 0; i < devDeps.length; i++) {
-    const devDep = devDeps[i];
-    if (devDep === name) {
+    if (lockDep.name === depName && lockDep.specifications.includes(depSpec)) {
+      tags.push(TAG_DEPENDENCY);
+      return;
+    }
+  });
+
+  Object.keys(devDeps).forEach(depName => {
+    const depSpec = devDeps[depName] as string;
+
+    if (lockDep.name === depName && lockDep.specifications.includes(depSpec)) {
       tags.push(TAG_DEV_DEPENDENCY);
     }
-  }
+  });
 
   return tags;
 };
 
 const parseData = ({ pkg, lock }: ParsedDataArgs) => {
-  let pkgDeps: Array<string>;
-  let pkgDevDeps: Array<string>;
+  let pkgDeps: { [key: string]: string | unknown };
+  let pkgDevDeps: { [key: string]: string | unknown };
   let parsedData: ParsedData;
 
   if (pkg) {
-    pkgDeps = Object.keys(pkg.dependencies || {});
-    pkgDevDeps = Object.keys(pkg.devDependencies || {});
+    pkgDeps = pkg.dependencies!;
+    pkgDevDeps = pkg.devDependencies!;
   }
 
   parsedData = lock.map(lockItem => {
-    const pkgTags = computePackageTags(lockItem.name, {
+    const pkgTags = computePackageTags(lockItem, {
       deps: pkgDeps || [],
       devDeps: pkgDevDeps || []
     });
 
     return {
       ...lockItem,
-      tags: pkgTags
+      tags: pkgTags || []
     };
   });
 
