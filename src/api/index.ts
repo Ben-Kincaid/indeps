@@ -9,11 +9,17 @@ import {
 } from "./parsers";
 import Viewer from "./viewer";
 import indepsPkg from "package.json";
+import { off } from "process";
 
 const TAG_DEPENDENCY = "TAG_DEPENDENCY";
 const TAG_DEV_DEPENDENCY = "TAG_DEV_DEPENDENCY";
-
-type PackageTag = typeof TAG_DEPENDENCY | typeof TAG_DEV_DEPENDENCY;
+const TAG_TS_DEF = "TAG_TS_DEF";
+const TAG_SUB_DEPENDENCY = "TAG_SUB_DEPENDENCY";
+type PackageTag =
+  | typeof TAG_DEPENDENCY
+  | typeof TAG_DEV_DEPENDENCY
+  | typeof TAG_TS_DEF
+  | typeof TAG_SUB_DEPENDENCY;
 
 export interface FullLockDependency extends LockDependency {
   tags: Array<PackageTag>;
@@ -84,7 +90,11 @@ const computePackageTags = (
   Object.keys(deps).forEach(depName => {
     const depSpec = deps[depName] as string;
 
-    if (lockDep.name === depName && lockDep.specifications.includes(depSpec)) {
+    if (
+      lockDep.name === depName &&
+      lockDep.specifications.includes(depSpec) &&
+      !tags.includes(TAG_DEPENDENCY)
+    ) {
       tags.push(TAG_DEPENDENCY);
       return;
     }
@@ -93,10 +103,20 @@ const computePackageTags = (
   Object.keys(devDeps).forEach(depName => {
     const depSpec = devDeps[depName] as string;
 
-    if (lockDep.name === depName && lockDep.specifications.includes(depSpec)) {
+    if (
+      lockDep.name === depName &&
+      lockDep.specifications.includes(depSpec) &&
+      !tags.includes(TAG_DEV_DEPENDENCY)
+    ) {
       tags.push(TAG_DEV_DEPENDENCY);
     }
   });
+
+  if (tags.includes(TAG_DEV_DEPENDENCY) && lockDep.name.startsWith("@types/")) {
+    tags.push(TAG_TS_DEF);
+  }
+
+  if (tags.length === 0) tags.push(TAG_SUB_DEPENDENCY);
 
   return tags;
 };
