@@ -2,14 +2,14 @@ import React, { MouseEventHandler, ReactElement } from "react";
 
 import classNames from "classnames";
 
-import { LockDependency } from "src/api/parsers";
 import useElementSize from "client/hooks/useElementSize";
 import Divider from "client/components/Divider";
 import Grow from "client/components/Grow";
+import { FullLockDependency } from "src/api";
 
 import styles from "./DepsListItem.module.scss";
 
-interface Props extends LockDependency {
+interface Props extends FullLockDependency {
   active?: boolean;
   style?: React.CSSProperties;
   onClick: MouseEventHandler;
@@ -21,6 +21,7 @@ function DepsListItem({
   specifications,
   version,
   dependencies,
+  tags, //eslint-disable-line
   style,
   active,
   onClick,

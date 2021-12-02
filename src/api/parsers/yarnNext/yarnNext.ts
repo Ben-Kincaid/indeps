@@ -29,7 +29,6 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
       ).exec(specificationName);
 
       if (!nameMatches || !specMatches) {
-        debugger;
         throw new Error(
           `There was an error while parsing package name: ${specificationName}`
         );
