@@ -6,12 +6,13 @@ import React, {
 } from "react";
 
 import Input from "client/components/Input";
+import FilterItem from "client/components/FilterItem";
 
 import styles from "./FilterSidebar.module.scss";
 
 export interface FilterSidebarState {
   searchValue: string;
-  filters: Array<unknown>;
+  filters: Array<string>;
 }
 
 type ChildrenRenderFn = (vals: {
@@ -30,12 +31,21 @@ export const FilterSidebarContext = createContext<FilterSidebarState>({
 
 function FilterSidebar({ children }: Props): ReactElement {
   const [searchValue, setSearchValue] = useState("");
-  const [filters] = useState([]);
+  const [filters, setFilters] = useState<Array<string>>(["TAG_DEPENDENCY"]);
 
   const handleSearchChange = (evt: ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault();
     const { value } = evt.target;
     setSearchValue(value);
+  };
+
+  const handleFilterItemClick = (value: string) => {
+    if (filters.includes(value)) {
+      const newFilters = filters.filter(filterItem => value !== filterItem);
+      setFilters(newFilters);
+    } else {
+      setFilters(filters => [...filters, value]);
+    }
   };
 
   return (
@@ -53,6 +63,37 @@ function FilterSidebar({ children }: Props): ReactElement {
                 onChange={handleSearchChange}
                 fullWidth
               />
+            </div>
+            <div className={styles.sidebarFilters}>
+              <h5 className={styles.sidebarSectionHeader}>Filters</h5>
+              <form className={styles.sidebarFiltersForm}>
+                <ul className={styles.sidebarFiltersList}>
+                  <FilterItem
+                    value="TAG_DEPENDENCY"
+                    active={filters.includes("TAG_DEPENDENCY")}
+                    label="Project dependencies"
+                    onClick={handleFilterItemClick}
+                  />
+                  <FilterItem
+                    value="TAG_DEV_DEPENDENCY"
+                    active={filters.includes("TAG_DEV_DEPENDENCY")}
+                    label="Development dependencies"
+                    onClick={handleFilterItemClick}
+                  />
+                  <FilterItem
+                    value="TAG_SUB_DEPENDENCY"
+                    active={filters.includes("TAG_SUB_DEPENDENCY")}
+                    label="Sub-dependencies"
+                    onClick={handleFilterItemClick}
+                  />
+                  <FilterItem
+                    value="TAG_TS_DEF"
+                    active={filters.includes("TAG_TS_DEF")}
+                    label="@type packages"
+                    onClick={handleFilterItemClick}
+                  />
+                </ul>
+              </form>
             </div>
           </div>
         </aside>
