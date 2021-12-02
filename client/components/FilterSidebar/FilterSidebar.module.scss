@@ -14,9 +14,32 @@
 .sidebar {
   background-color: #c2c2d5;
   padding: 8.5rem 1rem 1.5rem;
+  @media (min-width: $screen-lg) {
+    padding: 8.5rem 1.25rem 1.5rem;
+  }
 }
 
 .content {
   margin-top: 7.4rem;
   width: 100%;
+}
+
+.sidebarSectionHeader {
+  margin: 0;
+}
+
+.sidebarFilters {
+  margin-top: 2.25rem;
+}
+
+.sidebarFiltersList {
+  list-style-type: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  > li {
+    margin-bottom: 1rem;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
 }
