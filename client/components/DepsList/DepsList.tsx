@@ -36,7 +36,8 @@ const VirtuosoList: Components["List"] = forwardRef<
 
 VirtuosoList.displayName = "VirtuosoList";
 
-function DepsList({ items }): ReactElement {
+function DepsList(): ReactElement {
+  const { data } = useData();
   const { searchValue } = useFilterSidebar();
 
   const { items: deps } = useQueryFilter<FullLockDependency>(
