@@ -4,9 +4,6 @@ import cn from "classnames";
 
 import styles from "./Input.module.scss";
 
-
-
-
 interface Props {
   name: string;
   id: string;
@@ -16,6 +13,7 @@ interface Props {
   placeholder?: string;
   fullWidth?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  autoComplete?: string;
 }
 
 function Input({
@@ -26,7 +24,8 @@ function Input({
   label,
   placeholder,
   fullWidth = false,
-  onChange
+  onChange,
+  autoComplete
 }: Props): ReactElement {
   return (
     <span className={styles.wrapper}>
@@ -39,6 +38,7 @@ function Input({
         className={cn(styles.input, {
           [styles.inputFullWidth]: fullWidth
         })}
+        autoComplete={autoComplete}
         placeholder={placeholder}
         name={name}
         id={id}
