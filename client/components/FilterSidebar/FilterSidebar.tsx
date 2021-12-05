@@ -60,6 +60,7 @@ function FilterSidebar({ children }: Props): ReactElement {
                 type="search"
                 value={searchValue}
                 placeholder="Search for a dependency..."
+                autoComplete="off"
                 onChange={handleSearchChange}
                 fullWidth
               />
