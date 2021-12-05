@@ -75,7 +75,7 @@ const config = {
         use: [styleLoader, CSSLoader, postCSSLoader, sassLoader]
       },
       {
-        test: /\.(png|jpg|gif)$/i,
+        test: /\.(png|jpg|gif|svg)$/i,
         type: "asset/resource"
       }
     ]

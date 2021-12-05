@@ -1,11 +1,8 @@
-import React, { ChangeEventHandler, ReactElement } from "react";
+import React, { ChangeEventHandler, ReactElement, useState } from "react";
 
 import cn from "classnames";
 
 import styles from "./Input.module.scss";
-
-
-
 
 interface Props {
   name: string;
@@ -16,6 +13,11 @@ interface Props {
   placeholder?: string;
   fullWidth?: boolean;
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  autoComplete?: string;
+}
+
+interface InputProps extends Props {
+  startAdornment?: React.FunctionComponent<Partial<Props>>;
 }
 
 function Input({
@@ -26,27 +28,53 @@ function Input({
   label,
   placeholder,
   fullWidth = false,
-  onChange
-}: Props): ReactElement {
+  onChange,
+  autoComplete,
+  startAdornment: StartAdornment
+}: InputProps): ReactElement {
+  const [focused, setFocused] = useState(false);
+
+  const handleFocus = () => {
+    setFocused(true);
+  };
+
+  const handleBlur = () => {
+    setFocused(false);
+  };
+
   return (
-    <span className={styles.wrapper}>
+    <div
+      className={cn(styles.container, {
+        [styles.containerFocused]: focused
+      })}
+    >
       {label && (
         <label className={styles.label} htmlFor={id}>
           {label}
         </label>
       )}
-      <input
-        className={cn(styles.input, {
-          [styles.inputFullWidth]: fullWidth
-        })}
-        placeholder={placeholder}
-        name={name}
-        id={id}
-        type={type}
-        value={value}
-        onChange={onChange}
-      />
-    </span>
+      <span className={styles.inputWrapper}>
+        {StartAdornment && (
+          <div className={styles.inputStartAdornment}>
+            <StartAdornment />
+          </div>
+        )}
+        <input
+          className={cn(styles.input, {
+            [styles.inputFullWidth]: fullWidth
+          })}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          autoComplete={autoComplete}
+          placeholder={placeholder}
+          name={name}
+          id={id}
+          type={type}
+          value={value}
+          onChange={onChange}
+        />
+      </span>
+    </div>
   );
 }
 

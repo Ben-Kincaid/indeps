@@ -7,8 +7,13 @@ import React, {
 
 import Input from "client/components/Input";
 import FilterItem from "client/components/FilterItem";
+import SearchIcon from "client/assets/search-icon.svg";
 
 import styles from "./FilterSidebar.module.scss";
+
+const InputIcon = () => {
+  return <img src={SearchIcon} style={{ height: "100%" }} />;
+};
 
 export interface FilterSidebarState {
   searchValue: string;
@@ -60,7 +65,9 @@ function FilterSidebar({ children }: Props): ReactElement {
                 type="search"
                 value={searchValue}
                 placeholder="Search for a dependency..."
+                autoComplete="off"
                 onChange={handleSearchChange}
+                startAdornment={InputIcon}
                 fullWidth
               />
             </div>
