@@ -7,12 +7,16 @@ import React, {
 
 import Input from "client/components/Input";
 import FilterItem from "client/components/FilterItem";
-import SearchIcon from "client/assets/search-icon.svg";
+import { ReactComponent as SearchIcon } from "client/assets/search-icon.svg";
 
 import styles from "./FilterSidebar.module.scss";
 
 const InputIcon = () => {
-  return <img src={SearchIcon} style={{ height: "100%" }} />;
+  return (
+    <span style={{ height: "25px" }}>
+      <SearchIcon height="25px" />
+    </span>
+  );
 };
 
 export interface FilterSidebarState {
