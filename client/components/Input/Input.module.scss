@@ -1,18 +1,35 @@
 @import "styles/theme.scss";
 
-.wrapper {
+.container {
+  outline: 1px solid transparent;
+  transition: 0.1s ease-out outline;
+}
+
+.containerFocused {
+  outline: 1px solid $primary;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+.inputStartAdornment {
+  display: block;
+  height: 25px;
+  padding-right: 0.5rem;
 }
 
 .input {
-  padding: 0.5rem 0.75rem;
   border: none;
-  background-color: #fff;
+  background-color: transparent;
   font-size: 1rem;
-  border-radius: 4px;
   &:focus {
     border: none;
-    outline: 1.2px solid lighten($primary, 20%);
-    background-color: none;
+    outline: none;
   }
 }
 
