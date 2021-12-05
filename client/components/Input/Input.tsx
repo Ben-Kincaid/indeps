@@ -1,7 +1,6 @@
 import React, { ChangeEventHandler, ReactElement, useState } from "react";
 
 import cn from "classnames";
-import classNames from "classnames";
 
 import styles from "./Input.module.scss";
 
@@ -45,7 +44,7 @@ function Input({
 
   return (
     <div
-      className={classNames(styles.container, {
+      className={cn(styles.container, {
         [styles.containerFocused]: focused
       })}
     >
