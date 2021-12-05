@@ -75,8 +75,19 @@ const config = {
         use: [styleLoader, CSSLoader, postCSSLoader, sassLoader]
       },
       {
-        test: /\.(png|jpg|gif|svg)$/i,
+        test: /\.(png|jpg|gif)$/i,
         type: "asset/resource"
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: "@svgr/webpack",
+            options: {
+              exportType: "named"
+            }
+          }
+        ]
       }
     ]
   },
