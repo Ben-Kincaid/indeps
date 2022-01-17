@@ -1,4 +1,4 @@
-import { ParsedLock } from "..";
+import { ParsedLock } from "../..";
 import { YarnV1Lexed } from ".";
 
 const cleanLexem = (lexem: string): string => {

@@ -5,11 +5,11 @@ import classNames from "classnames";
 import useElementSize from "client/hooks/useElementSize";
 import Divider from "client/components/Divider";
 import Grow from "client/components/Grow";
-import { FullLockDependency } from "src/api";
+import { FullDependency } from "src/api";
 
 import styles from "./DepsListItem.module.scss";
 
-interface Props extends FullLockDependency {
+interface Props extends FullDependency {
   active?: boolean;
   style?: React.CSSProperties;
   onClick: MouseEventHandler;

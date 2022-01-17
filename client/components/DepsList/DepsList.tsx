@@ -9,7 +9,7 @@ import React, {
 import classNames from "classnames";
 import { Components, ListProps, Virtuoso } from "react-virtuoso";
 
-import { FullLockDependency, ParsedData } from "src/api";
+import { FullDependency, ParsedData } from "src/api";
 import useQueryFilter from "client/hooks/useQueryFilter";
 import DepsListItem from "client/components/DepsListItem";
 import useFilterSidebar from "client/hooks/useFilterSidebar";
@@ -21,7 +21,7 @@ interface VirtuosoListProps extends ListProps {
   className?: string;
 }
 
-const generateInitialActiveStates = (deps: FullLockDependency[]) => {
+const generateInitialActiveStates = (deps: FullDependency[]) => {
   return deps.map(() => {
     return false;
   });
@@ -46,7 +46,7 @@ function DepsList(): ReactElement {
   const { data } = useData();
   const { searchValue, filters } = useFilterSidebar();
 
-  const { items: deps } = useQueryFilter<FullLockDependency>(
+  const { items: deps } = useQueryFilter<FullDependency>(
     searchValue,
     data,
     "name"

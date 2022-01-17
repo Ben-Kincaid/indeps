@@ -78,6 +78,7 @@ class Viewer {
   }
 
   async startServer() {
+    console.log("starting server?");
     logger.log({
       level: "info",
       msg: "🔍 Warming up server..."

@@ -1,5 +1,5 @@
 import yaml from "js-yaml";
-import { LockSubDependency, ParsedLock } from "../types";
+import { LockSubDependency, ParsedLock } from "../../types";
 
 interface ParsedPackage {
   version: string | null;
