@@ -113,11 +113,13 @@ function DepsList(): ReactElement {
               resolved,
               integrity,
               dependencies,
-              tags
+              tags,
+              paths
             } = item;
 
             return (
               <DepsListItem
+                paths={paths}
                 onClick={handleItemClick.bind(null, index)}
                 active={active}
                 name={name}

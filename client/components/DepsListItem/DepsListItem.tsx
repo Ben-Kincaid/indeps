@@ -18,6 +18,7 @@ interface Props extends FullDependency {
 
 function DepsListItem({
   name,
+  // paths,
   specifications,
   version,
   dependencies,
