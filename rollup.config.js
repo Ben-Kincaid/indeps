@@ -16,7 +16,10 @@ export default [
       name: "main.ts"
     },
     plugins: [
-      typescript({ sourceMap: env !== "prod", sourceRoot: __dirname }),
+      typescript({
+        sourceMap: env !== "prod",
+        include: ["./src/**/*"]
+      }),
       json(),
       commonjs(),
       nodeResolve()
@@ -33,7 +36,10 @@ export default [
       name: "main.ts"
     },
     plugins: [
-      typescript({ sourceMap: env !== "prod", sourceRoot: __dirname }),
+      typescript({
+        sourceMap: env !== "prod",
+        include: ["./src/**/*"]
+      }),
       json(),
       commonjs(),
       nodeResolve()
