@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { Graph } from "src/api/graph";
+import logger from "src/api/logger";
 import { LockDependency, LockType, ParsedLock } from "src/api/parsers";
 import npmParser from "src/api/parsers/npm";
 import yarnParser from "src/api/parsers/yarn";
@@ -307,15 +308,32 @@ async function initializeIndeps(startOpts: StartOpts) {
   }
 
   // get parsed lock data
+  logger.log({
+    level: "info",
+    msg: `🔍 Parsing your lockfile...`
+  });
   const lockParsed = parseLock({ data: lockRaw, type: lockType });
 
   // get parsed pkg data
+  logger.log({
+    level: "info",
+    msg: `🔍 Parsing your package.json file...`
+  });
   const pkgParsed = parsePkg({ data: pkgRaw });
 
   // // create DAG
+  logger.log({
+    level: "info",
+    msg: `🔍 Creating your dependency graph...`
+  });
   const lockGraph = createDependencyGraph(lockParsed);
 
   // // normalize parsed lock data w/ dependency path data && pkg data
+  logger.log({
+    level: "info",
+    msg: `🔍 Finalizing your dependency data...`
+  });
+
   const dependencyData = createDependencyData({
     lock: lockParsed,
     pkg: pkgParsed,
@@ -326,7 +344,7 @@ async function initializeIndeps(startOpts: StartOpts) {
   await startViewer({
     data: dependencyData,
     packageName: pkgParsed.name,
-    indepsVersion: "FIXME",
+    indepsVersion: indepsPkg.version || "x.x.x",
     port: port || 3988,
     open
   });
