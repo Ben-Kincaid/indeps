@@ -1,20 +1,22 @@
 import fs from "fs";
 import path from "path";
+
 import { Graph } from "src/api/graph";
 import logger from "src/api/logger";
+import Viewer from "src/api/viewer";
 import { LockDependency, LockType, ParsedLock } from "src/api/parsers";
+
 import npmParser from "src/api/parsers/npm";
 import yarnParser from "src/api/parsers/yarn";
+
 import {
   FullDependency,
-  LockInfo,
   PackageTag,
   ParsedData,
   StartOpts,
   StartViewerOpts,
   TAGS
 } from "src/api/types";
-import Viewer from "src/api/viewer";
 
 interface ParseLockOpts {
   data: string;
@@ -214,10 +216,6 @@ function createDependencyData({
   const out = lock.reduce<any>((acc, curr) => {
     const depId = `${curr.name}@${curr.version}`;
 
-    // get the packages various require paths
-    // const requirePath = graph.getParents(depId);
-    const requirePath: Array<string> = [];
-
     // compute the packges `tags` based on their lock dependency
     const tags = computePackageTags({
       dependencies: pkgDeps,
@@ -257,7 +255,7 @@ async function startViewer({
 }: StartViewerOpts) {
   const viewer = new Viewer({
     data,
-    port: port,
+    port,
     packageName,
     indepsVersion,
     open
@@ -321,26 +319,25 @@ async function initializeIndeps(startOpts: StartOpts) {
   });
   const pkgParsed = parsePkg({ data: pkgRaw });
 
-  // // create DAG
+  // create DAG
   logger.log({
     level: "info",
     msg: `🔍 Creating your dependency graph...`
   });
   const lockGraph = createDependencyGraph(lockParsed);
 
-  // // normalize parsed lock data w/ dependency path data && pkg data
+  // normalize parsed lock data w/ dependency path data && pkg data
   logger.log({
     level: "info",
     msg: `🔍 Finalizing your dependency data...`
   });
-
   const dependencyData = createDependencyData({
     lock: lockParsed,
     pkg: pkgParsed,
     graph: lockGraph
   });
 
-  // // start viewer with normalized data
+  // start viewer with normalized data
   await startViewer({
     data: dependencyData,
     packageName: pkgParsed.name,
