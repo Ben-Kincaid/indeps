@@ -38,9 +38,9 @@ function NavBar(): ReactElement {
             <NavLink
               className={styles.subNavListItemLink}
               activeClassName={styles.subNavListItemLinkActive}
-              to="/tree"
+              to="/graph"
             >
-              Tree View
+              Dependency Graph
             </NavLink>
           </li>
         </ul>
