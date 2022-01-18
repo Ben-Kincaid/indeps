@@ -1,0 +1,9 @@
+@import "styles/theme.scss";
+
+.polygon {
+  fill: $black;
+}
+
+.arrowLeft {
+  transform: rotate(180deg);
+}
