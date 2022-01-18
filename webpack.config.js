@@ -109,7 +109,7 @@ if (isDev) {
     hot: true,
     open: true,
     proxy: {
-      "/": `http://localhost:8008`
+      "/": `http://localhost:8088`
     }
   };
 }
