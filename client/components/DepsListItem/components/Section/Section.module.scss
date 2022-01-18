@@ -1,0 +1,22 @@
+@import "styles/theme.scss";
+
+.depsListItemSection {
+  margin-top: 1rem;
+}
+
+.depsListItemSectionDivider {
+  margin-bottom: 1rem;
+}
+
+.depsListItemSectionTitle {
+  font-weight: 300;
+  color: $gray-500;
+  margin-top: 0;
+  margin-bottom: 0.65em;
+}
+
+.depsListItemSectionList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}

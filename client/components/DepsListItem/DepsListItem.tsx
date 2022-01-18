@@ -1,11 +1,14 @@
-import React, { MouseEventHandler, ReactElement } from "react";
+import React, { MouseEventHandler, ReactElement, useMemo } from "react";
 
 import classNames from "classnames";
 
 import useElementSize from "client/hooks/useElementSize";
-import Divider from "client/components/Divider";
 import Grow from "client/components/Grow";
 import { FullDependency } from "src/api";
+import Arrow from "client/components/Icons/components/Arrow";
+
+import SectionItem from "./components/SectionItem";
+import Section from "./components/Section";
 
 import styles from "./DepsListItem.module.scss";
 
@@ -18,7 +21,7 @@ interface Props extends FullDependency {
 
 function DepsListItem({
   name,
-  // paths,
+  paths,
   specifications,
   version,
   dependencies,
@@ -29,6 +32,27 @@ function DepsListItem({
   className
 }: Props): ReactElement {
   const [ref, { height }] = useElementSize();
+
+  const normalizedPaths = useMemo(
+    () =>
+      paths.reduce<Array<Array<{ name: string; version: string | null }>>>(
+        (acc, curr) => {
+          const separated = curr.map(pathItem => {
+            const split = pathItem.match(/(.*)@(.*)/);
+
+            return {
+              name: !split || split.length !== 3 ? pathItem : split[1],
+              version: !split || split.length !== 3 ? null : split[2]
+            };
+          });
+
+          acc.push(separated.reverse());
+          return acc;
+        },
+        []
+      ),
+    [paths]
+  );
 
   return (
     <article className={classNames(styles.item, className)} style={style}>
@@ -98,23 +122,85 @@ function DepsListItem({
                 </div>
               </div>
 
+              {paths && paths.length > 0 && (
+                <Section
+                  title="Required by:"
+                  className={styles.depsListItemSection}
+                >
+                  {tags.includes("TAG_DEPENDENCY") && (
+                    <SectionItem className={styles.depsListItemSectionItem}>
+                      <span className={styles.sectionImportantValue}>
+                        Project Dependency
+                      </span>
+                    </SectionItem>
+                  )}
+                  {tags.includes("TAG_DEV_DEPENDENCY") && (
+                    <SectionItem className={styles.depsListItemSectionItem}>
+                      <span className={styles.sectionImportantValue}>
+                        Development Dependency
+                      </span>
+                    </SectionItem>
+                  )}
+                  {normalizedPaths.map(
+                    path =>
+                      path.length > 1 && (
+                        <SectionItem
+                          key={`test123${name}@${version}-${JSON.stringify(
+                            path
+                          )}`}
+                          className={styles.depsListItemSectionItem}
+                        >
+                          {path.map(({ name, version }, i) => (
+                            <React.Fragment key={`${name}@${version}`}>
+                              <span
+                                className={classNames(
+                                  styles.sectionPathValue,
+                                  styles.textPrimary
+                                )}
+                              >
+                                {name}
+                                <span
+                                  className={classNames(
+                                    styles.sectionPathVersion,
+                                    styles.textGrey
+                                  )}
+                                >
+                                  v{version}
+                                </span>
+                              </span>
+                              {i < path.length - 1 && (
+                                <Arrow
+                                  className={styles.pathArrow}
+                                  width="12px"
+                                  height="auto"
+                                  dir="right"
+                                />
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </SectionItem>
+                      )
+                  )}
+                </Section>
+              )}
+
               {dependencies && dependencies.length > 0 && (
-                <>
-                  <Divider className={styles.panelDivider} />
-                  <div className={styles.panelDependencies}>
-                    <p className={styles.panelMetaTitle}>Dependencies:</p>
-                    <ul className={styles.panelMetaList}>
-                      {dependencies?.map(({ name, range }) => (
-                        <li key={name} className={styles.panelMetaListItem}>
-                          <span className={styles.panelDependencyValue}>
-                            <span className={styles.textGrey}>{name}</span>{" "}
-                            {range}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
+                <Section
+                  title="Dependencies:"
+                  className={styles.depsListItemSection}
+                >
+                  {dependencies?.map(({ name, range }) => (
+                    <SectionItem
+                      key={`${name}@${range}`}
+                      className={styles.depsListItemSectionItem}
+                    >
+                      <span className={styles.panelDependencyValue}>
+                        <span className={styles.textPrimary}>{name}</span>{" "}
+                        {range}
+                      </span>
+                    </SectionItem>
+                  ))}
+                </Section>
               )}
             </div>
           </div>

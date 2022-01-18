@@ -161,6 +161,46 @@
   color: $black;
 }
 
-.textGrey {
+.textPrimary {
   color: $primary;
+}
+
+.textGrey {
+  color: $gray-500;
+}
+
+.sectionPathValue {
+  font-weight: 600;
+}
+
+.sectionPathVersion {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.sectionImportantValue {
+  font-weight: 600;
+  color: $yellow;
+}
+
+.depsListItemSection {
+  margin-top: 1rem;
+  > .depsListItemSectionItem {
+    margin-top: 0.5rem;
+    line-height: 1.3;
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+}
+
+.depsListItemSectionItem {
+}
+
+.pathArrow {
+  vertical-align: middle;
+  display: inline-block;
+  margin: 0 0.5rem;
 }
