@@ -127,7 +127,7 @@
 
 .panelMetaTitle {
   font-weight: 300;
-  color: $gray-500;
+  color: $black;
   margin-top: 0;
   margin-bottom: 0.65em;
 }
@@ -171,6 +171,7 @@
 
 .sectionPathValue {
   font-weight: 600;
+  vertical-align: middle;
 }
 
 .sectionPathVersion {
@@ -181,6 +182,11 @@
 }
 
 .sectionImportantValue {
+  font-weight: 600;
+  color: $green;
+}
+
+.sectionSecondaryValue {
   font-weight: 600;
   color: $yellow;
 }

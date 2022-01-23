@@ -136,7 +136,7 @@ function DepsListItem({
                   )}
                   {tags.includes("TAG_DEV_DEPENDENCY") && (
                     <SectionItem className={styles.depsListItemSectionItem}>
-                      <span className={styles.sectionImportantValue}>
+                      <span className={styles.sectionSecondaryValue}>
                         Development Dependency
                       </span>
                     </SectionItem>
