@@ -342,7 +342,7 @@ async function initializeIndeps(startOpts: StartOpts) {
     data: dependencyData,
     packageName: pkgParsed.name,
     indepsVersion: indepsPkg.version || "x.x.x",
-    port: port || 3988,
+    port: port || 8088,
     open
   });
 }

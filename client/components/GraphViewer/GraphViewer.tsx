@@ -2,9 +2,9 @@ import React, { ReactElement } from "react";
 
 import UnderDevelopment from "client/components/UnderDevelopment";
 
-import styles from "./TreeViewer.module.scss";
+import styles from "./GraphViewer.module.scss";
 
-function TreeViewer(): ReactElement {
+function GraphViewer(): ReactElement {
   return (
     <div className={styles.container}>
       <UnderDevelopment />
@@ -12,4 +12,4 @@ function TreeViewer(): ReactElement {
   );
 }
 
-export default TreeViewer;
+export default GraphViewer;

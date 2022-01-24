@@ -127,7 +127,7 @@
 
 .panelMetaTitle {
   font-weight: 300;
-  color: $gray-500;
+  color: $black;
   margin-top: 0;
   margin-bottom: 0.65em;
 }
@@ -161,6 +161,52 @@
   color: $black;
 }
 
-.textGrey {
+.textPrimary {
   color: $primary;
+}
+
+.textGrey {
+  color: $gray-500;
+}
+
+.sectionPathValue {
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.sectionPathVersion {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.sectionImportantValue {
+  font-weight: 600;
+  color: $green;
+}
+
+.sectionSecondaryValue {
+  font-weight: 600;
+  color: $yellow;
+}
+
+.depsListItemSection {
+  margin-top: 1rem;
+  > .depsListItemSectionItem {
+    margin-top: 0.5rem;
+    line-height: 1.3;
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+}
+
+.depsListItemSectionItem {
+}
+
+.pathArrow {
+  vertical-align: middle;
+  display: inline-block;
+  margin: 0 0.5rem;
 }
