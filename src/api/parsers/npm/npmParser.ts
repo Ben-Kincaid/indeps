@@ -54,18 +54,30 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
       ...(pkg.devDependencies || {})
     };
 
+    // @TODO this needs to be refactored big time
     const subSpecifications = Object.keys(parsed.dependencies).reduce(
       (acc, d1Key) => {
         const d1 = parsed.dependencies[d1Key];
-        if (
-          d1.requires &&
-          d1.requires[curr] &&
-          !acc.includes(d1.requires[curr]!)
-        ) {
-          if (!d1.dependencies || !d1.dependencies[curr]) {
+        if (d1.requires) {
+          if (
+            d1.requires[curr] &&
+            !acc.includes(d1.requires[curr]!) &&
+            !d1.dependencies
+          ) {
             acc.push(d1.requires[curr]!);
+          } else if (!d1.dependencies) {
+            if (d1.requires && d1.requires[curr]) acc.push(d1.requires[curr]!);
+          } else if (!d1.dependencies[curr]) {
+            Object.keys(d1.dependencies).forEach(d2Key => {
+              const d2 = d1.dependencies[d2Key];
+              if (d2.requires && d2.requires[curr]) {
+                debugger;
+                acc.push(d2.requires[curr]!);
+              }
+            });
           }
         }
+
         return acc;
       },
       [] as Array<string>

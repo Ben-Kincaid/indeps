@@ -47,7 +47,7 @@ describe("yarnNext", () => {
 
   it("correctly parses complete yarn.lock file", () => {
     const lockData = fs.readFileSync(
-      path.resolve(__dirname, "./yarn.v2.mock.lock"),
+      path.resolve(__dirname, "./fixtures/yarn.v2.mock.lock"),
       "utf8"
     );
 

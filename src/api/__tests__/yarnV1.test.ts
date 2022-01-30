@@ -118,7 +118,7 @@ describe("yarnV1Parser", () => {
   });
   it("correctly parses complete yarn.lock file", () => {
     const lockData = fs.readFileSync(
-      path.resolve(__dirname, "./yarn.v1.mock.lock"),
+      path.resolve(__dirname, "./fixtures/yarn.v1.mock.lock"),
       "utf8"
     );
     const lexed = yarnV1Lexer(lockData);
