@@ -30,9 +30,24 @@ const fileExist = (filePath: string): boolean => {
   return fs.existsSync(filePath);
 };
 
+const getLockTypeFromPath = (path: string): LockType | null => {
+  if (path.endsWith("yarn.lock")) return "yarn";
+  if (path.endsWith("package-lock.json")) return "npm";
+  return null;
+};
+
 const getLockInfo = (): { path: string; type: LockType } => {
-  // handle if --f was passed
+  // handle if --l was passed
   if (argv.l) {
+    const expLockType = getLockTypeFromPath(argv.l);
+    if (!expLockType) {
+      logger.log({
+        level: "critical",
+        msg: `"${argv.l}" is not a valid lockfile. Please specify a yarn.lock or package-lock.json file.`
+      });
+      process.exit(1);
+    }
+
     if (argv.l[0] === "/") {
       const exists = fileExist(argv.l);
 
@@ -44,7 +59,7 @@ const getLockInfo = (): { path: string; type: LockType } => {
         process.exit(1);
       }
 
-      return { path: argv.l, type: "yarn" };
+      return { path: argv.l, type: expLockType };
     }
     const relativePath = path.join(process.cwd(), argv.l);
     const exists = fileExist(relativePath);
@@ -59,7 +74,7 @@ const getLockInfo = (): { path: string; type: LockType } => {
 
     return {
       path: relativePath,
-      type: "yarn"
+      type: expLockType
     };
   }
 
