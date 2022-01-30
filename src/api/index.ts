@@ -50,7 +50,10 @@ interface ComputePackageTagOpts {
  *
  * @internal
  */
-function parseLock({ data, type }: ParseLockOpts): ParsedLock {
+function parseLock(
+  { data, type }: ParseLockOpts,
+  pkg: PackageJson
+): ParsedLock {
   let parsed: ParsedLock;
   if (!["npm", "yarn"].includes(type)) {
     throw new Error("Unknown lockfile type.");
@@ -58,7 +61,7 @@ function parseLock({ data, type }: ParseLockOpts): ParsedLock {
 
   // handle parsing package-lock.json
   if (type === "npm") {
-    parsed = npmParser(data);
+    parsed = npmParser(data, pkg);
   } else if (type === "yarn") {
     parsed = yarnParser(data);
   }
@@ -305,19 +308,19 @@ async function initializeIndeps(startOpts: StartOpts) {
     );
   }
 
-  // get parsed lock data
-  logger.log({
-    level: "info",
-    msg: `🔍 Parsing your lockfile...`
-  });
-  const lockParsed = parseLock({ data: lockRaw, type: lockType });
-
   // get parsed pkg data
   logger.log({
     level: "info",
     msg: `🔍 Parsing your package.json file...`
   });
   const pkgParsed = parsePkg({ data: pkgRaw });
+
+  // get parsed lock data
+  logger.log({
+    level: "info",
+    msg: `🔍 Parsing your lockfile...`
+  });
+  const lockParsed = parseLock({ data: lockRaw, type: lockType }, pkgParsed);
 
   // create DAG
   logger.log({
