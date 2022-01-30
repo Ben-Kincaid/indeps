@@ -65,13 +65,21 @@ function DepsList(): ReactElement {
     return filtered;
   }, [deps, filters]);
 
+  const sortedItems = useMemo(() => {
+    return filteredItems.sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+  }, [filteredItems]);
+
   const [activeStates, setActiveStates] = useState(
-    generateInitialActiveStates(filteredItems)
+    generateInitialActiveStates(sortedItems)
   );
 
   useEffect(() => {
-    setActiveStates(generateInitialActiveStates(filteredItems));
-  }, [filteredItems]);
+    setActiveStates(generateInitialActiveStates(sortedItems));
+  }, [sortedItems]);
 
   const handleItemClick = (index: number) => {
     setActiveStates([
@@ -88,7 +96,7 @@ function DepsList(): ReactElement {
           <div className={styles.badge}>
             <small className={styles.badgeText}>
               (
-              {filteredItems.length === 0
+              {sortedItems.length === 0
                 ? "No items found"
                 : `${filteredItems.length} Dependencies`}
               )
@@ -102,7 +110,7 @@ function DepsList(): ReactElement {
             height: "calc(100vh - 175px)",
             overflowX: "visible"
           }}
-          data={filteredItems}
+          data={sortedItems}
           itemContent={(index: number, data) => {
             const active = activeStates[index];
             const item = data;
