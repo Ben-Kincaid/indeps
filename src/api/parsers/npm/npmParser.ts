@@ -16,45 +16,8 @@ import { LockDependency, ParsedLock } from "src/api/parsers";
 function createLockDependency(
   name: string,
   dependency: PackageLockDependencyBase,
-  dependencies: PackageLock["dependencies"]
+  specifications: Array<string>
 ): LockDependency {
-  // get the specifications for this package
-  const specifications = Object.keys(dependencies).reduce<Array<string>>(
-    (acc, depKey) => {
-      const dependency = dependencies[depKey];
-
-      // if there is no `requires` property, return
-      if (!dependency.requires) return acc;
-
-      // if the requires object includes this dependencies name,
-      // push its range as a specification
-      if (
-        Object.keys(dependency.requires).includes(name) &&
-        !acc.includes(dependency.requires[name]!)
-      ) {
-        acc.push(dependency.requires[name]!);
-      }
-
-      // loop through inner dependencies for specifications
-      if (dependency.dependencies) {
-        // for each inner dependency,
-        // check if it also requires the current package
-        // and push its range if so.
-        Object.keys(dependency.dependencies).forEach(innerDepKey => {
-          const innerDep = dependency.dependencies[innerDepKey];
-          if (!innerDep.requires) return;
-          if (Object.keys(innerDep.requires).includes(name)) {
-            acc.push(innerDep.requires[name]!);
-          }
-        });
-      }
-
-      // return the accumulator with the newly-pushed dependency/inner dependency specifications
-      return acc;
-    },
-    []
-  );
-
   // return all LockDependency properties
   return {
     name,
@@ -82,10 +45,51 @@ function createLockDependency(
  *
  * @internal
  */
-function normalizeParsedNPM(parsed: PackageLock): ParsedLock {
+function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
   const out = Object.keys(parsed.dependencies).reduce((acc, curr) => {
     const dependency = parsed.dependencies[curr];
-    const lockDep = createLockDependency(curr, dependency, parsed.dependencies);
+
+    const pkgDeps = {
+      ...(pkg.dependencies || {}),
+      ...(pkg.devDependencies || {})
+    };
+
+    const subSpecifications = Object.keys(parsed.dependencies).reduce(
+      (acc, d1Key) => {
+        const d1 = parsed.dependencies[d1Key];
+        if (
+          d1.requires &&
+          d1.requires[curr] &&
+          !acc.includes(d1.requires[curr]!)
+        ) {
+          if (!d1.dependencies || !d1.dependencies[curr]) {
+            acc.push(d1.requires[curr]!);
+          }
+        }
+        return acc;
+      },
+      [] as Array<string>
+    );
+
+    const pkgSpecifications = Object.keys(pkgDeps).reduce<Array<string>>(
+      (acc2, curr2) => {
+        if (curr === curr2) {
+          acc2.push(pkgDeps[curr2]!);
+        }
+        return acc2;
+      },
+      [] as Array<string>
+    );
+    const specifications = new Set([
+      ...subSpecifications,
+      ...pkgSpecifications
+    ]);
+
+    const lockDep = createLockDependency(
+      curr,
+      dependency,
+      Array.from(specifications)
+    );
     acc.push(lockDep);
 
     if (dependency.dependencies) {
@@ -100,9 +104,28 @@ function normalizeParsedNPM(parsed: PackageLock): ParsedLock {
           return;
         }
 
-        acc.push(
-          createLockDependency(innerDepKey, innerDep, parsed.dependencies)
-        );
+        const specifications: Array<string> = [];
+
+        if (dependency.requires) {
+          if (Object.keys(dependency.requires).includes(innerDepKey)) {
+            specifications.push(dependency.requires[innerDepKey]!);
+          } else {
+            const siblingSpecs = Object.keys(dependency.dependencies).reduce<
+              Array<string>
+            >((acc, dKey) => {
+              const d = dependency.dependencies[dKey];
+              if (!d.requires) return acc;
+              if (Object.keys(d.requires).includes(innerDepKey)) {
+                acc.push(d.requires[innerDepKey]!);
+              }
+              return acc;
+            }, [] as Array<string>);
+
+            specifications.push(...siblingSpecs);
+          }
+        }
+
+        acc.push(createLockDependency(innerDepKey, innerDep, specifications));
       });
     }
 
@@ -120,9 +143,9 @@ function normalizeParsedNPM(parsed: PackageLock): ParsedLock {
  *
  * @internal
  */
-function npmParser(data: string): ParsedLock {
+function npmParser(data: string, pkg: PackageJson): ParsedLock {
   const parsed = JSON.parse(data) as PackageLock;
-  return normalizeParsedNPM(parsed);
+  return normalizeParsedNPM(parsed, pkg);
 }
 
 export default npmParser;
