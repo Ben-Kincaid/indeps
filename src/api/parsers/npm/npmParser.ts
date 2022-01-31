@@ -54,28 +54,29 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
       ...(pkg.devDependencies || {})
     };
 
-    // @TODO this needs to be refactored big time
+    // get specifications for root-level deps
     const subSpecifications = Object.keys(parsed.dependencies).reduce(
       (acc, d1Key) => {
         const d1 = parsed.dependencies[d1Key];
-        if (d1.requires) {
+
+        if (
+          d1.requires &&
+          d1.requires[curr] &&
+          (!d1.dependencies || !d1.dependencies[curr])
+        ) {
           if (
             d1.requires[curr] &&
-            !acc.includes(d1.requires[curr]!) &&
-            !d1.dependencies
+            (!d1.dependencies || !d1.dependencies[curr])
           ) {
             acc.push(d1.requires[curr]!);
-          } else if (!d1.dependencies) {
-            if (d1.requires && d1.requires[curr]) acc.push(d1.requires[curr]!);
-          } else if (!d1.dependencies[curr]) {
-            Object.keys(d1.dependencies).forEach(d2Key => {
-              const d2 = d1.dependencies[d2Key];
-              if (d2.requires && d2.requires[curr]) {
-                debugger;
-                acc.push(d2.requires[curr]!);
-              }
-            });
           }
+        } else if (d1.dependencies && !d1.dependencies[curr]) {
+          Object.keys(d1.dependencies).forEach(d2Key => {
+            const d2 = d1.dependencies[d2Key];
+            if (d2.requires && d2.requires[curr]) {
+              acc.push(d2.requires[curr]!);
+            }
+          });
         }
 
         return acc;
@@ -83,6 +84,7 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
       [] as Array<string>
     );
 
+    // inject pkg dependencies/devDependencies specs to root level dep
     const pkgSpecifications = Object.keys(pkgDeps).reduce<Array<string>>(
       (acc2, curr2) => {
         if (curr === curr2) {
@@ -92,11 +94,13 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
       },
       [] as Array<string>
     );
+
     const specifications = new Set([
       ...subSpecifications,
       ...pkgSpecifications
     ]);
 
+    // create root-level dep
     const lockDep = createLockDependency(
       curr,
       dependency,
@@ -104,6 +108,7 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
     );
     acc.push(lockDep);
 
+    // create deps for required dependencies
     if (dependency.dependencies) {
       Object.keys(dependency.dependencies).forEach(innerDepKey => {
         const innerDep = dependency.dependencies[innerDepKey];
