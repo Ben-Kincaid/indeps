@@ -1,20 +1,14 @@
 import fs from "fs";
 import path from "path";
 import npmParser from "src/api/parsers/npm";
+import { getFixture } from "src/api/__tests__/utils";
 
 describe("npmParser", () => {
+  // Use case: is able to parse simple package with minimal project dependencies & no sub dependencies
   it("correctly parses simple package declaration", () => {
-    const pkgLockData = fs.readFileSync(
-      path.resolve(__dirname, "./fixtures/package-lock--single.mock.json"),
-      "utf8"
-    );
+    const pkgLockData = getFixture("package-lock--single.mock.json", false);
 
-    const pkgData = JSON.parse(
-      fs.readFileSync(
-        path.resolve(__dirname, "./fixtures/package--single.mock.json"),
-        "utf8"
-      )
-    );
+    const pkgData = getFixture<PackageJson>("package--single.mock.json", true);
 
     const parsed = npmParser(pkgLockData, pkgData);
 
@@ -31,18 +25,11 @@ describe("npmParser", () => {
     ]);
   });
 
+  // Use case: package dependency & sub dependency require same package, different spec + version
   it("correctly parses linked package declarations", () => {
-    const pkgLockData = fs.readFileSync(
-      path.resolve(__dirname, "./fixtures/package-lock--linked.mock.json"),
-      "utf8"
-    );
+    const pkgLockData = getFixture("package-lock--linked.mock.json", false);
 
-    const pkgData = JSON.parse(
-      fs.readFileSync(
-        path.resolve(__dirname, "./fixtures/package--linked.mock.json"),
-        "utf8"
-      )
-    );
+    const pkgData = getFixture<PackageJson>("package--linked.mock.json", true);
 
     const parsed = npmParser(pkgLockData, pkgData);
 
@@ -83,18 +70,12 @@ describe("npmParser", () => {
       }
     ]);
   });
-  it("correctly parses shared declarations", () => {
-    const pkgLockData = fs.readFileSync(
-      path.resolve(__dirname, "./fixtures/package-lock--shared.mock.json"),
-      "utf8"
-    );
 
-    const pkgData = JSON.parse(
-      fs.readFileSync(
-        path.resolve(__dirname, "./fixtures/package--shared.mock.json"),
-        "utf8"
-      )
-    );
+  // Use case: package dependency & sub dependency require same package, same version but different spec
+  it("correctly parses shared declarations", () => {
+    const pkgLockData = getFixture("package-lock--shared.mock.json", false);
+
+    const pkgData = getFixture<PackageJson>("package--shared.mock.json", true);
 
     const parsed = npmParser(pkgLockData, pkgData);
 
