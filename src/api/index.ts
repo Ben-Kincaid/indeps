@@ -350,4 +350,11 @@ async function initializeIndeps(startOpts: StartOpts) {
   });
 }
 
-export { initializeIndeps, ParsedData, FullDependency };
+export {
+  initializeIndeps,
+  createDependencyGraph,
+  createDependencyData,
+  computePackageTags,
+  ParsedData,
+  FullDependency
+};
