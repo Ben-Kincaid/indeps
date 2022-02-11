@@ -52,11 +52,22 @@ export interface LockInfo {
   path: string;
 }
 
+/**
+ * The configuration object for starting the indeps process.
+ *
+ * @remarks
+ * The configuration object for starting the indeps process. This method will parse the dependencies listed in your lockfile and start the HTTP server responsible for serving the indeps client.
+ */
 export interface StartOpts {
+  /** Information about the target lockfile */
   lock: LockInfo;
+  /** Information about the target package.json file */
   pkg: PkgInfo;
+  /** The port to listen to with the HTTP server. */
   port?: number;
+  /** Toggles functionality for opening the browser on server initialization. */
   open?: boolean;
+  /** The log level to use for the indeps process. */
   logLevel?: "none" | "standard" | "verbose";
 }
 
@@ -65,10 +76,18 @@ export interface ParseLockArgs {
   type: LockType;
 }
 
+/**
+ * The configuration object for starting the indeps HTTP server.
+ */
 export interface StartViewerOpts {
+  /** The normalized, hydrated dependency data  */
   data: ParsedData;
+  /** The current version of `indeps` */
   indepsVersion: string;
+  /** The port to use for the HTTP server */
   port: number;
+  /** The name of the target project, from the "name" property in `package.json` */
   packageName?: string;
+  /** Toggles the functionality for opening the browser on server initialization */
   open?: boolean;
 }

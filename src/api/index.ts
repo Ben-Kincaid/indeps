@@ -23,16 +23,28 @@ interface ParseLockOpts {
   type: LockType;
 }
 
+/**
+ *
+ */
 interface ParsePkgOpts {
   data: string;
 }
 
+/**
+ * Config for normalizing & hydrating final dependency objects.
+ */
 interface CreateDependencyDataOpts {
+  /** The parsed package.json file */
   pkg: PackageJson;
+  /** The parsed lockfile */
   lock: ParsedLock;
+  /** The `Graph` representing the dependency tree of our parsed lockfile */
   graph: Graph;
 }
 
+/**
+ * Config object used to compute the package tags for a given dependency.
+ */
 interface ComputePackageTagOpts {
   dependencies: PackageJson["dependencies"];
   devDependencies: PackageJson["devDependencies"];
