@@ -104,7 +104,8 @@
     "synchronousWatchDirectory": true,
     "excludeDirectories": [
       "**/node_modules",
-      "lib"
+      "lib",
+      "docs"
     ],
     "excludeFiles": [
       ".gitignore"
