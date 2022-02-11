@@ -1,7 +1,7 @@
-import { initializeIndeps } from "./api";
+import { initializeIndeps } from "src/api";
+import { StartOpts, LockInfo, PkgInfo } from "src/api/types";
+import { LockType } from "src/api/parsers/types";
 
-const fns = {
-  initializeIndeps // start the indeps process
-};
+export { StartOpts, LockInfo, PkgInfo, LockType };
 
-export { initializeIndeps };
+export default initializeIndeps;

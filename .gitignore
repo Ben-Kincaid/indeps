@@ -1,7 +1,7 @@
 # Ignore node packages.
 node_modules
 
-# Yarn 2 BS
+# Yarn 2 
 .yarn/*
 !.yarn/cache
 !.yarn/patches
@@ -10,12 +10,15 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 
-# Don't include the built library, stupid.
+# Ignore built lib/client.
 lib/**/*
 public/**/*
 
-# Generated jest files.
+# Ignore generated jest files.
 coverage
+
+# Ignore built typedocs (will be reinstated once finalized)
+docs
 
 # cuz Macos.
 .DS_STORE

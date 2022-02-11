@@ -26,7 +26,9 @@
     "debug": "node --inspect-brk lib/cli.js --no-open",
     "debug:watch": "nodemon --inspect-brk lib/cli.js --no-open",
     "test": "jest --coverage --verbose",
-    "test:watch": "npm test -- --watch --verbose"
+    "test:watch": "npm test -- --watch --verbose",
+    "docs:build": "typedoc src/index.ts",
+    "docs:watch": "yarn docs:build -- --watch"
   },
   "keywords": [
     "dependency",
@@ -97,6 +99,7 @@
     "ts-jest": "^27.0.7",
     "tsc": "^2.0.3",
     "tslib": "^2.3.1",
+    "typedoc": "^0.22.11",
     "typescript": "^4.4.4",
     "webpack": "^5.64.0",
     "webpack-bundle-analyzer": "^4.5.0",
