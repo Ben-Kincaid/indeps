@@ -1,15 +1,14 @@
 import fs from "fs";
 import path from "path";
-import winston from "winston";
+
+import { config } from "winston";
 
 import { Graph } from "src/api/graph";
 import { createLogger } from "src/logger";
 import Viewer from "src/api/viewer";
 import { LockDependency, LockType, ParsedLock } from "src/api/parsers";
-
 import npmParser from "src/api/parsers/npm";
 import yarnParser from "src/api/parsers/yarn";
-
 import {
   FullDependency,
   PackageTag,
@@ -78,9 +77,11 @@ function parseLock(
     parsed = npmParser(data, pkg);
   } else if (type === "yarn") {
     parsed = yarnParser(data);
+  } else {
+    throw new IndepsError("Invalid lockfile type.");
   }
 
-  return parsed!;
+  return parsed;
 }
 
 /**
@@ -108,7 +109,7 @@ function parsePkg({ data }: ParsePkgOpts): PackageJson {
  */
 function getIndepsPkg() {
   let pkgData: string;
-  let pkgPath = "../package.json";
+  const pkgPath = "../package.json";
   try {
     pkgData = fs.readFileSync(path.join(__dirname, pkgPath), "utf8");
   } catch (error) {
@@ -137,7 +138,7 @@ function createDependencyGraph(lock: ParsedLock): Graph {
   const g = new Graph();
 
   // loop over all lock dependencies
-  for (var i = 0; i < lock.length; i++) {
+  for (let i = 0; i < lock.length; i++) {
     const dep = lock[i];
     const depId = `${dep.name}@${dep.version}`;
 
@@ -146,10 +147,10 @@ function createDependencyGraph(lock: ParsedLock): Graph {
 
     // if the dependency has sub-dependencies, loop over them
     if (dep.dependencies && dep.dependencies.length > 0) {
-      for (var i2 = 0; i2 < dep.dependencies.length; i2++) {
+      for (let i2 = 0; i2 < dep.dependencies.length; i2++) {
         const subDep = dep.dependencies[i2];
         // loop over each lock dependency again until you find a package with that has the specific lock spec specified
-        for (var d = 0; d < lock.length; d++) {
+        for (let d = 0; d < lock.length; d++) {
           if (
             subDep.name === lock[d].name &&
             lock[d].specifications.includes(subDep.range)
@@ -180,7 +181,7 @@ function computePackageTags({
   devDependencies = {},
   lockDependency
 }: ComputePackageTagOpts): Array<PackageTag> {
-  let tags: Array<PackageTag> = [];
+  const tags: Array<PackageTag> = [];
   Object.keys(dependencies).forEach(depName => {
     const depSpec = dependencies[depName] as string;
     if (
@@ -230,7 +231,7 @@ function createDependencyData({
 }: CreateDependencyDataOpts): ParsedData {
   const pkgDeps = pkg.dependencies;
   const pkgDevDeps = pkg.devDependencies;
-  const out = lock.reduce<any>((acc, curr) => {
+  const out = lock.reduce<ParsedData>((acc, curr) => {
     const depId = `${curr.name}@${curr.version}`;
 
     // compute the packges `tags` based on their lock dependency
@@ -299,7 +300,7 @@ async function initializeIndeps(startOpts: StartOpts) {
 
   const logger = createLogger({
     level: logLevel,
-    customLevels: winston.config.npm.levels
+    customLevels: config.npm.levels
   });
   // get current indeps package info
   const indepsPkg = getIndepsPkg();

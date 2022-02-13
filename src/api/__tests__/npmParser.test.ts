@@ -1,5 +1,3 @@
-import fs from "fs";
-import path from "path";
 import npmParser from "src/api/parsers/npm";
 import { getFixture } from "src/api/__tests__/utils";
 

@@ -1,23 +1,22 @@
-import winston, {
+import {
   createLogger as createWinstonLogger,
-  addColors,
-  transports
+  config,
+  transports,
+  format,
+  Logger
 } from "winston";
 
 interface CreateLoggerOpts {
-  customLevels?: winston.config.AbstractConfigSetLevels;
-  level: any;
+  customLevels?: config.AbstractConfigSetLevels;
+  level?: "standard" | "verbose";
 }
 
 const createLogger = ({
-  customLevels = winston.config.npm.levels,
+  customLevels = config.npm.levels,
   level = "standard"
-}: CreateLoggerOpts): winston.Logger => {
-  const transport = new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.cli()
-    )
+}: CreateLoggerOpts): Logger => {
+  const transport = new transports.Console({
+    format: format.combine(format.colorize(), format.cli())
   });
 
   const logger = createWinstonLogger({

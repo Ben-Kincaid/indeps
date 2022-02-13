@@ -28,7 +28,7 @@ function createLockDependency(
     ...(dependency.requires && {
       dependencies: Object.keys(dependency.requires).map(depKey => ({
         name: depKey,
-        range: dependency.requires![depKey]!
+        range: (dependency.requires && dependency.requires[depKey]) ?? ""
       }))
     })
   };
@@ -68,13 +68,13 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
             d1.requires[curr] &&
             (!d1.dependencies || !d1.dependencies[curr])
           ) {
-            acc.push(d1.requires[curr]!);
+            acc.push(d1.requires[curr]);
           }
         } else if (d1.dependencies && !d1.dependencies[curr]) {
           Object.keys(d1.dependencies).forEach(d2Key => {
             const d2 = d1.dependencies[d2Key];
             if (d2.requires && d2.requires[curr]) {
-              acc.push(d2.requires[curr]!);
+              acc.push(d2.requires[curr]);
             }
           });
         }
@@ -87,8 +87,10 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
     // inject pkg dependencies/devDependencies specs to root level dep
     const pkgSpecifications = Object.keys(pkgDeps).reduce<Array<string>>(
       (acc2, curr2) => {
+        const pkgDep = pkgDeps[curr2];
+
         if (curr === curr2) {
-          acc2.push(pkgDeps[curr2]!);
+          if (pkgDep !== undefined) acc2.push(pkgDep);
         }
         return acc2;
       },
@@ -125,7 +127,7 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
 
         if (dependency.requires) {
           if (Object.keys(dependency.requires).includes(innerDepKey)) {
-            specifications.push(dependency.requires[innerDepKey]!);
+            specifications.push(dependency.requires[innerDepKey]);
           } else {
             const siblingSpecs = Object.keys(dependency.dependencies).reduce<
               Array<string>
@@ -133,7 +135,7 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
               const d = dependency.dependencies[dKey];
               if (!d.requires) return acc;
               if (Object.keys(d.requires).includes(innerDepKey)) {
-                acc.push(d.requires[innerDepKey]!);
+                acc.push(d.requires[innerDepKey]);
               }
               return acc;
             }, [] as Array<string>);

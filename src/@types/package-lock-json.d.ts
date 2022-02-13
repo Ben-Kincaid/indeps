@@ -14,7 +14,7 @@ interface PackageLockPackage {
     [k: string]: string | undefined;
   };
   dependencies?: {
-    [k: string]: string | undefined;
+    [k: string]: string;
   };
   optionalDependencies?: {
     [k: string]: string | undefined;
@@ -29,7 +29,7 @@ interface PackageLockDependencyBase {
   dev?: boolean;
   optional?: boolean;
   requires?: {
-    [k: string]: string | undefined;
+    [k: string]: string;
   };
 }
 
