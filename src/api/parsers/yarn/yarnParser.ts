@@ -1,4 +1,5 @@
 import { ParsedLock, yarnNext, yarnV1 } from "src/api/parsers";
+import { IndepsError } from "src/error";
 
 /**
  * Get the version of a yarn.lock file.
@@ -39,7 +40,7 @@ function yarnParser(data: string): ParsedLock {
 
   const version = getYarnVersionFromString(data);
   if (version === 0) {
-    throw new Error(
+    throw new IndepsError(
       "Indeps was not able to detect the version of your Yarn lockfile. "
     );
   } else if (version === 1) {
@@ -47,7 +48,9 @@ function yarnParser(data: string): ParsedLock {
   } else if (version === 2) {
     out = yarnNext(data);
   } else {
-    throw new Error("Indeps does not support this version of Yarn's lockfile.");
+    throw new IndepsError(
+      "Indeps does not support this version of Yarn's lockfile."
+    );
   }
 
   return out;
