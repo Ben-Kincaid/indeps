@@ -11,7 +11,7 @@ interface CreateLoggerOpts {
 
 const createLogger = ({
   customLevels = winston.config.npm.levels,
-  level = "info"
+  level = "standard"
 }: CreateLoggerOpts): winston.Logger => {
   const transport = new winston.transports.Console({
     format: winston.format.combine(
@@ -22,7 +22,7 @@ const createLogger = ({
 
   const logger = createWinstonLogger({
     levels: customLevels,
-    level,
+    level: level === "standard" ? "info" : "verbose",
     transports: [transport],
     exceptionHandlers: [transport]
   });

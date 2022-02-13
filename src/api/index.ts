@@ -295,7 +295,7 @@ async function startViewer({
  * @alpha
  */
 async function initializeIndeps(startOpts: StartOpts) {
-  const { open, pkg, lock, port, logLevel = "error" } = startOpts;
+  const { open, pkg, lock, port, logLevel } = startOpts;
 
   const logger = createLogger({
     level: logLevel,

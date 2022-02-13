@@ -157,7 +157,7 @@ class ErrorTransport extends Console {
       pkg: pkg!,
       port: argv.p,
       open: argv.open,
-      logLevel: "info"
+      logLevel: "standard"
     });
   } catch (error) {
     if (error instanceof IndepsError) {

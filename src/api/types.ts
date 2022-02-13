@@ -68,7 +68,7 @@ export interface StartOpts {
   /** Toggles functionality for opening the browser on server initialization. */
   open?: boolean;
   /** The log level to use for the indeps process. */
-  logLevel?: any;
+  logLevel?: "standard" | "verbose";
 }
 
 export interface ParseLockArgs {
