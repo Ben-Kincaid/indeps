@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn check-types && yarn client:lint --max-warnings 1 && yarn node:lint --max-warnings 0 && yarn test
+yarn health
