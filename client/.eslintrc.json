@@ -80,5 +80,8 @@
                 "project": "tsconfig.json"
             }
         }
-    }
+    },
+    "ignorePatterns": [
+        "*.scss"
+    ]
 }
