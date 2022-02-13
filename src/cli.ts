@@ -2,7 +2,12 @@ import path from "path";
 import fs from "fs";
 import { initializeIndeps } from "./api";
 import { LockType } from "./api/parsers";
-import logger from "./api/logger";
+import { createLogger } from "./logger";
+import winston, { loggers } from "winston";
+import Transport from "winston-transport";
+import { LockInfo, PkgInfo } from "src";
+import { Console } from "winston/lib/winston/transports";
+import { IndepsError } from "src/error";
 
 const argv = require("yargs")
   .scriptName("indeps")
@@ -41,22 +46,16 @@ const getLockInfo = (): { path: string; type: LockType } => {
   if (argv.l) {
     const expLockType = getLockTypeFromPath(argv.l);
     if (!expLockType) {
-      logger.log({
-        level: "critical",
-        msg: `"${argv.l}" is not a valid lockfile. Please specify a yarn.lock or package-lock.json file.`
-      });
-      process.exit(1);
+      throw new IndepsError(
+        `"${argv.l}" is not a valid lockfile. Please specify a yarn.lock or package-lock.json file.`
+      );
     }
 
     if (argv.l[0] === "/") {
       const exists = fileExist(argv.l);
 
       if (!exists) {
-        logger.log({
-          level: "critical",
-          msg: `No file found at: ${argv.l}`
-        });
-        process.exit(1);
+        throw new IndepsError(`No file found at: ${argv.l}`);
       }
 
       return { path: argv.l, type: expLockType };
@@ -65,11 +64,7 @@ const getLockInfo = (): { path: string; type: LockType } => {
     const exists = fileExist(relativePath);
 
     if (!exists) {
-      logger.log({
-        level: "critical",
-        msg: `No file found at: ${relativePath}`
-      });
-      process.exit(1);
+      throw new IndepsError(`No file found at: ${relativePath}`);
     }
 
     return {
@@ -90,11 +85,9 @@ const getLockInfo = (): { path: string; type: LockType } => {
 
     if (autoPkgExists) return { type: "npm", path: autoPkgPath };
 
-    logger.log({
-      level: "critical",
-      msg: `No file found at: ${argv.l}`
-    });
-    process.exit(1);
+    throw new IndepsError(
+      `No lockfile could be found automatically in your current working directory, and there was no \`--l\` flag passed. Please use indeps in a project directory with a valid lockfile & package.json, or explicitly specify the files with \`--l\` and \`--pkg\`.`
+    );
   }
 
   return {
@@ -108,22 +101,14 @@ const getPkgInfo = (): { path: string } => {
     if (argv.pkg[0] === "/") {
       const exists = fileExist(argv.pkg);
       if (!exists) {
-        logger.log({
-          level: "critical",
-          msg: `No file found at: ${argv.l}`
-        });
-        process.exit(1);
+        throw new IndepsError(`No file found at: ${argv.l}`);
       }
       return { path: argv.pkg };
     }
     const relativePath = path.join(process.cwd(), "./package.json");
     const exists = fileExist(relativePath);
     if (!exists) {
-      logger.log({
-        level: "critical",
-        msg: `No file found at: ${argv.l}`
-      });
-      process.exit(1);
+      throw new IndepsError(`No file found at: ${argv.l}`);
     }
     return {
       path: relativePath
@@ -133,11 +118,7 @@ const getPkgInfo = (): { path: string } => {
   const autoPath = path.join(process.cwd(), "./package.json");
   const exists = fileExist(autoPath);
   if (!exists) {
-    logger.log({
-      level: "critical",
-      msg: `No file found at: ${argv.l}`
-    });
-    process.exit(1);
+    throw new IndepsError(`No file found at: ${argv.l}`);
   }
 
   return {
@@ -145,13 +126,46 @@ const getPkgInfo = (): { path: string } => {
   };
 };
 
-const lock = getLockInfo();
+class ErrorTransport extends Console {
+  ogLog: any;
+  constructor(opts: any) {
+    super(opts);
+    this.ogLog = super.log;
+  }
 
-const pkg = getPkgInfo();
+  log(info: any, callback: any) {
+    this.ogLog(info, callback);
+  }
+}
 
-initializeIndeps({
-  lock: lock,
-  pkg: pkg,
-  port: argv.p,
-  open: argv.open
-});
+(async () => {
+  const logger = createLogger({
+    level: "info",
+    customLevels: winston.config.cli.levels
+  });
+
+  // start indeps
+  try {
+    // get lockfile info
+    const lock = getLockInfo();
+
+    // get package.json info
+    const pkg = getPkgInfo();
+
+    await initializeIndeps({
+      lock: lock!,
+      pkg: pkg!,
+      port: argv.p,
+      open: argv.open,
+      logLevel: "standard"
+    });
+  } catch (error) {
+    if (error instanceof IndepsError) {
+      logger.error(error.message);
+    } else if (error instanceof Error) {
+      logger.error(error.message);
+    } else {
+      logger.error(error);
+    }
+  }
+})();

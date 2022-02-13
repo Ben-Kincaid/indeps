@@ -1,5 +1,6 @@
 import { ParsedLock } from "../..";
 import { YarnV1Lexed } from ".";
+import { IndepsError } from "src/error";
 
 const cleanLexem = (lexem: string): string => {
   return lexem.replace(/(^\"|\"$)/g, "");
@@ -23,7 +24,7 @@ const parsePackageDeclarations = (
       nameMatches.length > 1 ||
       specMatches.length > 1
     ) {
-      throw new Error(
+      throw new IndepsError(
         `There was an error while parsing package name: ${declaration}`
       );
     }

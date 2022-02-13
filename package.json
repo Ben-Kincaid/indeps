@@ -51,6 +51,7 @@
     "react-router-dom": "^5",
     "react-virtuoso": "^2.2.7",
     "sirv": "^1.0.18",
+    "winston": "^3.5.1",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
@@ -60,7 +61,7 @@
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
     "@babel/runtime": "^7.16.3",
-    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-commonjs": "beta",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-typescript": "^8.3.0",
@@ -93,7 +94,7 @@
     "postcss": "^8.3.11",
     "postcss-loader": "^6.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.60.0",
+    "rollup": "^2.67.0",
     "sass-loader": "^12.3.0",
     "style-loader": "^3.3.1",
     "ts-jest": "^27.0.7",

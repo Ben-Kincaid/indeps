@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
+import winston from "winston";
 
 import { Graph } from "src/api/graph";
-import logger from "src/api/logger";
+import { createLogger } from "src/logger";
 import Viewer from "src/api/viewer";
 import { LockDependency, LockType, ParsedLock } from "src/api/parsers";
 
@@ -17,6 +18,7 @@ import {
   StartViewerOpts,
   TAGS
 } from "src/api/types";
+import { IndepsError } from "src/error";
 
 interface ParseLockOpts {
   data: string;
@@ -24,7 +26,7 @@ interface ParseLockOpts {
 }
 
 /**
- *
+ * Config required for parsing the package.json file
  */
 interface ParsePkgOpts {
   data: string;
@@ -68,7 +70,7 @@ function parseLock(
 ): ParsedLock {
   let parsed: ParsedLock;
   if (!["npm", "yarn"].includes(type)) {
-    throw new Error("Unknown lockfile type.");
+    throw new IndepsError("Unknown lockfile type.");
   }
 
   // handle parsing package-lock.json
@@ -111,7 +113,7 @@ function getIndepsPkg() {
     pkgData = fs.readFileSync(path.join(__dirname, pkgPath), "utf8");
   } catch (error) {
     // handle error handling for no internal package.json
-    throw new Error(
+    throw new IndepsError(
       "No internal indeps package.json found. Something is wrong with how indeps is installed on your system/in your project."
     );
   }
@@ -276,7 +278,9 @@ async function startViewer({
     open
   });
 
-  await viewer.startServer();
+  const server = await viewer.startServer();
+
+  return server;
 }
 
 /**
@@ -293,6 +297,10 @@ async function startViewer({
 async function initializeIndeps(startOpts: StartOpts) {
   const { open, pkg, lock, port, logLevel } = startOpts;
 
+  const logger = createLogger({
+    level: logLevel,
+    customLevels: winston.config.npm.levels
+  });
   // get current indeps package info
   const indepsPkg = getIndepsPkg();
 
@@ -308,44 +316,32 @@ async function initializeIndeps(startOpts: StartOpts) {
   try {
     pkgRaw = fs.readFileSync(pkgPath, "utf8");
   } catch (error) {
-    throw new Error(
+    throw new IndepsError(
       `There was an error reading your package.json file at: ${pkgPath} \n\n Does this file exist?\n\n${error}`
     );
   }
   try {
     lockRaw = fs.readFileSync(lockPath, "utf8");
   } catch (error) {
-    throw new Error(
+    throw new IndepsError(
       `There was an error reading your lockfile file at: ${lockPath} \n\n Does this file exist?\n\n${error}`
     );
   }
 
   // get parsed pkg data
-  logger.log({
-    level: "info",
-    msg: `🔍 Parsing your package.json file...`
-  });
+  logger.info("🔍 Parsing your package.json file...");
   const pkgParsed = parsePkg({ data: pkgRaw });
 
   // get parsed lock data
-  logger.log({
-    level: "info",
-    msg: `🔍 Parsing your lockfile...`
-  });
+  logger.info("🔍 Parsing your lockfile...");
   const lockParsed = parseLock({ data: lockRaw, type: lockType }, pkgParsed);
 
   // create DAG
-  logger.log({
-    level: "info",
-    msg: `🔍 Creating your dependency graph...`
-  });
+  logger.info("🔍 Creating your dependency graph...");
   const lockGraph = createDependencyGraph(lockParsed);
 
   // normalize parsed lock data w/ dependency path data && pkg data
-  logger.log({
-    level: "info",
-    msg: `🔍 Finalizing your dependency data...`
-  });
+  logger.info("🔍 Finalizing your dependency data...");
   const dependencyData = createDependencyData({
     lock: lockParsed,
     pkg: pkgParsed,
@@ -360,6 +356,8 @@ async function initializeIndeps(startOpts: StartOpts) {
     port: port || 8088,
     open
   });
+
+  logger.info("Started indeps server!");
 }
 
 export {

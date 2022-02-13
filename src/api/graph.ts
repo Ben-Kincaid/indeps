@@ -1,4 +1,5 @@
 import { offsetComparator } from "react-virtuoso/dist/sizeSystem";
+import { IndepsError } from "src/error";
 
 type EdgeDirection = "directed" | "undirected";
 
@@ -39,7 +40,7 @@ class Graph {
     if (this.nodes.has(source)) {
       this.nodes.get(source)!.push(destination);
     } else {
-      throw new Error(
+      throw new IndepsError(
         `Unable to add "${destination}" to unknown source node: "${source}"`
       );
     }

@@ -1,4 +1,5 @@
 import yaml from "js-yaml";
+import { IndepsError } from "src/error";
 import { LockSubDependency, ParsedLock } from "../../types";
 
 interface ParsedPackage {
@@ -29,7 +30,7 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
       ).exec(specificationName);
 
       if (!nameMatches || !specMatches) {
-        throw new Error(
+        throw new IndepsError(
           `There was an error while parsing package name: ${specificationName}`
         );
       }
