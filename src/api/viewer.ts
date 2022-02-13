@@ -1,10 +1,11 @@
 import { ParsedLock } from "./parsers";
 import http from "http";
 import path, { dirname } from "path";
-import logger from "./logger";
+
 import sirv from "sirv";
 import { ParsedData } from "src/api";
 import open from "open";
+import { IndepsError } from "src/error";
 
 interface ViewerOpts {
   port: number;
@@ -77,27 +78,22 @@ class Viewer {
     }
   }
 
-  async startServer() {
-    logger.log({
-      level: "info",
-      msg: "🔍 Warming up server..."
-    });
+  startServer(): Promise<http.Server> {
+    return new Promise((resolve, reject) => {
+      if (!this.data || this.data.length === 0) {
+        throw new IndepsError("No lockdata found.");
+      }
 
-    if (!this.data || this.data.length === 0) {
-      throw new Error("No lockdata found.");
-    }
-    const server = http
-      .createServer(this.handleServerRequest)
-      .listen(this.viewerPort, "localhost", () => {
-        // open browser to the server
-        if (this.open)
-          open(`http://localhost:${this.viewerPort}`, { wait: false });
+      const server = http
+        .createServer(this.handleServerRequest)
+        .listen(this.viewerPort, "localhost", () => {
+          // open browser to the server
+          if (this.open)
+            open(`http://localhost:${this.viewerPort}`, { wait: false });
 
-        logger.log({
-          level: "info",
-          msg: `🟢  Indeps started. Visit at http://localhost:${this.viewerPort}`
+          resolve(server);
         });
-      });
+    });
   }
 }
 
