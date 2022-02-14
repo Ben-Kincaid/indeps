@@ -13,7 +13,7 @@
     "link-local": "yarn build && chmod +x lib/cli.js && yarn link",
     "clean": "rimraf public/ lib/",
     "check-types": "tsc --noemit",
-    "health": "yarn check-types && yarn client:lint --max-warnings 1 && yarn node:lint --max-warnings 0 && yarn test",
+    "health": "yarn check-types && yarn prettier:check && yarn client:lint --max-warnings 1 && yarn node:lint --max-warnings 0 && yarn test",
     "client:lint": "eslint client/* -c client/.eslintrc.json  --no-error-on-unmatched-pattern",
     "client:lint:fix": "yarn client:lint --fix",
     "node:lint": "eslint ./src/* -c ./src/.eslintrc.json  --no-error-on-unmatched-pattern",
