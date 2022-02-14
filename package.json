@@ -32,7 +32,9 @@
     "test": "jest --coverage --verbose",
     "test:watch": "npm test -- --watch --verbose",
     "docs:build": "typedoc src/index.ts",
-    "docs:watch": "yarn docs:build -- --watch"
+    "docs:watch": "yarn docs:build -- --watch",
+    "prettier:check": "prettier --check .",
+    "prettier:write": "prettier --write ."
   },
   "keywords": [
     "dependency",
@@ -98,6 +100,7 @@
     "nodemon": "^2.0.13",
     "postcss": "^8.3.11",
     "postcss-loader": "^6.2.0",
+    "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.67.0",
     "sass-loader": "^12.3.0",
