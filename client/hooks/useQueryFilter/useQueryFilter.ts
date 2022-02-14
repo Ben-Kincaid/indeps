@@ -7,9 +7,11 @@ function useQueryFilter<T extends object>(
 ): { items: T[] } {
   const filteredItems = useMemo(
     () =>
-      items.filter(obj => {
+      items.filter((obj) => {
         if (
-          String((obj as { [key: string]: unknown })[searchKey]).includes(query)
+          String(
+            (obj as { [key: string]: unknown })[searchKey]
+          ).includes(query)
         ) {
           return true;
         }

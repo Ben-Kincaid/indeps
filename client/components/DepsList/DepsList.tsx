@@ -57,8 +57,8 @@ function DepsList(): ReactElement {
 
     const filtered: ParsedData = [];
 
-    deps.forEach(item => {
-      const matched = item.tags.some(tag => filters.includes(tag));
+    deps.forEach((item) => {
+      const matched = item.tags.some((tag) => filters.includes(tag));
       if (matched) filtered.push(item);
     });
 

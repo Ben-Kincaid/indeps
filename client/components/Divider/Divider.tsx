@@ -4,9 +4,6 @@ import classNames from "classnames";
 
 import styles from "./Divider.module.scss";
 
-
-
-
 interface Props {
   width?: number | string;
   className?: string;

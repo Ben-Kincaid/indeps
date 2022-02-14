@@ -37,7 +37,7 @@ describe("Graph", () => {
   it("reverses the graph", () => {
     const g = new Graph();
 
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       g.addVertex(node);
     });
 
@@ -57,7 +57,7 @@ describe("Graph", () => {
   it("gets paths to all root nodes from a specified starting node", () => {
     const g = new Graph();
 
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       g.addVertex(node);
     });
 

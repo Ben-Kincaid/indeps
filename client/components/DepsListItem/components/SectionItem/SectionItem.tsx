@@ -11,8 +11,15 @@ interface Props {
 
 function SectionItem({ className, children }: Props): ReactElement {
   return (
-    <li className={classNames(styles.depsListItemSectionItem, className)}>
-      <span className={styles.depsListItemSectionItemValue}>{children}</span>
+    <li
+      className={classNames(
+        styles.depsListItemSectionItem,
+        className
+      )}
+    >
+      <span className={styles.depsListItemSectionItemValue}>
+        {children}
+      </span>
     </li>
   );
 }

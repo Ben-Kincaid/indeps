@@ -33,14 +33,18 @@ interface Props {
   children: React.ReactNode | React.ReactNode[] | ChildrenRenderFn;
 }
 
-export const FilterSidebarContext = createContext<FilterSidebarState>({
-  searchValue: "",
-  filters: []
-});
+export const FilterSidebarContext = createContext<FilterSidebarState>(
+  {
+    searchValue: "",
+    filters: []
+  }
+);
 
 function FilterSidebar({ children }: Props): ReactElement {
   const [searchValue, setSearchValue] = useState("");
-  const [filters, setFilters] = useState<Array<string>>(["TAG_DEPENDENCY"]);
+  const [filters, setFilters] = useState<Array<string>>([
+    "TAG_DEPENDENCY"
+  ]);
 
   const handleSearchChange = (evt: ChangeEvent<HTMLInputElement>) => {
     evt.preventDefault();
@@ -50,10 +54,12 @@ function FilterSidebar({ children }: Props): ReactElement {
 
   const handleFilterItemClick = (value: string) => {
     if (filters.includes(value)) {
-      const newFilters = filters.filter(filterItem => value !== filterItem);
+      const newFilters = filters.filter(
+        (filterItem) => value !== filterItem
+      );
       setFilters(newFilters);
     } else {
-      setFilters(filters => [...filters, value]);
+      setFilters((filters) => [...filters, value]);
     }
   };
 

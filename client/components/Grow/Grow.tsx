@@ -4,9 +4,6 @@ import classNames from "classnames";
 
 import styles from "./Grow.module.scss";
 
-
-
-
 interface Props {
   height: number | "auto";
   children: React.ReactNode | Array<React.ReactNode>;

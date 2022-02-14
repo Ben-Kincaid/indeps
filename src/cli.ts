@@ -34,7 +34,8 @@ const argv = yargs(hideBin(process.argv))
   })
   .parseSync();
 
-const fileExist = (filePath: string): boolean => fs.existsSync(filePath);
+const fileExist = (filePath: string): boolean =>
+  fs.existsSync(filePath);
 
 const getLockTypeFromPath = (path: string): LockType | null => {
   if (path.endsWith("yarn.lock")) return "yarn";
@@ -80,7 +81,10 @@ const getLockInfo = (): { path: string; type: LockType } => {
   const autoYarnExists = fileExist(autoPath);
 
   if (!autoYarnExists) {
-    const autoPkgPath = path.join(process.cwd(), "./package-lock.json");
+    const autoPkgPath = path.join(
+      process.cwd(),
+      "./package-lock.json"
+    );
     const autoPkgExists = fileExist(autoPkgPath);
 
     if (autoPkgExists) return { type: "npm", path: autoPkgPath };

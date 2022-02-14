@@ -141,9 +141,13 @@ function tokenise(input: string): Array<Token> {
         } else {
           chop = indentSize;
           if (!lastIndentSize || lastIndentSize < indentSize) {
-            tokens.push(createToken("INDENT", line, col, indentSize / 2));
+            tokens.push(
+              createToken("INDENT", line, col, indentSize / 2)
+            );
           } else {
-            tokens.push(createToken("DEDENT", line, col, indentSize / 2));
+            tokens.push(
+              createToken("DEDENT", line, col, indentSize / 2)
+            );
           }
         }
       } else {
@@ -155,7 +159,8 @@ function tokenise(input: string): Array<Token> {
 
       for (; i < input.length; i++) {
         if (input[i] === '"') {
-          const isEscaped = input[i - 1] === "\\" && input[i - 2] !== "\\";
+          const isEscaped =
+            input[i - 1] === "\\" && input[i - 2] !== "\\";
           if (!isEscaped) {
             i++;
             break;
@@ -220,7 +225,8 @@ function tokenise(input: string): Array<Token> {
     // adjust column to match chop
     col += chop;
 
-    lastNewLine = ["\n", "\r"].includes(input[0]) || input[1] === "\n";
+    lastNewLine =
+      ["\n", "\r"].includes(input[0]) || input[1] === "\n";
     input = input.slice(chop);
   }
 
@@ -236,5 +242,8 @@ const yarnV1Lexer = (data: string): LexedLock => {
   return lexed;
 };
 
-export { LexedLock as YarnV1Lexed, createToken as createYarnV1LexerToken };
+export {
+  LexedLock as YarnV1Lexed,
+  createToken as createYarnV1LexerToken
+};
 export default yarnV1Lexer;

@@ -18,7 +18,8 @@ function getYarnVersionFromString(data: string): number {
     if (commentLine === "# yarn lockfile v1") {
       version = 1;
     } else if (
-      commentLine === "# Manual changes might be lost - proceed with caution!"
+      commentLine ===
+      "# Manual changes might be lost - proceed with caution!"
     ) {
       version = 2;
     }
