@@ -34,8 +34,6 @@ const argv = yargs(hideBin(process.argv))
   })
   .parseSync();
 
-console.log(argv);
-
 const fileExist = (filePath: string): boolean => fs.existsSync(filePath);
 
 const getLockTypeFromPath = (path: string): LockType | null => {
