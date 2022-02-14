@@ -100,11 +100,11 @@ function createToken(
 
 function tokenise(input: string): Array<Token> {
   let lastNewLine = false;
-  let lastIndentSize = null;
+  const lastIndentSize = null;
   let line = 1;
   let col = 0;
 
-  let tokens: Array<Token> = [];
+  const tokens: Array<Token> = [];
 
   while (input.length) {
     let chop = 0;
@@ -169,9 +169,14 @@ function tokenise(input: string): Array<Token> {
       tokens.push(createToken("STRING", line, col, val));
     } else if (/^[0-9]/.test(input)) {
       // handle numbers
-      const val = /^[0-9]/.exec(input)![0];
-      chop = val.length;
-      tokens.push(createToken("NUMBER", line, col, Number(val)));
+      const matches = /^[0-9]/.exec(input);
+
+      if (matches) {
+        chop = matches[0].length;
+        tokens.push(
+          createToken("NUMBER", line, col, Number(matches[0].length))
+        );
+      }
     } else if (/^true/.test(input)) {
       // handle true booleans
       tokens.push(createToken("BOOLEAN", line, col, true));

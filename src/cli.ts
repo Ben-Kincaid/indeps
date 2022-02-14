@@ -1,39 +1,40 @@
 import path from "path";
 import fs from "fs";
-import { initializeIndeps } from "./api";
-import { LockType } from "./api/parsers";
-import { createLogger } from "./logger";
-import winston, { loggers } from "winston";
-import Transport from "winston-transport";
-import { LockInfo, PkgInfo } from "src";
-import { Console } from "winston/lib/winston/transports";
+
+import { config } from "winston";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+
 import { IndepsError } from "src/error";
 
-const argv = require("yargs")
-  .scriptName("indeps")
-  .usage("Usage: $0 [options]")
-  .help("h")
-  .alias("h", "help")
-  .alias("l", "lock")
-  .nargs("l", 1)
-  .describe(
-    "l",
-    "The yarn.lock to use for the visualization. Defaults to yarn.lock in current directory."
-  )
-  .alias("p", "port")
-  .nargs("p", 1)
-  .describe("p", "The port used to serve the visualizer client.")
-  .nargs("pkg", 1)
-  .describe(
-    "pkg",
-    "the package.json to use for the visualization. Defaults to package.json in current directory."
-  )
-  .boolean("no-open")
-  .describe("no-open", "Disable opening of browser on server start.").argv;
+import { createLogger } from "./logger";
+import { LockType } from "./api/parsers";
+import { initializeIndeps } from "./api";
 
-const fileExist = (filePath: string): boolean => {
-  return fs.existsSync(filePath);
-};
+const argv = yargs(hideBin(process.argv))
+  .option("lock", {
+    alias: "l",
+    type: "string",
+    description:
+      "Path to the yarn.lock to use for the visualization. Defaults to yarn.lock in current directory."
+  })
+  .option("pkg", {
+    type: "string",
+    description:
+      "Path to the package.json to use for the visualization. Defaults to package.json in current directory."
+  })
+  .option("port", {
+    alias: "p",
+    type: "number",
+    description: "The port used to serve the visualizer client."
+  })
+  .option("no-open", {
+    type: "boolean",
+    description: "Disable opening of browser on server start."
+  })
+  .parseSync();
+
+const fileExist = (filePath: string): boolean => fs.existsSync(filePath);
 
 const getLockTypeFromPath = (path: string): LockType | null => {
   if (path.endsWith("yarn.lock")) return "yarn";
@@ -43,24 +44,24 @@ const getLockTypeFromPath = (path: string): LockType | null => {
 
 const getLockInfo = (): { path: string; type: LockType } => {
   // handle if --l was passed
-  if (argv.l) {
-    const expLockType = getLockTypeFromPath(argv.l);
+  if (argv.lock) {
+    const expLockType = getLockTypeFromPath(argv.lock);
     if (!expLockType) {
       throw new IndepsError(
-        `"${argv.l}" is not a valid lockfile. Please specify a yarn.lock or package-lock.json file.`
+        `"${argv.lock}" is not a valid lockfile. Please specify a yarn.lock or package-lock.json file.`
       );
     }
 
-    if (argv.l[0] === "/") {
-      const exists = fileExist(argv.l);
+    if (argv.lock[0] === "/") {
+      const exists = fileExist(argv.lock);
 
       if (!exists) {
-        throw new IndepsError(`No file found at: ${argv.l}`);
+        throw new IndepsError(`No file found at: ${argv.lock}`);
       }
 
-      return { path: argv.l, type: expLockType };
+      return { path: argv.lock, type: expLockType };
     }
-    const relativePath = path.join(process.cwd(), argv.l);
+    const relativePath = path.join(process.cwd(), argv.lock);
     const exists = fileExist(relativePath);
 
     if (!exists) {
@@ -74,8 +75,7 @@ const getLockInfo = (): { path: string; type: LockType } => {
   }
 
   // handle auto-detection
-  let autoPath = path.join(process.cwd(), "./yarn.lock");
-  let autoType = "yarn";
+  const autoPath = path.join(process.cwd(), "./yarn.lock");
 
   const autoYarnExists = fileExist(autoPath);
 
@@ -86,7 +86,7 @@ const getLockInfo = (): { path: string; type: LockType } => {
     if (autoPkgExists) return { type: "npm", path: autoPkgPath };
 
     throw new IndepsError(
-      `No lockfile could be found automatically in your current working directory, and there was no \`--l\` flag passed. Please use indeps in a project directory with a valid lockfile & package.json, or explicitly specify the files with \`--l\` and \`--pkg\`.`
+      "No lockfile could be found automatically in your current working directory, and there was no `--l` flag passed. Please use indeps in a project directory with a valid lockfile & package.json, or explicitly specify the files with `--l` and `--pkg`."
     );
   }
 
@@ -101,14 +101,14 @@ const getPkgInfo = (): { path: string } => {
     if (argv.pkg[0] === "/") {
       const exists = fileExist(argv.pkg);
       if (!exists) {
-        throw new IndepsError(`No file found at: ${argv.l}`);
+        throw new IndepsError(`No file found at: ${argv.lock}`);
       }
       return { path: argv.pkg };
     }
     const relativePath = path.join(process.cwd(), "./package.json");
     const exists = fileExist(relativePath);
     if (!exists) {
-      throw new IndepsError(`No file found at: ${argv.l}`);
+      throw new IndepsError(`No file found at: ${argv.lock}`);
     }
     return {
       path: relativePath
@@ -118,7 +118,7 @@ const getPkgInfo = (): { path: string } => {
   const autoPath = path.join(process.cwd(), "./package.json");
   const exists = fileExist(autoPath);
   if (!exists) {
-    throw new IndepsError(`No file found at: ${argv.l}`);
+    throw new IndepsError(`No file found at: ${argv.lock}`);
   }
 
   return {
@@ -126,22 +126,10 @@ const getPkgInfo = (): { path: string } => {
   };
 };
 
-class ErrorTransport extends Console {
-  ogLog: any;
-  constructor(opts: any) {
-    super(opts);
-    this.ogLog = super.log;
-  }
-
-  log(info: any, callback: any) {
-    this.ogLog(info, callback);
-  }
-}
-
 (async () => {
   const logger = createLogger({
-    level: "info",
-    customLevels: winston.config.cli.levels
+    level: "standard",
+    customLevels: config.cli.levels
   });
 
   // start indeps
@@ -153,10 +141,10 @@ class ErrorTransport extends Console {
     const pkg = getPkgInfo();
 
     await initializeIndeps({
-      lock: lock!,
-      pkg: pkg!,
-      port: argv.p,
-      open: argv.open,
+      lock: lock,
+      pkg: pkg,
+      port: argv.port,
+      open: argv.open as boolean,
       logLevel: "standard"
     });
   } catch (error) {

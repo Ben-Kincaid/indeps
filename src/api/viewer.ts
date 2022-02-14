@@ -1,10 +1,10 @@
-import { ParsedLock } from "./parsers";
 import http from "http";
-import path, { dirname } from "path";
+import path from "path";
 
 import sirv from "sirv";
-import { ParsedData } from "src/api";
 import open from "open";
+
+import { ParsedData } from "src/api";
 import { IndepsError } from "src/error";
 
 interface ViewerOpts {
@@ -79,7 +79,7 @@ class Viewer {
   }
 
   startServer(): Promise<http.Server> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       if (!this.data || this.data.length === 0) {
         throw new IndepsError("No lockdata found.");
       }

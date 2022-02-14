@@ -1,19 +1,20 @@
-import { ParsedLock } from "../..";
-import { YarnV1Lexed } from ".";
 import { IndepsError } from "src/error";
+import { LockDependency, ParsedLock } from "src/api/parsers";
+
+import { YarnV1Lexed } from ".";
 
 const cleanLexem = (lexem: string): string => {
-  return lexem.replace(/(^\"|\"$)/g, "");
+  return lexem.replace(/(^"|"$)/g, "");
 };
 
 const parsePackageDeclarations = (
-  declarations: Array<string>
+  declarations: Array<string | number | boolean>
 ): { name: string; specifications: Array<string> } => {
   let packageName = "";
-  let packageSpecifications: Array<string> = [];
+  const packageSpecifications: Array<string> = [];
 
   declarations.forEach(declaration => {
-    const cleanedDeclaration = cleanLexem(declaration);
+    const cleanedDeclaration = cleanLexem(String(declaration));
 
     const nameMatches = cleanedDeclaration.match(/.+?(?=@)/g);
     const specMatches = cleanedDeclaration.match(/[^@]+$/g);
@@ -42,10 +43,10 @@ const parsePackageDeclarations = (
 const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
   const deps = [];
 
-  let currentPackage: any = null;
-  let currentPackageDeclarations: any = [];
+  let currentPackage: Partial<LockDependency> | null = null;
+  let currentPackageDeclarations: Array<string | number | boolean> = [];
   let indentLevel = 0;
-  for (var i = 0; i < lexed.length; i++) {
+  for (let i = 0; i < lexed.length; i++) {
     const prevToken = lexed[i - 1];
     const currentToken = lexed[i];
     const nextToken = lexed[i + 1];
@@ -141,7 +142,7 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
       break;
     }
   }
-  return deps;
+  return deps as Array<LockDependency>;
 };
 
 export default yarnV1Parser;

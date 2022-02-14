@@ -4,7 +4,7 @@ import { getFixture } from "src/api/__tests__/utils";
 
 describe("computePackageTags", () => {
   it("creates proper package tags for project dependency", () => {
-    const dependency: any = {
+    const dependency: LockDependency = {
       name: "path-to-regexp",
       version: "6.2.0",
       resolved:
@@ -29,7 +29,7 @@ describe("computePackageTags", () => {
   });
 
   it("creates proper package tags for development dependency", () => {
-    const dependency: any = {
+    const dependency: LockDependency = {
       name: "path-to-regexp",
       version: "6.2.0",
       resolved:

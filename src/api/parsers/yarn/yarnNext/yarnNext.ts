@@ -1,5 +1,8 @@
 import yaml from "js-yaml";
+
+import { LockDependency } from "src/api/parsers";
 import { IndepsError } from "src/error";
+
 import { LockSubDependency, ParsedLock } from "../../types";
 
 interface ParsedPackage {
@@ -10,8 +13,8 @@ interface ParsedPackage {
   checksum: string;
   dependencies: { [key: string]: string };
   peerDependencies: Map<string, string>;
-  dependenciesMeta: Map<string, any>;
-  peerDependenciesMeta: Map<string, any>;
+  dependenciesMeta: Map<string, unknown>;
+  peerDependenciesMeta: Map<string, unknown>;
 }
 
 type ParsedYarnNext = { [key: string]: ParsedPackage };
@@ -20,7 +23,7 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
   return Object.keys(doc).map(identHash => {
     const pkg = doc[identHash];
     const specificationNames = identHash.split(", ");
-    let name: string = "";
+    let name = "";
     const specifications: Array<string> = [];
 
     specificationNames.forEach(specificationName => {
@@ -61,7 +64,7 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
       resolved: pkg.resolution,
       integrity: pkg.checksum,
       ...(dependencies && { dependencies })
-    } as any;
+    } as LockDependency;
   });
 };
 

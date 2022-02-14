@@ -1,4 +1,3 @@
-import { offsetComparator } from "react-virtuoso/dist/sizeSystem";
 import { IndepsError } from "src/error";
 
 type EdgeDirection = "directed" | "undirected";
@@ -38,7 +37,9 @@ class Graph {
    */
   addEdge(source: string, destination: string) {
     if (this.nodes.has(source)) {
-      this.nodes.get(source)!.push(destination);
+      const sourceNode = this.nodes.get(source);
+
+      if (sourceNode) sourceNode.push(destination);
     } else {
       throw new IndepsError(
         `Unable to add "${destination}" to unknown source node: "${source}"`
@@ -62,9 +63,9 @@ class Graph {
           reversed.set(child, []);
         }
 
-        const curr = reversed.get(child)!;
+        const curr = reversed.get(child);
 
-        curr.push(node);
+        if (curr) curr.push(node);
       });
     }
 

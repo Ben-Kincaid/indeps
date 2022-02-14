@@ -423,7 +423,7 @@ export interface PackageJson2 {
    * This interface was referenced by `PackageJson2`'s JSON-Schema definition
    * via the `patternProperty` "^_".
    */
-  [k: string]: any;
+  [k: string]: any; // eslint-disable-line
 }
 /**
  * Used to specify conditional exports, note that Conditional exports are unsupported in older environments, so it's recommended to use the fallback array option if support for those environments is a concern.

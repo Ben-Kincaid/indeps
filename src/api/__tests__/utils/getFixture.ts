@@ -6,7 +6,7 @@ import path from "path";
  */
 function getFixture<T = string>(
   fileName: string,
-  parseJson: boolean = false
+  parseJson = false
 ): T {
   const data = fs.readFileSync(
     path.resolve(__dirname, `../fixtures/${fileName}`),

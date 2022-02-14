@@ -1,9 +1,9 @@
 import path from "path";
 import fs from "fs";
+
 import yarnV1Lexer, {
   createYarnV1LexerToken
 } from "../parsers/yarn/yarnV1/yarnV1Lexer";
-
 import yarnV1Parser from "../parsers/yarn/yarnV1/yarnV1Parser";
 
 describe("yarnV1Lexer", () => {
