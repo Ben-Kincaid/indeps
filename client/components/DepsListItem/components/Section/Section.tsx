@@ -12,12 +12,21 @@ interface Props {
   children: React.ReactNode | Array<React.ReactNode>;
 }
 
-function Section({ title, className, children }: Props): ReactElement {
+function Section({
+  title,
+  className,
+  children
+}: Props): ReactElement {
   return (
     <div className={styles.depsListItemSection}>
       <Divider className={styles.depsListItemSectionDivider} />
       <p className={styles.depsListItemSectionTitle}>{title}</p>
-      <ul className={classNames(styles.depsListItemSectionList, className)}>
+      <ul
+        className={classNames(
+          styles.depsListItemSectionList,
+          className
+        )}
+      >
         {children}
       </ul>
     </div>

@@ -6,7 +6,11 @@ import { config } from "winston";
 import { Graph } from "src/api/graph";
 import { createLogger } from "src/logger";
 import Viewer from "src/api/viewer";
-import { LockDependency, LockType, ParsedLock } from "src/api/parsers";
+import {
+  LockDependency,
+  LockType,
+  ParsedLock
+} from "src/api/parsers";
 import npmParser from "src/api/parsers/npm";
 import yarnParser from "src/api/parsers/yarn";
 import {
@@ -182,7 +186,7 @@ function computePackageTags({
   lockDependency
 }: ComputePackageTagOpts): Array<PackageTag> {
   const tags: Array<PackageTag> = [];
-  Object.keys(dependencies).forEach(depName => {
+  Object.keys(dependencies).forEach((depName) => {
     const depSpec = dependencies[depName] as string;
     if (
       lockDependency.name === depName &&
@@ -193,7 +197,7 @@ function computePackageTags({
       return;
     }
   });
-  Object.keys(devDependencies).forEach(depName => {
+  Object.keys(devDependencies).forEach((depName) => {
     const depSpec = devDependencies[depName] as string;
     if (
       lockDependency.name === depName &&
@@ -335,7 +339,10 @@ async function initializeIndeps(startOpts: StartOpts) {
 
   // get parsed lock data
   logger.info("🔍 Parsing your lockfile...");
-  const lockParsed = parseLock({ data: lockRaw, type: lockType }, pkgParsed);
+  const lockParsed = parseLock(
+    { data: lockRaw, type: lockType },
+    pkgParsed
+  );
 
   // create DAG
   logger.info("🔍 Creating your dependency graph...");

@@ -57,7 +57,8 @@ describe("computePackageTags", () => {
     const dependency: LockDependency = {
       name: "isarray",
       version: "0.0.1",
-      resolved: "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz",
+      resolved:
+        "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz",
       integrity: "sha1-ihis/Kmo9Bd+Cav8YDiTmwXR7t8=",
       specifications: ["0.0.1"]
     };

@@ -13,7 +13,7 @@ const parsePackageDeclarations = (
   let packageName = "";
   const packageSpecifications: Array<string> = [];
 
-  declarations.forEach(declaration => {
+  declarations.forEach((declaration) => {
     const cleanedDeclaration = cleanLexem(String(declaration));
 
     const nameMatches = cleanedDeclaration.match(/.+?(?=@)/g);
@@ -44,7 +44,8 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
   const deps = [];
 
   let currentPackage: Partial<LockDependency> | null = null;
-  let currentPackageDeclarations: Array<string | number | boolean> = [];
+  let currentPackageDeclarations: Array<string | number | boolean> =
+    [];
   let indentLevel = 0;
   for (let i = 0; i < lexed.length; i++) {
     const prevToken = lexed[i - 1];
@@ -98,15 +99,24 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
       currentPackage
     ) {
       if (currentToken.lexem === "version") {
-        currentPackage.version = cleanLexem(nextToken.lexem as string);
+        currentPackage.version = cleanLexem(
+          nextToken.lexem as string
+        );
       }
       if (currentToken.lexem === "resolved") {
-        currentPackage.resolved = cleanLexem(nextToken.lexem as string);
+        currentPackage.resolved = cleanLexem(
+          nextToken.lexem as string
+        );
       }
       if (currentToken.lexem === "integrity") {
-        currentPackage.integrity = cleanLexem(nextToken.lexem as string);
+        currentPackage.integrity = cleanLexem(
+          nextToken.lexem as string
+        );
       }
-      if (currentToken.lexem === "dependencies" && nextToken.type === "COLON") {
+      if (
+        currentToken.lexem === "dependencies" &&
+        nextToken.type === "COLON"
+      ) {
         currentPackage.dependencies = [];
       }
     }

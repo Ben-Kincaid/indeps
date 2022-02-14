@@ -4,9 +4,15 @@ import { getFixture } from "src/api/__tests__/utils";
 describe("npmParser", () => {
   // Use case: is able to parse simple package with minimal project dependencies & no sub dependencies
   it("correctly parses simple package declaration", () => {
-    const pkgLockData = getFixture("package-lock--single.mock.json", false);
+    const pkgLockData = getFixture(
+      "package-lock--single.mock.json",
+      false
+    );
 
-    const pkgData = getFixture<PackageJson>("package--single.mock.json", true);
+    const pkgData = getFixture<PackageJson>(
+      "package--single.mock.json",
+      true
+    );
 
     const parsed = npmParser(pkgLockData, pkgData);
 
@@ -25,9 +31,15 @@ describe("npmParser", () => {
 
   // Use case: package dependency & sub dependency require same package, different spec + version
   it("correctly parses linked package declarations", () => {
-    const pkgLockData = getFixture("package-lock--linked.mock.json", false);
+    const pkgLockData = getFixture(
+      "package-lock--linked.mock.json",
+      false
+    );
 
-    const pkgData = getFixture<PackageJson>("package--linked.mock.json", true);
+    const pkgData = getFixture<PackageJson>(
+      "package--linked.mock.json",
+      true
+    );
 
     const parsed = npmParser(pkgLockData, pkgData);
 
@@ -35,7 +47,8 @@ describe("npmParser", () => {
       {
         name: "isarray",
         integrity: "sha1-ihis/Kmo9Bd+Cav8YDiTmwXR7t8=",
-        resolved: "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz",
+        resolved:
+          "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz",
         specifications: ["0.0.1"],
         version: "0.0.1"
       },
@@ -51,7 +64,8 @@ describe("npmParser", () => {
       {
         name: "renux",
         integrity: "sha1-5v6omWBe8udGsQYA9CQfDBy559U=",
-        resolved: "https://registry.npmjs.org/renux/-/renux-1.0.10.tgz",
+        resolved:
+          "https://registry.npmjs.org/renux/-/renux-1.0.10.tgz",
         specifications: ["^1.0.10"],
         version: "1.0.10",
         dependencies: [{ name: "path-to-regexp", range: "^1.2.1" }]
@@ -71,9 +85,15 @@ describe("npmParser", () => {
 
   // Use case: package dependency & sub dependency require same package, same version but different spec
   it("correctly parses shared declarations", () => {
-    const pkgLockData = getFixture("package-lock--shared.mock.json", false);
+    const pkgLockData = getFixture(
+      "package-lock--shared.mock.json",
+      false
+    );
 
-    const pkgData = getFixture<PackageJson>("package--shared.mock.json", true);
+    const pkgData = getFixture<PackageJson>(
+      "package--shared.mock.json",
+      true
+    );
 
     const parsed = npmParser(pkgLockData, pkgData);
 
@@ -81,7 +101,8 @@ describe("npmParser", () => {
       {
         name: "isarray",
         integrity: "sha1-ihis/Kmo9Bd+Cav8YDiTmwXR7t8=",
-        resolved: "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz",
+        resolved:
+          "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz",
         specifications: ["0.0.1"],
         version: "0.0.1"
       },
@@ -97,7 +118,8 @@ describe("npmParser", () => {
       {
         name: "renux",
         integrity: "sha1-5v6omWBe8udGsQYA9CQfDBy559U=",
-        resolved: "https://registry.npmjs.org/renux/-/renux-1.0.10.tgz",
+        resolved:
+          "https://registry.npmjs.org/renux/-/renux-1.0.10.tgz",
         specifications: ["^1.0.10"],
         version: "1.0.10",
         dependencies: [{ name: "path-to-regexp", range: "^1.2.1" }]

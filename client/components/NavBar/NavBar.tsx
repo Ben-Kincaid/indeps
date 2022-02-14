@@ -14,7 +14,11 @@ function NavBar(): ReactElement {
     <div className={styles.nav}>
       <nav className={styles.mainNav} aria-label="primary">
         <div className={styles.branding}>
-          <img className={styles.brandImage} src={logoLight} alt="Indeps" />
+          <img
+            className={styles.brandImage}
+            src={logoLight}
+            alt="Indeps"
+          />
           <span className={styles.brandVersion}>{version}</span>
         </div>
         {packageName && (

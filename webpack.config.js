@@ -44,7 +44,9 @@ const sassLoader = {
   }
 };
 const isDev = process.env.NODE_ENV !== "production";
-const styleLoader = isDev ? "style-loader" : MiniCssExtractPlugin.loader;
+const styleLoader = isDev
+  ? "style-loader"
+  : MiniCssExtractPlugin.loader;
 
 const config = {
   devtool: "inline-source-map",

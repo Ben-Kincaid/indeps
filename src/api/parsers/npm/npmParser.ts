@@ -26,10 +26,13 @@ function createLockDependency(
     resolved: dependency.resolved,
     integrity: dependency.integrity,
     ...(dependency.requires && {
-      dependencies: Object.keys(dependency.requires).map(depKey => ({
-        name: depKey,
-        range: (dependency.requires && dependency.requires[depKey]) ?? ""
-      }))
+      dependencies: Object.keys(dependency.requires).map(
+        (depKey) => ({
+          name: depKey,
+          range:
+            (dependency.requires && dependency.requires[depKey]) ?? ""
+        })
+      )
     })
   };
 }
@@ -45,7 +48,10 @@ function createLockDependency(
  *
  * @internal
  */
-function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
+function normalizeParsedNPM(
+  parsed: PackageLock,
+  pkg: PackageJson
+): ParsedLock {
   const out = Object.keys(parsed.dependencies).reduce((acc, curr) => {
     const dependency = parsed.dependencies[curr];
 
@@ -71,7 +77,7 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
             acc.push(d1.requires[curr]);
           }
         } else if (d1.dependencies && !d1.dependencies[curr]) {
-          Object.keys(d1.dependencies).forEach(d2Key => {
+          Object.keys(d1.dependencies).forEach((d2Key) => {
             const d2 = d1.dependencies[d2Key];
             if (d2.requires && d2.requires[curr]) {
               acc.push(d2.requires[curr]);
@@ -85,17 +91,16 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
     );
 
     // inject pkg dependencies/devDependencies specs to root level dep
-    const pkgSpecifications = Object.keys(pkgDeps).reduce<Array<string>>(
-      (acc2, curr2) => {
-        const pkgDep = pkgDeps[curr2];
+    const pkgSpecifications = Object.keys(pkgDeps).reduce<
+      Array<string>
+    >((acc2, curr2) => {
+      const pkgDep = pkgDeps[curr2];
 
-        if (curr === curr2) {
-          if (pkgDep !== undefined) acc2.push(pkgDep);
-        }
-        return acc2;
-      },
-      [] as Array<string>
-    );
+      if (curr === curr2) {
+        if (pkgDep !== undefined) acc2.push(pkgDep);
+      }
+      return acc2;
+    }, [] as Array<string>);
 
     const specifications = new Set([
       ...subSpecifications,
@@ -112,7 +117,7 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
 
     // create deps for required dependencies
     if (dependency.dependencies) {
-      Object.keys(dependency.dependencies).forEach(innerDepKey => {
+      Object.keys(dependency.dependencies).forEach((innerDepKey) => {
         const innerDep = dependency.dependencies[innerDepKey];
         if (
           acc.some(
@@ -126,12 +131,14 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
         const specifications: Array<string> = [];
 
         if (dependency.requires) {
-          if (Object.keys(dependency.requires).includes(innerDepKey)) {
+          if (
+            Object.keys(dependency.requires).includes(innerDepKey)
+          ) {
             specifications.push(dependency.requires[innerDepKey]);
           } else {
-            const siblingSpecs = Object.keys(dependency.dependencies).reduce<
-              Array<string>
-            >((acc, dKey) => {
+            const siblingSpecs = Object.keys(
+              dependency.dependencies
+            ).reduce<Array<string>>((acc, dKey) => {
               const d = dependency.dependencies[dKey];
               if (!d.requires) return acc;
               if (Object.keys(d.requires).includes(innerDepKey)) {
@@ -144,7 +151,9 @@ function normalizeParsedNPM(parsed: PackageLock, pkg: PackageJson): ParsedLock {
           }
         }
 
-        acc.push(createLockDependency(innerDepKey, innerDep, specifications));
+        acc.push(
+          createLockDependency(innerDepKey, innerDep, specifications)
+        );
       });
     }
 

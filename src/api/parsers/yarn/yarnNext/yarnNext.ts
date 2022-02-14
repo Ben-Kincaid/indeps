@@ -20,13 +20,13 @@ interface ParsedPackage {
 type ParsedYarnNext = { [key: string]: ParsedPackage };
 
 const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
-  return Object.keys(doc).map(identHash => {
+  return Object.keys(doc).map((identHash) => {
     const pkg = doc[identHash];
     const specificationNames = identHash.split(", ");
     let name = "";
     const specifications: Array<string> = [];
 
-    specificationNames.forEach(specificationName => {
+    specificationNames.forEach((specificationName) => {
       const nameMatches = specificationName.match(/.+?(?=@)/g);
       const specMatches = new RegExp(
         /(@npm:|@workspace:|@patch:)([\s\S]*)$|([^@]*$)/g
@@ -43,18 +43,17 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
     });
 
     const dependencies = pkg.dependencies
-      ? Object.keys(pkg.dependencies).reduce<Array<LockSubDependency>>(
-          (acc, dependencyName) => {
-            return [
-              ...acc,
-              {
-                name: dependencyName,
-                range: pkg.dependencies[dependencyName]
-              }
-            ];
-          },
-          []
-        )
+      ? Object.keys(pkg.dependencies).reduce<
+          Array<LockSubDependency>
+        >((acc, dependencyName) => {
+          return [
+            ...acc,
+            {
+              name: dependencyName,
+              range: pkg.dependencies[dependencyName]
+            }
+          ];
+        }, [])
       : null;
 
     return {
@@ -70,13 +69,16 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
 
 const yarnNext = (data: string): ParsedLock => {
   const doc = yaml.load(data) as ParsedYarnNext;
-  const filteredDoc = Object.keys(doc).reduce<ParsedYarnNext>((acc, key) => {
-    if (key !== "__metadata") {
-      acc[key] = doc[key];
-    }
+  const filteredDoc = Object.keys(doc).reduce<ParsedYarnNext>(
+    (acc, key) => {
+      if (key !== "__metadata") {
+        acc[key] = doc[key];
+      }
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {}
+  );
 
   const normalized = normalizeYarnNext(filteredDoc);
   return normalized;

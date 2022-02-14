@@ -58,7 +58,7 @@ class Graph {
 
     for (const [node, children] of this.nodes) {
       if (!reversed.has(node)) reversed.set(node, []);
-      children.forEach(child => {
+      children.forEach((child) => {
         if (!reversed.has(child)) {
           reversed.set(child, []);
         }
@@ -112,7 +112,7 @@ class Graph {
       const descendants = nodes.get(node);
       // if the node has descendants(ancestors after reverse),
       if (descendants && descendants.length > 0) {
-        descendants?.forEach(descendant => {
+        descendants?.forEach((descendant) => {
           const newPath = [...path, descendant];
           paths = this.dfsPaths(newPath, paths, visited);
         });

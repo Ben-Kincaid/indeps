@@ -23,7 +23,11 @@ interface RenderOpts {
 
 const projectRoot = path.join(__dirname, "..");
 
-const renderTemplate = ({ data, packageName, indepsVersion }: RenderOpts) => {
+const renderTemplate = ({
+  data,
+  packageName,
+  indepsVersion
+}: RenderOpts) => {
   return `
 <!DOCTYPE html>
 <html>
@@ -61,7 +65,10 @@ class Viewer {
     this.handleServerRequest = this.handleServerRequest.bind(this);
   }
 
-  handleServerRequest(req: http.IncomingMessage, res: http.ServerResponse) {
+  handleServerRequest(
+    req: http.IncomingMessage,
+    res: http.ServerResponse
+  ) {
     if (req.method === "GET" && req.url === "/") {
       const doc = renderTemplate({
         data: this.data,
@@ -79,7 +86,7 @@ class Viewer {
   }
 
   startServer(): Promise<http.Server> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (!this.data || this.data.length === 0) {
         throw new IndepsError("No lockdata found.");
       }
@@ -89,7 +96,9 @@ class Viewer {
         .listen(this.viewerPort, "localhost", () => {
           // open browser to the server
           if (this.open)
-            open(`http://localhost:${this.viewerPort}`, { wait: false });
+            open(`http://localhost:${this.viewerPort}`, {
+              wait: false
+            });
 
           resolve(server);
         });

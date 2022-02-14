@@ -1,4 +1,8 @@
-import React, { MouseEventHandler, ReactElement, useMemo } from "react";
+import React, {
+  MouseEventHandler,
+  ReactElement,
+  useMemo
+} from "react";
 
 import classNames from "classnames";
 
@@ -35,27 +39,29 @@ function DepsListItem({
 
   const normalizedPaths = useMemo(
     () =>
-      paths.reduce<Array<Array<{ name: string; version: string | null }>>>(
-        (acc, curr) => {
-          const separated = curr.map(pathItem => {
-            const split = pathItem.match(/(.*)@(.*)/);
+      paths.reduce<
+        Array<Array<{ name: string; version: string | null }>>
+      >((acc, curr) => {
+        const separated = curr.map((pathItem) => {
+          const split = pathItem.match(/(.*)@(.*)/);
 
-            return {
-              name: !split || split.length !== 3 ? pathItem : split[1],
-              version: !split || split.length !== 3 ? null : split[2]
-            };
-          });
+          return {
+            name: !split || split.length !== 3 ? pathItem : split[1],
+            version: !split || split.length !== 3 ? null : split[2]
+          };
+        });
 
-          acc.push(separated.reverse());
-          return acc;
-        },
-        []
-      ),
+        acc.push(separated.reverse());
+        return acc;
+      }, []),
     [paths]
   );
 
   return (
-    <article className={classNames(styles.item, className)} style={style}>
+    <article
+      className={classNames(styles.item, className)}
+      style={style}
+    >
       <button className={styles.topBtn} onClick={onClick}>
         <div className={styles.topName}>
           <h3>{name}</h3>
@@ -103,12 +109,16 @@ function DepsListItem({
               <div className={styles.panelMeta}>
                 <div className={styles.panelMetaVersion}>
                   <p className={styles.panelMetaTitle}>Version:</p>
-                  <span className={styles.panelMetaValue}>{version}</span>
+                  <span className={styles.panelMetaValue}>
+                    {version}
+                  </span>
                 </div>
                 <div className={styles.panelMetaSpecs}>
-                  <p className={styles.panelMetaTitle}>Specifications:</p>
+                  <p className={styles.panelMetaTitle}>
+                    Specifications:
+                  </p>
                   <ul className={styles.panelMetaList}>
-                    {specifications?.map(specification => (
+                    {specifications?.map((specification) => (
                       <li
                         key={specification}
                         className={styles.panelMetaListItem}
@@ -128,21 +138,25 @@ function DepsListItem({
                   className={styles.depsListItemSection}
                 >
                   {tags.includes("TAG_DEPENDENCY") && (
-                    <SectionItem className={styles.depsListItemSectionItem}>
+                    <SectionItem
+                      className={styles.depsListItemSectionItem}
+                    >
                       <span className={styles.sectionImportantValue}>
                         Project Dependency
                       </span>
                     </SectionItem>
                   )}
                   {tags.includes("TAG_DEV_DEPENDENCY") && (
-                    <SectionItem className={styles.depsListItemSectionItem}>
+                    <SectionItem
+                      className={styles.depsListItemSectionItem}
+                    >
                       <span className={styles.sectionSecondaryValue}>
                         Development Dependency
                       </span>
                     </SectionItem>
                   )}
                   {normalizedPaths.map(
-                    path =>
+                    (path) =>
                       path.length > 1 && (
                         <SectionItem
                           key={`test123${name}@${version}-${JSON.stringify(
@@ -151,7 +165,9 @@ function DepsListItem({
                           className={styles.depsListItemSectionItem}
                         >
                           {path.map(({ name, version }, i) => (
-                            <React.Fragment key={`${name}@${version}`}>
+                            <React.Fragment
+                              key={`${name}@${version}`}
+                            >
                               <span
                                 className={classNames(
                                   styles.sectionPathValue,
@@ -195,7 +211,9 @@ function DepsListItem({
                       className={styles.depsListItemSectionItem}
                     >
                       <span className={styles.panelDependencyValue}>
-                        <span className={styles.textPrimary}>{name}</span>{" "}
+                        <span className={styles.textPrimary}>
+                          {name}
+                        </span>{" "}
                         {range}
                       </span>
                     </SectionItem>
