@@ -1,7 +1,6 @@
 import path from "path";
 import fs from "fs";
 
-import { config } from "winston";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
