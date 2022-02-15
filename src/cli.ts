@@ -8,7 +8,7 @@ import { hideBin } from "yargs/helpers";
 import createDependencyGraph from "src/utils/createDependencyGraph";
 import { IndepsError } from "src/error";
 import getIndepsPkg from "src/utils/getIndepsPkg";
-import {parseLock, parsePkg, LockType } from "src/parsers";
+import { parseLock, parsePkg, LockType } from "src/parsers";
 import createDependencyData from "src/utils/createDependencyData";
 import Viewer from "src/viewer";
 import fileExist from "src/utils/fileExists";
