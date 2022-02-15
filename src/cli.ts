@@ -35,9 +35,15 @@ const argv = yargs(hideBin(process.argv))
     type: "number",
     description: "The port used to serve the visualizer client."
   })
-  .option("no-open", {
+  .option("open", {
     type: "boolean",
-    description: "Disable opening of browser on server start."
+    description: "Disable opening of browser on server start.",
+    default: true
+  })
+  .option("quiet", {
+    type: "boolean",
+    description:
+      "Disable all console output besides warnings & errors."
   })
   .parseSync();
 
@@ -132,11 +138,18 @@ function getPkgInfo(): { path: string } {
 
 /** Start the indeps processes */
 (async () => {
+  // get CLI options
+  const { open, port = 8088, quiet } = argv;
+
   // create CLI logger
   const logger = createLogger({
-    level: "standard",
-    customLevels: config.cli.levels
+    level: quiet ? "warn" : "info"
   });
+
+  // add notices for disabling-oriented flags
+  if (open === false) {
+    logger.warn("Browser open disabled.");
+  }
 
   try {
     let pkgRaw: string;
@@ -195,16 +208,19 @@ function getPkgInfo(): { path: string } {
     // create a new Viewer
     const viewer = new Viewer({
       data: dependencyData,
-      port: argv.port || 8088,
-      packageName: pkgParsed.name,
       indepsVersion: indepsPkg.version || "x.x.x",
-      open: argv.open as boolean
+      open,
+      packageName: pkgParsed.name,
+      port
     });
 
     // start viewer with normalized data
     await viewer.startServer();
 
-    logger.info("Started indeps server!");
+    logger.info(`🏃 Server started.`);
+    logger.info(
+      `🏃 Running at: \x1b[1mhttp://127.0.0.1:${port}\x1b[0m`
+    );
   } catch (error) {
     if (error instanceof IndepsError) {
       logger.error(error.message);
