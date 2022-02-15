@@ -1,4 +1,4 @@
-import { ParsedLock, yarnNext, yarnV1 } from "src/api/parsers";
+import { ParsedLock, yarnNext, yarnV1 } from "src/parsers";
 import { IndepsError } from "src/error";
 
 /**

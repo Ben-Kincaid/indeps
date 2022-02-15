@@ -1,6 +1,6 @@
-import { computePackageTags } from "src/api";
-import { LockDependency } from "src/api/parsers";
-import { getFixture } from "src/api/__tests__/utils";
+import { LockDependency } from "src/parsers";
+import { getFixture } from "src/__tests__/utils";
+import computePackageTags from "src/utils/computePackageTags";
 
 describe("computePackageTags", () => {
   it("creates proper package tags for project dependency", () => {

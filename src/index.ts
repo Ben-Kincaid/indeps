@@ -1,7 +1,4 @@
-import { initializeIndeps } from "src/api";
-import { StartOpts, LockInfo, PkgInfo } from "src/api/types";
-import { LockType } from "src/api/parsers/types";
+import { LockType } from "src/parsers/types";
+import { StartOpts, LockInfo, PkgInfo } from "src/types";
 
 export { StartOpts, LockInfo, PkgInfo, LockType };
-
-export default initializeIndeps;

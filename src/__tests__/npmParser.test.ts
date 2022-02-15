@@ -1,5 +1,5 @@
-import npmParser from "src/api/parsers/npm";
-import { getFixture } from "src/api/__tests__/utils";
+import npmParser from "src/parsers/npm";
+import { getFixture } from "src/__tests__/utils";
 
 describe("npmParser", () => {
   // Use case: is able to parse simple package with minimal project dependencies & no sub dependencies

@@ -1,4 +1,4 @@
-import { Graph } from "src/api/graph";
+import { Graph } from "src/graph";
 
 const nodes = ["node-1", "node-2", "node-3", "node-4", "node-5"];
 const edges = [

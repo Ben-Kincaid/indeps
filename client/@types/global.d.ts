@@ -1,4 +1,4 @@
-import { ParsedData } from "src/api";
+import { ParsedData } from "src/types";
 
 declare global {
   // add typings for server-side injected data

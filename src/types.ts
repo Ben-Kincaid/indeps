@@ -1,8 +1,4 @@
-import {
-  LockDependency,
-  LockType,
-  ParsedLock
-} from "src/api/parsers";
+import { LockDependency, LockType, ParsedLock } from "src/parsers";
 
 // Package tag constants
 const TAG_DEPENDENCY = "TAG_DEPENDENCY";

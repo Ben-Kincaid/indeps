@@ -1,4 +1,4 @@
-import { LockDependency, ParsedLock } from "src/api/parsers";
+import { LockDependency, ParsedLock } from "src/parsers";
 
 /**
  * Create a lock dependency from a dependency object from package-lock.json.

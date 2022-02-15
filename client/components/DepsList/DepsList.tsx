@@ -9,7 +9,7 @@ import React, {
 import classNames from "classnames";
 import { Components, ListProps, Virtuoso } from "react-virtuoso";
 
-import { FullDependency, ParsedData } from "src/api";
+import { FullDependency, ParsedData } from "src/types";
 import useQueryFilter from "client/hooks/useQueryFilter";
 import DepsListItem from "client/components/DepsListItem";
 import useFilterSidebar from "client/hooks/useFilterSidebar";
