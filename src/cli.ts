@@ -8,8 +8,7 @@ import { hideBin } from "yargs/helpers";
 import createDependencyGraph from "src/utils/createDependencyGraph";
 import { IndepsError } from "src/error";
 import getIndepsPkg from "src/utils/getIndepsPkg";
-import parseLock from "src/parsers/parseLock";
-import { parsePkg, LockType } from "src/parsers";
+import {parseLock, parsePkg, LockType } from "src/parsers";
 import createDependencyData from "src/utils/createDependencyData";
 import Viewer from "src/viewer";
 import fileExist from "src/utils/fileExists";
@@ -42,7 +41,7 @@ const argv = yargs(hideBin(process.argv))
   })
   .parseSync();
 
-/** Get the lockfile information using the CLI context/parameters */
+/** Get the lockfile information using the CWD context or CLI options */
 function getLockInfo(): { path: string; type: LockType } {
   // handle if --l was passed
   if (argv.lock) {
@@ -100,7 +99,7 @@ function getLockInfo(): { path: string; type: LockType } {
   };
 }
 
-/** Get the package.json information using the CLI context/parameters */
+/** Get the package.json information using the CWD context or CLI options */
 function getPkgInfo(): { path: string } {
   if (argv.pkg) {
     if (argv.pkg[0] === "/") {
