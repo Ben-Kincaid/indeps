@@ -3,28 +3,56 @@ import {
   config,
   transports,
   format,
-  Logger
+  Logger,
+  addColors
 } from "winston";
 
 interface CreateLoggerOpts {
-  customLevels?: config.AbstractConfigSetLevels;
-  level?: "standard" | "verbose";
+  levels?: config.AbstractConfigSetLevels;
+  colors?: config.AbstractConfigSetColors;
+  level?: string;
 }
 
+const defaultColors = {
+  error: "bold red",
+  warn: "underline yellow",
+  info: "green",
+  verbose: "dim gray",
+  debug: "magenta",
+  silly: "cyan redBG"
+};
+
 const createLogger = ({
-  customLevels = config.npm.levels,
-  level = "standard"
+  levels = config.npm.levels,
+  colors = defaultColors,
+  level = "info"
 }: CreateLoggerOpts): Logger => {
+  const myCustomFormat = format.combine(
+    format.colorize({
+      all: true
+    }),
+    format.simple(),
+    format.label({
+      label: "\x1b[2mindeps\x1b[0m"
+    }),
+    format.printf(
+      ({ level, message, label }) =>
+        `[${label}] \x1b[2m${level}\x1b[0m: ${message}`
+    )
+  );
+
   const transport = new transports.Console({
-    format: format.combine(format.colorize(), format.cli())
+    format: format.combine(myCustomFormat)
   });
 
   const logger = createWinstonLogger({
-    levels: customLevels,
-    level: level === "standard" ? "info" : "verbose",
+    levels: levels,
+    level: level,
     transports: [transport],
     exceptionHandlers: [transport]
   });
+
+  addColors(colors);
 
   return logger;
 };
