@@ -25,11 +25,12 @@
     "docs:watch": "yarn docs:build -- --watch",
     "health": "yarn check-types && yarn prettier:check && yarn client:lint --max-warnings 1 && yarn node:lint --max-warnings 0 && yarn test",
     "link-local": "yarn build && chmod +x lib/cli.js && yarn link",
+    "lint-staged": "lint-staged",
     "node:lint": "eslint ./src/* -c ./src/.eslintrc.json  --no-error-on-unmatched-pattern",
     "node:lint:fix": "yarn node:lint --fix",
     "prepare": "husky install",
     "prettier:check": "prettier --check .",
-    "prettier:write": "prettier --write .",
+    "prettier:write": "prettier --ignore-unknown --write",
     "start": "node lib/cli.js",
     "start:watch": "nodemon lib/cli.js --no-open",
     "test": "jest --verbose",
@@ -97,6 +98,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^7.0.4",
     "jest": "^27.3.0",
+    "lint-staged": ">=10",
     "mini-css-extract-plugin": "^2.4.4",
     "nodemon": "^2.0.13",
     "open-cli": "^7.0.1",
@@ -116,6 +118,10 @@
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.5.0"
+  },
+  "lint-staged": {
+    "*": "yarn prettier:write",
+    "*.{js,jsx,ts,tsx}": "yarn client:lint:fix && yarn node:lint:fix"
   },
   "packageManager": "yarn@3.1.0"
 }
