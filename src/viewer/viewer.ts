@@ -93,10 +93,10 @@ class Viewer {
 
       const server = http
         .createServer(this.handleServerRequest)
-        .listen(this.viewerPort, "localhost", () => {
+        .listen(this.viewerPort, "127.0.0.1", () => {
           // open browser to the server
           if (this.open)
-            open(`http://localhost:${this.viewerPort}`, {
+            open(`http://127.0.0.1:${this.viewerPort}`, {
               wait: false
             });
 
