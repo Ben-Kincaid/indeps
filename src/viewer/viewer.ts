@@ -4,7 +4,7 @@ import path from "path";
 import sirv from "sirv";
 import open from "open";
 
-import { ParsedData } from "src/api";
+import { ParsedData } from "src/types";
 import { IndepsError } from "src/error";
 
 interface ViewerOpts {

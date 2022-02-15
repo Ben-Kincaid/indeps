@@ -1,4 +1,4 @@
-import { ParsedData } from "src/api";
+import { ParsedData } from "src/types";
 
 export interface GlobalData {
   data: ParsedData;

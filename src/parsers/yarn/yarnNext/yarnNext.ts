@@ -1,6 +1,6 @@
 import yaml from "js-yaml";
 
-import { LockDependency } from "src/api/parsers";
+import { LockDependency } from "src/parsers";
 import { IndepsError } from "src/error";
 
 import { LockSubDependency, ParsedLock } from "../../types";

@@ -1,5 +1,5 @@
 import { IndepsError } from "src/error";
-import { LockDependency, ParsedLock } from "src/api/parsers";
+import { LockDependency, ParsedLock } from "src/parsers";
 
 import { YarnV1Lexed } from ".";
 

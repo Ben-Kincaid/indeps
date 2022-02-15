@@ -8,7 +8,7 @@ import classNames from "classnames";
 
 import useElementSize from "client/hooks/useElementSize";
 import Grow from "client/components/Grow";
-import { FullDependency } from "src/api";
+import { FullDependency } from "src/types";
 import Arrow from "client/components/Icons/components/Arrow";
 
 import SectionItem from "./components/SectionItem";
