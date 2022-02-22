@@ -116,6 +116,93 @@ describe("yarnV1Parser", () => {
       }
     ]);
   });
+  it("correctly parses duplicate package declarations (different resolved version)", () => {
+    const lexed = yarnV1Lexer(`
+json5@2.x, json5@^2.1.2:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz"
+  integrity sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==
+  dependencies:
+    minimist "^1.2.5"
+
+json5@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/json5/-/json5-1.0.1.tgz"
+  integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
+  dependencies:
+    minimist "^1.2.0"
+    `);
+    const parsed = yarnV1Parser(lexed);
+
+    expect(parsed).toEqual([
+      {
+        name: "json5",
+        specifications: ["2.x", "^2.1.2"],
+        version: "2.2.0",
+        resolved:
+          "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz",
+        integrity:
+          "sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==",
+        dependencies: [
+          {
+            name: "minimist",
+            range: "^1.2.5"
+          }
+        ]
+      },
+      {
+        name: "json5",
+        specifications: ["^1.0.1"],
+        version: "1.0.1",
+        resolved:
+          "https://registry.npmjs.org/json5/-/json5-1.0.1.tgz",
+        integrity:
+          "sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==",
+        dependencies: [
+          {
+            name: "minimist",
+            range: "^1.2.0"
+          }
+        ]
+      }
+    ]);
+  });
+  it("correctly parses duplicate package declarations (same resolved version)", () => {
+    const lexed = yarnV1Lexer(`
+json5@2.x, json5@^2.1.2:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz"
+  integrity sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==
+  dependencies:
+    minimist "^1.2.5"
+
+json5@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz"
+  integrity sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==
+  dependencies:
+    minimist "^1.2.5"
+        `);
+    const parsed = yarnV1Parser(lexed);
+
+    expect(parsed).toEqual([
+      {
+        name: "json5",
+        specifications: ["2.x", "^2.1.2", "2.2.0"],
+        version: "2.2.0",
+        resolved:
+          "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz",
+        integrity:
+          "sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA==",
+        dependencies: [
+          {
+            name: "minimist",
+            range: "^1.2.5"
+          }
+        ]
+      }
+    ]);
+  });
   it("correctly parses complete yarn.lock file", () => {
     const lockData = fs.readFileSync(
       path.resolve(__dirname, "./fixtures/yarn.v1.mock.lock"),
