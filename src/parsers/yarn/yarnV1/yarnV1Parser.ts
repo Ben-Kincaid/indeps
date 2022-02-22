@@ -1,5 +1,6 @@
 import { IndepsError } from "src/error";
 import { LockDependency, ParsedLock } from "src/parsers";
+import sortSpecifications from "src/parsers/utilities/sortSpecifications";
 
 import { YarnV1Lexed } from ".";
 
@@ -36,7 +37,7 @@ const parsePackageDeclarations = (
 
   return {
     name: packageName,
-    specifications: packageSpecifications
+    specifications: sortSpecifications(packageSpecifications)
   };
 };
 

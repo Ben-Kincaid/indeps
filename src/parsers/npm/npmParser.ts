@@ -1,4 +1,5 @@
 import { LockDependency, ParsedLock } from "src/parsers";
+import sortSpecifications from "src/parsers/utilities/sortSpecifications";
 
 /**
  * Create a lock dependency from a dependency object from package-lock.json.
@@ -22,7 +23,7 @@ function createLockDependency(
   return {
     name,
     version: dependency.version,
-    specifications,
+    specifications: sortSpecifications(specifications),
     resolved: dependency.resolved,
     integrity: dependency.integrity,
     ...(dependency.requires && {
