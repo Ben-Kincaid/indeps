@@ -41,7 +41,7 @@ const parsePackageDeclarations = (
 };
 
 const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
-  const deps = [];
+  let deps: Array<LockDependency> = [];
 
   let currentPackage: Partial<LockDependency> | null = null;
   let currentPackageDeclarations: Array<string | number | boolean> =
@@ -143,7 +143,34 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
         currentPackage) ||
       currentToken.type === "EOF"
     ) {
-      if (currentPackage) deps.push(currentPackage);
+      if (
+        deps.some(
+          (dep) =>
+            dep.name === currentPackage?.name &&
+            dep.version === currentPackage?.version
+        )
+      ) {
+        deps = deps.map((dep) => {
+          if (
+            currentPackage?.specifications &&
+            dep.name === currentPackage.name &&
+            dep.version === currentPackage.version
+          ) {
+            return {
+              ...dep,
+              specifications: [
+                ...dep.specifications,
+                ...currentPackage.specifications
+              ]
+            };
+          } else {
+            return dep;
+          }
+        });
+      } else if (currentPackage) {
+        deps.push(currentPackage as LockDependency);
+      }
+
       currentPackageDeclarations = [];
       currentPackage = null;
     }
