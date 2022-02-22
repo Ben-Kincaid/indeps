@@ -23,7 +23,7 @@ describe("yarnNext", () => {
     expect(parsed).toEqual([
       {
         name: "dom-serializer",
-        specifications: ["^1.0.1", "^1.3.2"],
+        specifications: ["^1.3.2", "^1.0.1"],
         version: "1.3.2",
         resolved: "dom-serializer@npm:1.3.2",
         integrity:
@@ -75,7 +75,7 @@ describe("yarnNext", () => {
       },
       {
         name: "dom-serializer",
-        specifications: ["^1.0.1", "^1.3.2"],
+        specifications: ["^1.3.2", "^1.0.1"],
         version: "1.3.2",
         resolved: "dom-serializer@npm:1.3.2",
         integrity:
