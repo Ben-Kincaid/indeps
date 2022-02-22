@@ -2,6 +2,7 @@ import yaml from "js-yaml";
 
 import { LockDependency } from "src/parsers";
 import { IndepsError } from "src/error";
+import sortSpecifications from "src/parsers/utilities/sortSpecifications";
 
 import { LockSubDependency, ParsedLock } from "../../types";
 
@@ -58,7 +59,7 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
 
     return {
       name: name,
-      specifications,
+      specifications: sortSpecifications(specifications),
       version: pkg.version,
       resolved: pkg.resolution,
       integrity: pkg.checksum,

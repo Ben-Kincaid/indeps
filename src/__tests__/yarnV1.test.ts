@@ -101,7 +101,7 @@ describe("yarnV1Parser", () => {
     expect(parsed).toEqual([
       {
         name: "@babel/code-frame",
-        specifications: ["^7.12.13", "^7.14.5", "^7.15.8"],
+        specifications: ["^7.15.8", "^7.14.5", "^7.12.13"],
         version: "7.15.8",
         resolved:
           "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.15.8.tgz#45990c47adadb00c03677baa89221f7cc23d2503",
@@ -137,7 +137,7 @@ json5@^1.0.1:
     expect(parsed).toEqual([
       {
         name: "json5",
-        specifications: ["2.x", "^2.1.2"],
+        specifications: ["^2.1.2", "2.x"],
         version: "2.2.0",
         resolved:
           "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz",
@@ -188,7 +188,7 @@ json5@2.2.0:
     expect(parsed).toEqual([
       {
         name: "json5",
-        specifications: ["2.x", "^2.1.2", "2.2.0"],
+        specifications: ["2.2.0", "^2.1.2", "2.x"],
         version: "2.2.0",
         resolved:
           "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz",
@@ -214,7 +214,7 @@ json5@2.2.0:
     expect(parsed).toEqual([
       {
         name: "string-width",
-        specifications: ["^4.1.0", "^4.2.0"],
+        specifications: ["^4.2.0", "^4.1.0"],
         version: "4.2.3",
         resolved:
           "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
@@ -237,7 +237,7 @@ json5@2.2.0:
       },
       {
         name: "strip-ansi",
-        specifications: ["^6.0.0", "^6.0.1"],
+        specifications: ["^6.0.1", "^6.0.0"],
         version: "6.0.1",
         resolved:
           "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz",
