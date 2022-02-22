@@ -159,10 +159,10 @@ const yarnV1Parser = (lexed: YarnV1Lexed): ParsedLock => {
           ) {
             return {
               ...dep,
-              specifications: [
+              specifications: sortSpecifications([
                 ...dep.specifications,
                 ...currentPackage.specifications
-              ]
+              ])
             };
           } else {
             return dep;
