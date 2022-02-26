@@ -1,6 +1,75 @@
 import semverLt from "semver/functions/lt";
 import semverMinVersion from "semver/ranges/min-version";
 import semverSubset from "semver/ranges/subset";
+import semverValid from "semver/ranges/valid";
+
+type LockProtocol =
+  | "semver"
+  | "tag"
+  | "alias"
+  | "file"
+  | "link"
+  | "patch"
+  | "portal"
+  | "workspace"
+  | "exec"
+  | "git";
+
+/**
+ * Get the protocol for a given package version.
+ *
+ * @remarks
+ * Get the protocol for a given package version. Supports all protocols recognized by Yarn 1/2: https://yarnpkg.com/features/protocols
+ *
+ * @param input - The package version to parse.
+ * @returns The protocol for the given package version.
+ *
+ * @internal
+ */
+const getLockProtocol = (input: string): LockProtocol | null => {
+  if (semverValid(input)) {
+    return "semver";
+  }
+
+  if (input === "latest") {
+    return "tag";
+  }
+
+  if (/^npm:/.test(input)) {
+    return "alias";
+  }
+
+  if (/^file:/.test(input)) {
+    return "file";
+  }
+
+  if (/^link:/.test(input)) {
+    return "link";
+  }
+
+  if (/^patch:/.test(input)) {
+    return "patch";
+  }
+
+  if (/^portal:/.test(input)) {
+    return "portal";
+  }
+
+  if (/^workspace:/.test(input)) {
+    return "workspace";
+  }
+
+  if (/^exec:/.test(input)) {
+    return "exec";
+  }
+
+  if (/^(github:|git@)/.test(input)) {
+    return "git";
+  }
+
+  return null;
+};
+
 /**
  * Sort an array of package semver specifications
  *
@@ -13,6 +82,13 @@ function sortSpecifications(
   specifications: Array<string>
 ): Array<string> {
   return specifications.sort((a, b) => {
+    if (getLockProtocol(a) !== "semver") {
+      if (getLockProtocol(b) !== "semver") {
+        return a.localeCompare(b);
+      }
+      return 1;
+    }
+
     // get minimum possible versions for ranges
     const aMin = semverMinVersion(a);
     const bMin = semverMinVersion(b);
@@ -35,5 +111,7 @@ function sortSpecifications(
     return -1;
   });
 }
+
+export { getLockProtocol };
 
 export default sortSpecifications;
