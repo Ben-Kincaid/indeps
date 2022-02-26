@@ -144,4 +144,79 @@ describe("npmParser", () => {
       }
     ]);
   });
+  it("correctly parses duplicate nested packages", () => {
+    const pkgLockData = getFixture(
+      "package-lock--duplicate-nested.mock.json",
+      false
+    );
+
+    const pkgData = getFixture<PackageJson>(
+      "package--duplicate-nested.mock.json",
+      true
+    );
+
+    const parsed = npmParser(pkgLockData, pkgData);
+
+    expect(parsed).toEqual([
+      {
+        name: "json5",
+        integrity: undefined,
+        resolved: undefined,
+        specifications: ["2.x"],
+        version: "2.2.0",
+        dependencies: [{ name: "minimist", range: "^1.2.5" }]
+      },
+      {
+        name: "loader-utils",
+        integrity:
+          "sha512-qH0WSMBtn/oHuwjy/NucEgbx5dbxxnxup9s4PVXJUDHZBQY+s0NWA9rJf53RBnQZxfch7euUui7hpoAPvALZdA==",
+        resolved:
+          "https://registry.npmjs.org/loader-utils/-/loader-utils-1.4.0.tgz",
+        specifications: ["1.4.0"],
+        version: "1.4.0",
+        dependencies: [
+          { name: "big.js", range: "^5.2.2" },
+          { name: "json5", range: "^1.0.0" }
+        ]
+      },
+      {
+        name: "json5",
+        integrity:
+          "sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==",
+        resolved:
+          "https://registry.npmjs.org/json5/-/json5-1.0.1.tgz",
+        specifications: ["^1.0.0", "^1.0.1"],
+        version: "1.0.1",
+        dependencies: [{ name: "minimist", range: "^1.2.0" }]
+      },
+      {
+        name: "ts-jest",
+        integrity: undefined,
+        resolved: undefined,
+        specifications: ["^27.0.7"],
+        version: "27.1.3",
+        dependencies: [
+          { name: "semver", range: "7.x" },
+          { name: "json5", range: "2.x" },
+          { name: "yargs-parser", range: "20.x" }
+        ]
+      },
+      {
+        name: "semver",
+        integrity: undefined,
+        resolved: undefined,
+        specifications: ["7.x"],
+        version: "7.3.5",
+        dependencies: [{ name: "lru-cache", range: "^6.0.0" }]
+      },
+      {
+        name: "tsconfig-paths",
+        integrity: undefined,
+        resolved: undefined,
+        specifications: ["3.12.0"],
+        version: "3.12.0",
+        dependencies: [{ name: "json5", range: "^1.0.1" }]
+      }
+    ]);
+  });
 });
