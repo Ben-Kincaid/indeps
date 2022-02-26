@@ -111,7 +111,7 @@ if (isDev) {
     hot: true,
     open: true,
     proxy: {
-      "/": `http://localhost:8088`
+      "/": `http://127.0.0.1:8088`
     }
   };
 }

@@ -136,9 +136,9 @@ function getPkgInfo(): { path: string } {
 }
 
 /** Start the indeps processes */
-(async () => {
+(async (args) => {
   // get CLI options
-  const { open, port = 8088, quiet } = argv;
+  const { open, port = 8088, quiet } = args;
 
   // create CLI logger
   const logger = createLogger({
@@ -229,4 +229,4 @@ function getPkgInfo(): { path: string } {
       logger.error(error);
     }
   }
-})();
+})(argv);
