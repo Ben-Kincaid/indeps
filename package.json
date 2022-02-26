@@ -124,7 +124,7 @@
   },
   "lint-staged": {
     "*": "yarn prettier:write",
-    "*.{js,jsx,ts,tsx}": "yarn client:lint:fix && yarn node:lint:fix"
+    "!(*.config).{js,jsx,ts,tsx}": "yarn client:lint:fix && yarn node:lint:fix"
   },
   "packageManager": "yarn@3.1.0"
 }
