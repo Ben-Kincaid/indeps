@@ -120,14 +120,6 @@ function normalizeParsedNPM(
     if (dependency.dependencies) {
       Object.keys(dependency.dependencies).forEach((innerDepKey) => {
         const innerDep = dependency.dependencies[innerDepKey];
-        if (
-          acc.some(
-            ({ name, version }) =>
-              name === innerDepKey && version === innerDep.version
-          )
-        ) {
-          return;
-        }
 
         const specifications: Array<string> = [];
 
@@ -152,9 +144,37 @@ function normalizeParsedNPM(
           }
         }
 
-        acc.push(
-          createLockDependency(innerDepKey, innerDep, specifications)
-        );
+        if (
+          acc.some(
+            ({ name, version }) =>
+              name === innerDepKey && version === innerDep.version
+          )
+        ) {
+          acc = acc.map((lockDep) => {
+            if (
+              lockDep.name === innerDepKey &&
+              lockDep.version === innerDep.version
+            ) {
+              return {
+                ...lockDep,
+                specifications: [
+                  ...lockDep.specifications,
+                  ...specifications
+                ]
+              };
+            } else {
+              return lockDep;
+            }
+          });
+        } else {
+          acc.push(
+            createLockDependency(
+              innerDepKey,
+              innerDep,
+              specifications
+            )
+          );
+        }
       });
     }
 
