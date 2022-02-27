@@ -1,6 +1,8 @@
 import path from "path";
 import fs from "fs";
 
+import { getFixture } from "src/__tests__/utils";
+
 import { yarnNext } from "../parsers";
 
 describe("yarnNext", () => {
@@ -18,7 +20,7 @@ describe("yarnNext", () => {
     linkType: hard
 `;
 
-    const parsed = yarnNext(data);
+    const parsed = yarnNext(data, { name: "" });
 
     expect(parsed).toEqual([
       {
@@ -52,12 +54,14 @@ describe("yarnNext", () => {
       "utf8"
     );
 
-    const parsed = yarnNext(lockData);
+    const parsed = yarnNext(lockData, { name: "" });
 
     expect(parsed).toEqual([
       {
         name: "fsevents",
-        specifications: ["fsevents@^1.2.7#~builtin<compat/fsevents>"],
+        specifications: [
+          "patch:fsevents@^1.2.7#~builtin<compat/fsevents>"
+        ],
         version: "1.2.7",
         resolved:
           "fsevents@patch:fsevents@npm%3A1.2.7#~builtin<compat/fsevents>::version=1.2.7&hash=18f3a7",
@@ -98,7 +102,7 @@ describe("yarnNext", () => {
       {
         name: "@strictsoftware/typedoc-plugin-monorepo",
         specifications: [
-          "@strictsoftware/typedoc-plugin-monorepo@^0.2.2#./.patches/@strictsoftware/typedoc-plugin-monorepo.patch::locator=%40yarnpkg%2Fgatsby%40workspace%3Apackages%2Fgatsby"
+          "patch:@strictsoftware/typedoc-plugin-monorepo@^0.2.2#./.patches/@strictsoftware/typedoc-plugin-monorepo.patch::locator=%40yarnpkg%2Fgatsby%40workspace%3Apackages%2Fgatsby"
         ],
         version: "0.2.2",
         resolved:
@@ -126,7 +130,7 @@ describe("yarnNext", () => {
       },
       {
         name: "vscode-zipfs",
-        specifications: ["packages/vscode-zipfs"],
+        specifications: ["workspace:packages/vscode-zipfs"],
         version: "0.0.0-use.local",
         resolved: "vscode-zipfs@workspace:packages/vscode-zipfs",
         integrity: undefined,
@@ -176,6 +180,29 @@ describe("yarnNext", () => {
             range: "^1.85.1"
           }
         ]
+      }
+    ]);
+  });
+  it("correctly ignores local project package entry", () => {
+    const lockData = getFixture("yarn.v2--local-proj.mock.lock");
+
+    const parsed = yarnNext(lockData, { name: "my-package" });
+
+    expect(parsed).toEqual([
+      {
+        name: "st-jss",
+        integrity:
+          "bff48714944d67b160db71ba244fb0f3fe72e77ef2ec8414e2eeb56f2d926e404a13456b8b83a5392e217ba47dec2ec0c368801b31481813e94d185276c3e964",
+        resolved: "st-jss@npm:1.0.5",
+        specifications: ["^1.0.5"],
+        version: "1.0.5"
+      },
+      {
+        name: "vscode-zipfs",
+        integrity: undefined,
+        resolved: "vscode-zipfs@workspace:packages/vscode-zipfs",
+        specifications: ["workspace:packages/vscode-zipfs"],
+        version: "0.0.0-use.local"
       }
     ]);
   });
