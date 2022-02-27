@@ -29,18 +29,20 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
 
     specificationNames.forEach((specificationName) => {
       const nameMatches = specificationName.match(/.+?(?=@)/g);
-      const specMatches = new RegExp(
-        /(@npm:|@workspace:|@patch:|@git@|@github:|@file:|@link:|@portal:|@exec:)([\s\S]*)$|([^@]*$)/g
-      ).exec(specificationName);
 
-      if (!nameMatches || !specMatches) {
+      const specExp =
+        /^.+?@(?:npm:(.+?)|((?:workspace|exec|git@|github|file|link|patch|portal).+?))$/;
+
+      const specGroups = specExp.exec(specificationName);
+
+      if (!nameMatches || !specGroups) {
         throw new IndepsError(
           `There was an error while parsing package name: ${specificationName}`
         );
       }
 
       name = nameMatches[0];
-      specifications.push(specMatches[3] || specMatches[2]);
+      specifications.push(specGroups[1] || specGroups[2]);
     });
 
     const dependencies = pkg.dependencies
@@ -74,7 +76,7 @@ const yarnNext = (data: string, pkg: PackageJson): ParsedLock => {
     (acc, key) => {
       if (
         key !== "__metadata" &&
-        !key.includes(`${pkg.name}@workspace:`)
+        !key.startsWith(`${pkg.name}@workspace:`)
       ) {
         acc[key] = doc[key];
       }
