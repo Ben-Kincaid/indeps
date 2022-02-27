@@ -68,11 +68,14 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
   });
 };
 
-const yarnNext = (data: string): ParsedLock => {
+const yarnNext = (data: string, pkg: PackageJson): ParsedLock => {
   const doc = yaml.load(data) as ParsedYarnNext;
   const filteredDoc = Object.keys(doc).reduce<ParsedYarnNext>(
     (acc, key) => {
-      if (key !== "__metadata") {
+      if (
+        key !== "__metadata" &&
+        !key.includes(`${pkg.name}@workspace:`)
+      ) {
         acc[key] = doc[key];
       }
 

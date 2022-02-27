@@ -34,9 +34,10 @@ function getYarnVersionFromString(data: string): number {
  * This method takes a string representation of a `yarn.lock` file and converts it into a parsed object. Supports Yarn V1 & Yarn V2(berry) lockfiles.
  *
  * @param data - The raw string data for the `yarn.lock` file
+ * @param pkg - The parsed package.json file
  * @returns A fully parsed lockfile
  */
-function yarnParser(data: string): ParsedLock {
+function yarnParser(data: string, pkg: PackageJson): ParsedLock {
   let out: ParsedLock;
 
   const version = getYarnVersionFromString(data);
@@ -47,7 +48,7 @@ function yarnParser(data: string): ParsedLock {
   } else if (version === 1) {
     out = yarnV1(data);
   } else if (version === 2) {
-    out = yarnNext(data);
+    out = yarnNext(data, pkg);
   } else {
     throw new IndepsError(
       "Indeps does not support this version of Yarn's lockfile."

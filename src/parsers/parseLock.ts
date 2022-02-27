@@ -15,6 +15,7 @@ interface ParseLockOpts {
  * `parseLock` will convert a lockfile (providing the path & the lock type) into a agnostic object (ParsedLock).
  *
  * @param lockInfo - an object representing the lock file
+ * @param pkg - The parsed package.json file.
  * @returns The parsed lockfile.
  *
  * @internal
@@ -32,7 +33,7 @@ export default function parseLock(
   if (type === "npm") {
     parsed = npmParser(data, pkg);
   } else if (type === "yarn") {
-    parsed = yarnParser(data);
+    parsed = yarnParser(data, pkg);
   } else {
     throw new IndepsError("Invalid lockfile type.");
   }
