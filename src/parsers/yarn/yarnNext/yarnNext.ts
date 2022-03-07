@@ -31,18 +31,22 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
       const nameMatches = specificationName.match(/.+?(?=@)/g);
 
       const specExp =
-        /^.+?@(?:npm:(.+?)|((?:workspace|exec|git@|github|file|link|patch|portal).+?))$/;
+        /^.+?@(?:npm:(.+?)|((?:workspace|exec|git@|github|file|link|patch|portal|beta|latest).+?))$/;
 
       const specGroups = specExp.exec(specificationName);
 
-      if (!nameMatches || !specGroups) {
+      if (!nameMatches) {
         throw new IndepsError(
           `There was an error while parsing package name: ${specificationName}`
         );
       }
 
       name = nameMatches[0];
-      specifications.push(specGroups[1] || specGroups[2]);
+      if (!specGroups) {
+        specifications.push(specificationName);
+      } else {
+        specifications.push(specGroups[1] || specGroups[2]);
+      }
     });
 
     const dependencies = pkg.dependencies
