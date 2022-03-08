@@ -28,7 +28,7 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
     const specifications: Array<string> = [];
 
     specificationNames.forEach((specificationName) => {
-      const nameMatches = specificationName.match(/.+?(?=@)/g);
+      const nameMatches = specificationName.match(/^.+?(?=@)/g);
 
       const specExp =
         /^.+?@(?:npm:(.+?)|((?:workspace|exec|git@|github|file|link|patch|portal|beta|latest).*?))$/;
