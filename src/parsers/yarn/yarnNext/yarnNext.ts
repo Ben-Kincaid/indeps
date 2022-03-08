@@ -28,19 +28,25 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
     const specifications: Array<string> = [];
 
     specificationNames.forEach((specificationName) => {
-      const nameMatches = specificationName.match(/.+?(?=@)/g);
-      const specMatches = new RegExp(
-        /(@npm:|@workspace:|@patch:)([\s\S]*)$|([^@]*$)/g
-      ).exec(specificationName);
+      const nameMatches = specificationName.match(/^.+?(?=@)/g);
 
-      if (!nameMatches || !specMatches) {
+      const specExp =
+        /^.+?@(?:npm:(.+?)|((?:workspace|exec|git@|github|file|link|patch|portal|beta|latest).*?))$/;
+
+      const specGroups = specExp.exec(specificationName);
+
+      if (!nameMatches) {
         throw new IndepsError(
           `There was an error while parsing package name: ${specificationName}`
         );
       }
 
       name = nameMatches[0];
-      specifications.push(specMatches[3] || specMatches[2]);
+      if (!specGroups) {
+        specifications.push(specificationName);
+      } else {
+        specifications.push(specGroups[1] || specGroups[2]);
+      }
     });
 
     const dependencies = pkg.dependencies
@@ -68,11 +74,14 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
   });
 };
 
-const yarnNext = (data: string): ParsedLock => {
+const yarnNext = (data: string, pkg: PackageJson): ParsedLock => {
   const doc = yaml.load(data) as ParsedYarnNext;
   const filteredDoc = Object.keys(doc).reduce<ParsedYarnNext>(
     (acc, key) => {
-      if (key !== "__metadata") {
+      if (
+        key !== "__metadata" &&
+        !key.startsWith(`${pkg.name}@workspace:`)
+      ) {
         acc[key] = doc[key];
       }
 
