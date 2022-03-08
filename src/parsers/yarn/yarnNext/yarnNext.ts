@@ -31,7 +31,7 @@ const normalizeYarnNext = (doc: ParsedYarnNext): ParsedLock => {
       const nameMatches = specificationName.match(/.+?(?=@)/g);
 
       const specExp =
-        /^.+?@(?:npm:(.+?)|((?:workspace|exec|git@|github|file|link|patch|portal|beta|latest).+?))$/;
+        /^.+?@(?:npm:(.+?)|((?:workspace|exec|git@|github|file|link|patch|portal|beta|latest).*?))$/;
 
       const specGroups = specExp.exec(specificationName);
 
