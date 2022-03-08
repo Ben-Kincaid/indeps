@@ -213,7 +213,7 @@ describe("yarnNext", () => {
 
     expect(parsed).toEqual([
       {
-        name: "asn1-parser",
+        name: "@types/asn1-parser",
         version: "1.1.8",
         resolved: "asn1-parser@npm:1.1.8",
         integrity:

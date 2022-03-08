@@ -5,7 +5,7 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"asn1-parser@npm:^1.1.8":
+"@types/asn1-parser@npm:^1.1.8":
   version: 1.1.8
   resolution: "asn1-parser@npm:1.1.8"
   checksum: 66956cc3097227a6598453e22c307fa03083d2084712376b811987cae85f3681e55908410f0a4210c6d06d4b96ab6048ccbb7feedcb5a01a7e4cc56a0a55e1e8
