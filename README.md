@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Ben-Kincaid/indeps">
-    <img src="docs/assets/logo.svg" alt="Logo" width="253" height="68">
+    <img src="docs/assets/logo.svg" alt="indeps" width="253" height="68">
   </a>
 
 <h3 align="center">indeps</h3>
@@ -31,8 +31,12 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage-as-a-cli-utility">Usage (as a CLI utility)</a></li>
-    <li><a href="#usage-as-a-function">Usage (as a function)</a></li>
+    <li><a href="#usage">Usage </a>
+     <ul>
+        <li><a href="#as-a-cli-utility">As a CLI utility</a></li>
+        <li><a href="#using-the-exported-methods">Using the exported methods</a></li>
+      </ul>
+    </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
   </ol>
@@ -61,11 +65,11 @@ On the surface, **indeps** simply parses your lockfile (either `yarn.lock` or `p
 
 **indeps** can be ran as either a CLI, or one may also utilize our various function exports to run the **indeps** processes programatically.
 
-### Prerequisites
+#### Prerequisites
 
 - Node v12+
 
-### Installation
+#### Installation
 
 indeps can be installed locally or globally.
 
@@ -89,7 +93,9 @@ yarn global add indeps@0.1.0
 
 <!-- USAGE EXAMPLES -->
 
-## Usage (as a CLI utility)
+## Usage
+
+#### As a CLI utility
 
 indeps can be used a CLI utility to visualize the dependencies defined within any `yarn.lock` file - even if it is not inside a specific project.
 
@@ -104,33 +110,31 @@ indeps --lock /users/steve/my-project/yarn.lock --pkg /users/steve/my-project/pa
 indeps
 ```
 
-## Options (for CLI utility)
-
-### `--lock`/`-l`
+#### `--lock`/`-l`
 
 Path to the lockfile to use for visualization.
 
-### `--pkg`
+#### `--pkg`
 
 Path to the `package.json` file to use for the visualization.
 
-### `--port`/`-p`
+#### `--port`/`-p`
 
 The port used to serve the local **indeps** client. Defaults to `8088`.
 
-### `--open`/`-o`
+#### `--open`/`-o`
 
 If the indeps process should automatically open the client in a browser if one is available on the host machine. Defaults to `true`.
 
 You may also use `--no-open` as an alias for `--open false`
 
-### `--quiet`/`-q`
+#### `--quiet`/`-q`
 
 Disables the default informational log messages; only display warning & error logs. Defaults to `false`.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Usage (as a function)
+#### Using the exported methods
 
 Although **indeps** was made primarily with CLI usage in mind, we also export some high-level methods that allow you to run the various steps of the indeps process programatically. This provides a way for users to extend the functionality of indeps, or create plugins & extensions for bundlers or task runners.
 
@@ -156,9 +160,9 @@ import {
 
   // Get the raw data of the lockfile
   const lockData = fs.readFileSync(
-    "/path/to/package-lock.json",
+    "/path/to/package-lock.json", // or `yarn.lock`
     "utf8"
-  ); // or `yarn.lock`
+  );
 
   // Parse using `parseLock`
   const parsedLock = parseLock({
