@@ -5,7 +5,7 @@
     <img src="docs/assets/logo.svg" alt="Logo" width="253" height="68">
   </a>
 
-<h3 align="center">Indeps</h3>
+<h3 align="center">indeps</h3>
 
   <p align="center">
     🔍 Visualize the dependencies & sub-dependencies in your Javascript application.
@@ -23,6 +23,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
+     <li><a href="#how-it-works">How it works</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -44,11 +45,11 @@
 
 <!-- Add image of viewer here once complete -->
 
-`indeps` was created to provide developers with an efficient & intuitive way to visualize the dependencies in their javascript application. Combing through your lockfile is tedious, and isn't an effective way to view the "bigger picture" of the packages that make up your project. Discovering the source of clashing dependencies or the require path for a specific module can be time consuming, and wears down your `CMD + F` keys. `indeps` attempts to solve this issue by providing a human-friendly UI for displaying your projects resolved dependencies - along with useful data not generally provided in your lockfile, such as a package's dependency tree.
+**indeps** was created to provide developers with an efficient & intuitive way to visualize the dependencies in their javascript application. Combing through your lockfile is tedious, and isn't an effective way to view the "bigger picture" of the packages that make up your project. Discovering the source of clashing dependencies or the require path for a specific module can be time consuming, and wears down your `CMD + F` keys. **indeps** attempts to solve this issue by providing a human-friendly UI for displaying your projects resolved dependencies - along with useful data not generally provided in your lockfile, such as a package's dependency tree.
 
 ## How it works
 
-On the surface, `indeps` simply parses your lockfile (either `yarn.lock` or `package-lock.json`) and `package.json` file, runs additional analyzation on these files, and injects this normalized + hydrated data into the client webpage, being served by a local server. Currently, `indeps` requires:
+On the surface, **indeps** simply parses your lockfile (either `yarn.lock` or `package-lock.json`) and `package.json` file, runs additional analyzation on these files, and injects this normalized + hydrated data into the client webpage, being served by a local server. Currently, **indeps** requires:
 
 - A valid lockfile
   - Supports Yarn V1, Yarn V2(berry), and NPM(5+) lock files.
@@ -59,7 +60,7 @@ On the surface, `indeps` simply parses your lockfile (either `yarn.lock` or `pac
 
 ## Getting Started
 
-**Indeps** can be ran as either a CLI, or one may also utilize our various function exports to run the `indeps` processes programatically.
+**indeps** can be ran as either a CLI, or one may also utilize our various function exports to run the **indeps** processes programatically.
 
 ### Prerequisites
 
@@ -67,9 +68,9 @@ On the surface, `indeps` simply parses your lockfile (either `yarn.lock` or `pac
 
 ### Installation
 
-Indeps can be installed locally or globally.
+indeps can be installed locally or globally.
 
-To install Indeps on a per-project basis:
+To install indeps on a per-project basis:
 
 ```zsh
 npm i -D indeps@0.1.0
@@ -91,9 +92,9 @@ yarn global add indeps@0.1.0
 
 ## Usage (as a CLI utility)
 
-Indeps can be used a CLI utility to visualize the dependencies defined within any `yarn.lock` file - even if it is not inside a specific project.
+indeps can be used a CLI utility to visualize the dependencies defined within any `yarn.lock` file - even if it is not inside a specific project.
 
-If the package was installed globally, you can simply run `indeps` within any project directory with a valid lockfile & `package.json` file. Alternatively, you can specify the files you want to be used for the visualization through the `--lock`(`-l`) and `--pkg` flags:
+If the package was installed globally, you can simply run **indeps** within any project directory with a valid lockfile & `package.json` file. Alternatively, you can specify the files you want to be used for the visualization through the `--lock`(`-l`) and `--pkg` flags:
 
 ```bash
 # Can use either a path relative to your current directory
@@ -121,6 +122,8 @@ The port used to serve the local **indeps** client. Defaults to `8088`.
 ### `--open`/`-o`
 
 If the indeps process should automatically open the client in a browser if one is available on the host machine. Defaults to `true`.
+
+You may also use `--no-open` as an alias for `--open false`
 
 ### `--quiet`/`-q`
 
@@ -187,16 +190,18 @@ import {
 })();
 ```
 
-Our current focus is CLI usage - the exported method will be expanded with more usable options and defaults as we get closer `v1.0.0`.
+Current focus is CLI usage - the exported method will be expanded with more usable options and defaults as we get closer `v1.0.0`.
 
 <!-- ROADMAP -->
 
 ## Roadmap
 
-- [] Add `package-lock.json` support
-- [] Expand function export to be more usable
-- [] Provide more advanced visualization options
-  - [] Dependency tree view
+| Status | Milestone                                              |
+| ------ | ------------------------------------------------------ |
+| 🚀     | **Implement NPM & Yarn V2 (berry) support**            |
+| 🚧     | **Improve dependency list UI**                         |
+| 🚧     | **Create dependency graph visualization capabilities** |
+| 🚧     | **Rewrite of method exports, plugin & theme support**  |
 
 See the [open issues](https://github.com/Ben-Kincaid/indeps/issues) for a full list of proposed features (and known issues).
 
