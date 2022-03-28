@@ -1,27 +1,3 @@
-<div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -34,17 +10,12 @@
   <p align="center">
     🔍 Visualize the dependencies & sub-dependencies in your Javascript application.
     <br />
-    <a href="https://github.com/Ben-Kincaid/indeps"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/Ben-Kincaid/indeps">View Demo</a>
-    ·
     <a href="https://github.com/Ben-Kincaid/indeps/issues">Report Bug</a>
     ·
     <a href="https://github.com/Ben-Kincaid/indeps/issues">Request Feature</a>
   </p>
 </div>
-
+<br />
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -188,18 +159,3 @@ Ben Kincaid - [@BenKincaidWeb](https://twitter.com/BenKincaidWeb) - ben@benkinca
 Project Link: [https://github.com/Ben-Kincaid/indeps](https://github.com/Ben-Kincaid/indeps)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[contributors-shield]: https://img.shields.io/github/contributors/Ben-Kincaid/indeps.svg?style=for-the-badge
-[contributors-url]: https://github.com/Ben-Kincaid/indeps/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Ben-Kincaid/indeps.svg?style=for-the-badge
-[forks-url]: https://github.com/Ben-Kincaid/indeps/network/members
-[stars-shield]: https://img.shields.io/github/stars/Ben-Kincaid/indeps.svg?style=for-the-badge
-[stars-url]: https://github.com/Ben-Kincaid/indeps/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Ben-Kincaid/indeps.svg?style=for-the-badge
-[issues-url]: https://github.com/Ben-Kincaid/indeps/issues
-[license-shield]: https://img.shields.io/github/license/Ben-Kincaid/indeps.svg?style=for-the-badge
-[license-url]: https://github.com/Ben-Kincaid/indeps/blob/master/LICENSE.txt
-[product-screenshot]: images/screenshot.png
