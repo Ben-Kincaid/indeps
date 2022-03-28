@@ -35,7 +35,6 @@
     <li><a href="#usage-as-a-function">Usage (as a function)</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
@@ -49,7 +48,7 @@
 
 ## How it works
 
-On the surface, **indeps** simply parses your lockfile (either `yarn.lock` or `package-lock.json`) and `package.json` file, runs additional analyzation on these files, and injects this normalized + hydrated data into the client webpage, being served by a local server. Currently, **indeps** requires:
+On the surface, **indeps** simply parses your lockfile (either `yarn.lock` or `package-lock.json`) and `package.json` file, runs additional analysis on these files, and injects normalized + hydrated data into the client, being served by a local HTTP server. Currently, **indeps** requires:
 
 - A valid lockfile
   - Supports Yarn V1, Yarn V2(berry), and NPM(5+) lock files.
@@ -192,6 +191,7 @@ import {
 
 Current focus is CLI usage - the exported method will be expanded with more usable options and defaults as we get closer `v1.0.0`.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 <!-- ROADMAP -->
 
 ## Roadmap
@@ -212,15 +212,5 @@ See the [open issues](https://github.com/Ben-Kincaid/indeps/issues) for a full l
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- CONTACT -->
-
-## Contact
-
-Ben Kincaid - [@BenKincaidWeb](https://twitter.com/BenKincaidWeb) - ben@benkincaid.com
-
-Project Link: [https://github.com/Ben-Kincaid/indeps](https://github.com/Ben-Kincaid/indeps)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
