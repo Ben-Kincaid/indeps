@@ -65,11 +65,11 @@ On the surface, **indeps** simply parses your lockfile (either `yarn.lock` or `p
 
 **indeps** can be ran as either a CLI, or one may also utilize our various function exports to run the **indeps** processes programatically.
 
-#### Prerequisites
+### Prerequisites
 
 - Node v12+
 
-#### Installation
+### Installation
 
 indeps can be installed locally or globally.
 
@@ -95,7 +95,7 @@ yarn global add indeps@0.1.0
 
 ## Usage
 
-#### As a CLI utility
+### As a CLI utility
 
 indeps can be used a CLI utility to visualize the dependencies defined within any `yarn.lock` file - even if it is not inside a specific project.
 
@@ -134,7 +134,7 @@ Disables the default informational log messages; only display warning & error lo
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-#### Using the exported methods
+### Using the exported methods
 
 Although **indeps** was made primarily with CLI usage in mind, we also export some high-level methods that allow you to run the various steps of the indeps process programatically. This provides a way for users to extend the functionality of indeps, or create plugins & extensions for bundlers or task runners.
 
