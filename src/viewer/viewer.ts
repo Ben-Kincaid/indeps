@@ -6,23 +6,40 @@ import open from "open";
 
 import { ParsedData } from "src/types";
 import { IndepsError } from "src/error";
+import getIndepsPkg from "src/utils/getIndepsPkg";
 
+/**
+ * The configuration object for starting the indeps HTTP server.
+ */
 interface ViewerOpts {
-  port: number;
+  /** The normalized, hydrated dependency data  */
   data: ParsedData;
+  /** The current version of `indeps` */
   indepsVersion: string;
+  /** The port to use for the HTTP server */
+  port: number;
+  /** The name of the target project, from the "name" property in `package.json` */
   packageName?: string;
+  /** Toggles the functionality for opening the browser on server initialization */
   open?: boolean;
 }
 
+/**
+ * The configuration object for rendering the view markup for the HTTP document.
+ */
 interface RenderOpts {
+  /** The normalized, hydrated dependency data  */
   data: ParsedData;
+  /** The name of the target project, from the "name" property in `package.json` */
   packageName?: string;
+  /** The current version of `indeps` */
   indepsVersion: string;
 }
 
+/** The current project root directory */
 const projectRoot = path.join(__dirname, "..");
 
+/** Render the HTML document markup, with injected service data */
 const renderTemplate = ({
   data,
   packageName,
@@ -105,5 +122,15 @@ class Viewer {
     });
   }
 }
+
+const createViewer = (opts: Omit<ViewerOpts, "indepsVersion">) => {
+  const indepsPkg = getIndepsPkg();
+  return new Viewer({
+    indepsVersion: indepsPkg.version || "x.x.x",
+    ...opts
+  });
+};
+
+export { createViewer };
 
 export default Viewer;
