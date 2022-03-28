@@ -75,19 +75,3 @@ export interface ParseLockArgs {
   data: string;
   type: LockType;
 }
-
-/**
- * The configuration object for starting the indeps HTTP server.
- */
-export interface StartViewerOpts {
-  /** The normalized, hydrated dependency data  */
-  data: ParsedData;
-  /** The current version of `indeps` */
-  indepsVersion: string;
-  /** The port to use for the HTTP server */
-  port: number;
-  /** The name of the target project, from the "name" property in `package.json` */
-  packageName?: string;
-  /** Toggles the functionality for opening the browser on server initialization */
-  open?: boolean;
-}
