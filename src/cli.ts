@@ -6,10 +6,9 @@ import { hideBin } from "yargs/helpers";
 
 import createDependencyGraph from "src/utils/createDependencyGraph";
 import { IndepsError } from "src/error";
-import getIndepsPkg from "src/utils/getIndepsPkg";
 import { parseLock, parsePkg, LockType } from "src/parsers";
 import createDependencyData from "src/utils/createDependencyData";
-import Viewer from "src/viewer";
+import { createViewer } from "src/viewer";
 import fileExist from "src/utils/fileExists";
 import getLockTypeFromPath from "src/utils/getLockTypeFromPath";
 
@@ -160,9 +159,6 @@ function getPkgInfo(): { path: string } {
     // get package.json info
     const pkg = getPkgInfo();
 
-    // get internal package.json info
-    const indepsPkg = getIndepsPkg();
-
     // get package.json raw data
     try {
       pkgRaw = fs.readFileSync(pkg.path, "utf8");
@@ -205,9 +201,8 @@ function getPkgInfo(): { path: string } {
     });
 
     // create a new Viewer
-    const viewer = new Viewer({
+    const viewer = createViewer({
       data: dependencyData,
-      indepsVersion: indepsPkg.version || "x.x.x",
       open,
       packageName: pkgParsed.name,
       port
