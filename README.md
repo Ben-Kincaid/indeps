@@ -44,13 +44,22 @@
 
 <!-- Add image of viewer here once complete -->
 
-Package management in the javascript ecosystem is both critically important and daunting. Combing through your lockfiles is annoying, and is not helpful when trying to get a bigger picture of your applications dependency tree. `Indeps` was created to help detect issues with your dependencies and their sub-dependencies along with ability to easily visualize the packages that are being used in your javascript codebase.
+`indeps` was created to provide developers with an efficient & intuitive way to visualize the dependencies in their javascript application. Combing through your lockfile is tedious, and isn't an effective way to view the "bigger picture" of the packages that make up your project. Discovering the source of clashing dependencies or the require path for a specific module can be time consuming, and wears down your `CMD + F` keys. `indeps` attempts to solve this issue by providing a human-friendly UI for displaying your projects resolved dependencies - along with useful data not generally provided in your lockfile, such as a package's dependency tree.
+
+## How it works
+
+On the surface, `indeps` simply parses your lockfile (either `yarn.lock` or `package-lock.json`) and `package.json` file, runs additional analyzation on these files, and injects this normalized + hydrated data into the client webpage, being served by a local server. Currently, `indeps` requires:
+
+- A valid lockfile
+  - Supports Yarn V1, Yarn V2(berry), and NPM(5+) lock files.
+- A valid `package.json` file
+  - As of `v0.1.0`, we will be requiring a valid package.json file to run the full indeps process. We require information about the `devDependencies` & `dependencies` that are defined in your `package.json` file, and `package-lock.json` does not give us any guaranteed indicators as to which package/package resolution points to a file the application defined as a dependency or development dependency.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Getting Started
 
-**Indeps** can be ran as either a CLI or using the exported function.
+**Indeps** can be ran as either a CLI, or one may also utilize our various function exports to run the `indeps` processes programatically.
 
 ### Prerequisites
 
@@ -63,17 +72,17 @@ Indeps can be installed locally or globally.
 To install Indeps on a per-project basis:
 
 ```zsh
-npm i -D indeps
+npm i -D indeps@0.1.0
 # or
-yarn add -D indeps
+yarn add -D indeps@0.1.0
 ```
 
 Alternatively, installing indeps globally allows you to run it easily on any of your local projects. To install globally, run:
 
 ```zsh
-npm i -g indeps
+npm i -g indeps@0.1.0
 # or
-yarn global add indeps
+yarn global add indeps@0.1.0
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -84,26 +93,38 @@ yarn global add indeps
 
 Indeps can be used a CLI utility to visualize the dependencies defined within any `yarn.lock` file - even if it is not inside a specific project.
 
-If the package was installed globally, you are able to run `indeps` while within any project directory with a valid `yarn.lock` file. Alternatively, you can specify a specific file you want to be used for the visualization through the `--file` flag:
+If the package was installed globally, you can simply run `indeps` within any project directory with a valid lockfile & `package.json` file. Alternatively, you can specify the files you want to be used for the visualization through the `--lock`(`-l`) and `--pkg` flags:
 
-```zsh
+```bash
 # Can use either a path relative to your current directory
-indeps --file project/yarn.lock
+indeps --lock my-project/yarn.lock --pkg my-project/package.json
 # Or specify an absolute path
-indeps --file /users/steve/my-project/yarn.lock
-# leaving it empty will check for a lockfile in the current directory
+indeps --lock /users/steve/my-project/yarn.lock --pkg /users/steve/my-project/package.json
+# leaving it empty will check for a package.json/lockfile in the current directory
 indeps
 ```
 
 ## Options (for CLI utility)
 
-### `file`
+### `--lock`/`-l`
 
 Path to the lockfile to use for visualization.
 
-### `port`
+### `--pkg`
 
-Port that will be used to run the visualizer.
+Path to the `package.json` file to use for the visualization.
+
+### `--port`/`-p`
+
+The port used to serve the local **indeps** client. Defaults to `8088`.
+
+### `--open`/`-o`
+
+If the indeps process should automatically open the client in a browser if one is available on the host machine. Defaults to `true`.
+
+### `--quiet`/`-q`
+
+Disables the default informational log messages; only display warning & error logs. Defaults to `false`.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
