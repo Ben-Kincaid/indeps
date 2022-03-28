@@ -130,25 +130,64 @@ Disables the default informational log messages; only display warning & error lo
 
 ## Usage (as a function)
 
-Indeps can also be used declaratively when using `node`. Simply import the default export method:
+Although **indeps** was made primarily with CLI usage in mind, we also export some high-level methods that allow you to run the various steps of the indeps process programatically. This provides a way for users to extend the functionality of indeps, or create plugins & extensions for bundlers or task runners.
 
 ```js
-import indeps from "indeps";
+import fs from "fs";
 
-// start indeps
-indeps({
-  lock: {
+import {
+  parsePkg,
+  parseLock,
+  createDependencyGraph,
+  createDependencyData,
+  createViewer
+} from "indeps";
+
+(async () => {
+  // Get the raw data of the "package.json" file
+  const pkgData = fs.readFileSync("/path/to/package.json", "utf8");
+
+  // Parse raw data using `parsePkg`
+  const parsedPkg = parsePkg({
+    data: pkgData
+  });
+
+  // Get the raw data of the lockfile
+  const lockData = fs.readFileSync(
+    "/path/to/package-lock.json",
+    "utf8"
+  ); // or `yarn.lock`
+
+  // Parse using `parseLock`
+  const parsedLock = parseLock({
     type: "yarn",
-    path: "/path/to/yarn.lock"
-  }
-});
+    data: lockData
+  });
+
+  // create a DAG from the packages specified in the lockfile. This is used to determine the require path - or dependency tree - of a specific module specified in `yarn.lock` or `package-lock.json`.
+  const graph = createDependencyGraph(lock);
+
+  // Normalize & hydrate all of the necessary data into a complete dependency list.
+  const data = createDependencyData({
+    lock: parsedLock,
+    pkg: parsedPkg,
+    graph
+  });
+
+  // create the viewer instance. The viewer is responsible for running a local HTTP server and serving the indeps UI.
+  const viewer = createViewer({
+    data,
+    port: 8008,
+    packageName: parsedPkg.name,
+    open: true
+  });
+
+  // start the server. Returns the instance of the underlying HTTP server.
+  const server = await viewer.startServer();
+})();
 ```
 
 Our current focus is CLI usage - the exported method will be expanded with more usable options and defaults as we get closer `v1.0.0`.
-
-## Options (as a function)
-
-**TBD**
 
 <!-- ROADMAP -->
 
