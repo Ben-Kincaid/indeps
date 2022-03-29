@@ -34,11 +34,13 @@ const argv = yargs(hideBin(process.argv))
     description: "The port used to serve the visualizer client."
   })
   .option("open", {
+    alias: "o",
     type: "boolean",
     description: "Disable opening of browser on server start.",
     default: true
   })
   .option("quiet", {
+    alias: "q",
     type: "boolean",
     description:
       "Disable all console output besides warnings & errors."
