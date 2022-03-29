@@ -48,16 +48,21 @@
 
 <!-- Add image of viewer here once complete -->
 
-**indeps** was created to provide developers with an efficient & intuitive way to visualize the dependencies in their javascript application. Combing through your lockfile is tedious, and isn't an effective way to view the "bigger picture" of the packages that make up your project. Discovering the source of clashing dependencies or the require path for a specific module can be time consuming, and wears down your `CMD + F` keys. **indeps** attempts to solve this issue by providing a human-friendly UI for displaying your projects resolved dependencies - along with useful data not generally provided in your lockfile, such as a package's dependency tree.
+**indeps** is a tool for visualizing the dependencies that make up your JavaScript application. Combing through your lockfile is tedious, and isn't a very efficient way to understand the "bigger picture" of the packages within your project. Discovering the source of clashing dependencies or the dependency path for a specific module can be time consuming, and wears down your `CMD + F` keys. **indeps** attempts to solve this issue by providing a human-friendly UI for displaying & analyzing your projects resolved dependencies.
+
+- Easily search through the dependencies & sub-dependencies within your JavaScript project.
+- View the dependency tree for any given package.
+- Filter dependencies by various criteria, such as showing only the `@types` packages. Or, only show the packages that you've defined as a development dependency for the project.
+- _**Coming soon:**_ Visualize your dependencies in a treemap and/or graph.
 
 ## How it works
 
-On the surface, **indeps** simply parses your lockfile (either `yarn.lock` or `package-lock.json`) and `package.json` file, runs additional analysis on these files, and injects normalized + hydrated data into the client, being served by a local HTTP server. Currently, **indeps** requires:
+On the surface, **indeps** simply parses both your lockfile (either `yarn.lock` or `package-lock.json`) and your `package.json` file, runs additional analysis on these files, and injects this normalized data into a UI that is served by a local HTTP server. Currently, **indeps** requires:
 
 - A valid lockfile
   - Supports Yarn V1, Yarn V2(berry), and NPM(5+) lock files.
 - A valid `package.json` file
-  - As of `v0.1.0`, we will be requiring a valid package.json file to run the full indeps process. We require information about the `devDependencies` & `dependencies` that are defined in your `package.json` file, and `package-lock.json` does not give us any guaranteed indicators as to which package/package resolution points to a file the application defined as a dependency or development dependency.
+  - As of `v0.1.0`, we require a valid package.json file to run the indeps process. We require information about the `devDependencies` & `dependencies` that are defined in your `package.json` file, and certain lockfile formats do not provide sufficient indication as to which package/package resolution points to a package that the application defined as a dependency or development dependency. In the future, we may allow lockfile-only analysis, with a limited feature set compared to a full lockfile + `package.json` analysis.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -75,7 +80,7 @@ indeps can be installed locally or globally.
 
 To install indeps on a per-project basis:
 
-```zsh
+```bash
 npm i -D indeps@0.1.0
 # or
 yarn add -D indeps@0.1.0
@@ -83,7 +88,7 @@ yarn add -D indeps@0.1.0
 
 Alternatively, installing indeps globally allows you to run it easily on any of your local projects. To install globally, run:
 
-```zsh
+```bash
 npm i -g indeps@0.1.0
 # or
 yarn global add indeps@0.1.0
@@ -142,10 +147,15 @@ Although **indeps** was made primarily with CLI usage in mind, we also export so
 import fs from "fs";
 
 import {
+  /** Parses a string-representation of `package.json` to an indeps-compatible parsed object */
   parsePkg,
+  /** Parses a string-representation of a `yarn.lock` or `package-lock.json` file to an indeps-compatible parsed object */
   parseLock,
+  /** Generates a dependency graph based on the object returned from `parseLock` */
   createDependencyGraph,
+  /** Normalizes all data into a single object. */
   createDependencyData,
+  /** A function that creates an instance of the "Viewer", responsible for managing the local server that handles serving the indeps UI. */
   createViewer
 } from "indeps";
 
@@ -154,7 +164,7 @@ import {
   const pkgData = fs.readFileSync("/path/to/package.json", "utf8");
 
   // Parse raw data using `parsePkg`
-  const parsedPkg = parsePkg({
+  const pkg = parsePkg({
     data: pkgData
   });
 
@@ -165,18 +175,18 @@ import {
   );
 
   // Parse using `parseLock`
-  const parsedLock = parseLock({
+  const lock = parseLock({
     type: "yarn",
     data: lockData
   });
 
-  // create a DAG from the packages specified in the lockfile. This is used to determine the require path - or dependency tree - of a specific module specified in `yarn.lock` or `package-lock.json`.
+  // create a DAG from the packages specified in the lockfile. This is used to determine the require path - or dependency tree - of each module.
   const graph = createDependencyGraph(lock);
 
   // Normalize & hydrate all of the necessary data into a complete dependency list.
   const data = createDependencyData({
-    lock: parsedLock,
-    pkg: parsedPkg,
+    lock,
+    pkg,
     graph
   });
 
@@ -188,7 +198,7 @@ import {
     open: true
   });
 
-  // start the server. Returns the instance of the underlying HTTP server.
+  // start the server. Returns a node HTTP server instance (`node.httpServer`).
   const server = await viewer.startServer();
 })();
 ```
@@ -200,12 +210,13 @@ Current focus is CLI usage - the exported method will be expanded with more usab
 
 ## Roadmap
 
-| Status | Milestone                                              |
-| ------ | ------------------------------------------------------ |
-| 🚀     | **Implement NPM & Yarn V2 (berry) support**            |
-| 🚧     | **Improve dependency list UI**                         |
-| 🚧     | **Create dependency graph visualization capabilities** |
-| 🚧     | **Rewrite of method exports, plugin & theme support**  |
+| Status | Milestone                                                      |
+| ------ | -------------------------------------------------------------- |
+| 🚀     | **Implement NPM & Yarn V2 (berry) support**                    |
+| 🚧     | **Improve dependency list UI**                                 |
+| 🚧     | **Create dependency graph/treemap visualization capabilities** |
+| 🚧     | **Static site generation**                                     |
+| 🚧     | **Rewrite of method exports, plugin & theme support**          |
 
 See the [open issues](https://github.com/Ben-Kincaid/indeps/issues) for a full list of proposed features (and known issues).
 
