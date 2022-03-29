@@ -1,0 +1,36 @@
+{
+  "name": "depviz-t1",
+  "version": "1.0.0",
+  "lockfileVersion": 2,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "depviz-t1",
+      "version": "1.0.0",
+      "license": "ISC",
+      "dependencies": {
+        "rasha": "^1.2.0"
+      },
+      "devDependencies": {
+        "rasha": "^1.2.0"
+      }
+    },
+    "node_modules/rasha": {
+      "version": "1.2.5",
+      "resolved": "https://registry.npmjs.org/rasha/-/rasha-1.2.5.tgz",
+      "integrity": "sha512-KxtX+/fBk+wM7O3CNgwjSh5elwFilLvqWajhr6wFr2Hd63JnKTTi43Tw+Jb1hxJQWOwoya+NZWR2xztn3hCrTw==",
+      "dev": true,
+      "bin": {
+        "rasha": "bin/rasha.js"
+      }
+    }
+  },
+  "dependencies": {
+    "rasha": {
+      "version": "1.2.5",
+      "resolved": "https://registry.npmjs.org/rasha/-/rasha-1.2.5.tgz",
+      "integrity": "sha512-KxtX+/fBk+wM7O3CNgwjSh5elwFilLvqWajhr6wFr2Hd63JnKTTi43Tw+Jb1hxJQWOwoya+NZWR2xztn3hCrTw==",
+      "dev": true
+    }
+  }
+}

@@ -44,9 +44,12 @@ const sassLoader = {
   }
 };
 const isDev = process.env.NODE_ENV !== "production";
-const styleLoader = isDev ? "style-loader" : MiniCssExtractPlugin.loader;
+const styleLoader = isDev
+  ? "style-loader"
+  : MiniCssExtractPlugin.loader;
 
 const config = {
+  devtool: "inline-source-map",
   entry: path.resolve(__dirname, "./client/index.tsx"),
   module: {
     rules: [
@@ -72,16 +75,45 @@ const config = {
         test: /\.(sc|c)ss$/,
         exclude: ["/node_modules/", /\.module\.(sc|c)ss$/],
         use: [styleLoader, CSSLoader, postCSSLoader, sassLoader]
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        type: "asset/resource"
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: "@svgr/webpack",
+            options: {
+              exportType: "named"
+            }
+          }
+        ]
       }
     ]
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".scss"]
+    extensions: [".tsx", ".ts", ".js", ".scss"],
+    modules: [
+      path.resolve(__dirname, "node_modules"),
+      path.resolve(__dirname, "./")
+    ]
   },
   output: {
     path: path.resolve(__dirname, "public"),
     filename: "bundle.js"
   }
 };
+
+if (isDev) {
+  config.devServer = {
+    hot: true,
+    open: true,
+    proxy: {
+      "/": `http://127.0.0.1:8088`
+    }
+  };
+}
 
 module.exports = config;

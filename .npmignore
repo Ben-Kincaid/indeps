@@ -8,3 +8,6 @@ nodemon.json
 rollup.config.js
 webpack.config.js
 .husky
+
+# ignore built typedocs
+docs

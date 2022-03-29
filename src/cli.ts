@@ -1,66 +1,227 @@
 import path from "path";
 import fs from "fs";
-import startIndeps from "./api";
-import { LockType } from "./api/parsers";
-import logger from "./api/logger";
 
-// @FIX add logic for automatically detecting lock/package.json
-// and for arg overrides
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
-const argv = require("yargs")
+import createDependencyGraph from "src/utils/createDependencyGraph";
+import { IndepsError } from "src/error";
+import { parseLock, parsePkg, LockType } from "src/parsers";
+import createDependencyData from "src/utils/createDependencyData";
+import { createViewer } from "src/viewer";
+import fileExist from "src/utils/fileExists";
+import getLockTypeFromPath from "src/utils/getLockTypeFromPath";
+
+import { createLogger } from "./logger";
+
+/** Initialize interactive CLI tool */
+const argv = yargs(hideBin(process.argv))
   .scriptName("indeps")
-  .usage("Usage: $0 [options]")
-  .help("h")
-  .alias("h", "help")
-  .alias("f", "file")
-  .nargs("f", 1)
-  .describe(
-    "f",
-    "The yarn.lock to use for the visualization. Defaults to yarn.lock in current directory."
-  ).argv;
+  .option("lock", {
+    alias: "l",
+    type: "string",
+    description:
+      "Path to the yarn.lock to use for the visualization. Defaults to yarn.lock in current directory."
+  })
+  .option("pkg", {
+    type: "string",
+    description:
+      "Path to the package.json to use for the visualization. Defaults to package.json in current directory."
+  })
+  .option("port", {
+    alias: "p",
+    type: "number",
+    description: "The port used to serve the visualizer client."
+  })
+  .option("open", {
+    type: "boolean",
+    description: "Disable opening of browser on server start.",
+    default: true
+  })
+  .option("quiet", {
+    type: "boolean",
+    description:
+      "Disable all console output besides warnings & errors."
+  })
+  .parseSync();
 
-const checkIfExists = (filePath: string): boolean => {
-  const exists = fs.existsSync(filePath);
-
-  if (!exists) {
-    logger.log({
-      level: "critical",
-      msg: `No file found at: ${filePath}`
-    });
-    process.exit(1);
-  }
-
-  return true;
-};
-
-const getLockInfo = (): { path: string; type: LockType } => {
-  // handle if --f was passed
-  if (argv.f) {
-    if (argv.f[0] === "/") {
-      checkIfExists(argv.f);
-      return { path: argv.f, type: "yarn" };
+/** Get the lockfile information using the CWD context or CLI options */
+function getLockInfo(): { path: string; type: LockType } {
+  // handle if --l was passed
+  if (argv.lock) {
+    const expLockType = getLockTypeFromPath(argv.lock);
+    if (!expLockType) {
+      throw new IndepsError(
+        `"${argv.lock}" is not a valid lockfile. Please specify a yarn.lock or package-lock.json file.`
+      );
     }
-    const relativePath = path.join(process.cwd(), argv.f);
-    checkIfExists(relativePath);
+
+    if (argv.lock[0] === "/") {
+      const exists = fileExist(argv.lock);
+
+      if (!exists) {
+        throw new IndepsError(`No file found at: ${argv.lock}`);
+      }
+
+      return { path: argv.lock, type: expLockType };
+    }
+    const relativePath = path.join(process.cwd(), argv.lock);
+    const exists = fileExist(relativePath);
+
+    if (!exists) {
+      throw new IndepsError(`No file found at: ${relativePath}`);
+    }
 
     return {
       path: relativePath,
-      type: "yarn"
+      type: expLockType
     };
   }
 
   // handle auto-detection
   const autoPath = path.join(process.cwd(), "./yarn.lock");
-  checkIfExists(autoPath);
+
+  const autoYarnExists = fileExist(autoPath);
+
+  if (!autoYarnExists) {
+    const autoPkgPath = path.join(
+      process.cwd(),
+      "./package-lock.json"
+    );
+    const autoPkgExists = fileExist(autoPkgPath);
+
+    if (autoPkgExists) return { type: "npm", path: autoPkgPath };
+
+    throw new IndepsError(
+      "No lockfile could be found automatically in your current working directory, and there was no `--l` flag passed. Please use indeps in a project directory with a valid lockfile & package.json, or explicitly specify the files with `--l` and `--pkg`."
+    );
+  }
 
   return {
     path: autoPath,
     type: "yarn"
   };
-};
+}
 
-const lock = getLockInfo();
+/** Get the package.json information using the CWD context or CLI options */
+function getPkgInfo(): { path: string } {
+  if (argv.pkg) {
+    if (argv.pkg[0] === "/") {
+      const exists = fileExist(argv.pkg);
+      if (!exists) {
+        throw new IndepsError(`No file found at: ${argv.lock}`);
+      }
+      return { path: argv.pkg };
+    }
+    const relativePath = path.join(process.cwd(), "./package.json");
+    const exists = fileExist(relativePath);
+    if (!exists) {
+      throw new IndepsError(`No file found at: ${argv.lock}`);
+    }
+    return {
+      path: relativePath
+    };
+  }
 
-startIndeps({
-  lock: lock
-});
+  const autoPath = path.join(process.cwd(), "./package.json");
+  const exists = fileExist(autoPath);
+  if (!exists) {
+    throw new IndepsError(`No file found at: ${argv.lock}`);
+  }
+
+  return {
+    path: autoPath
+  };
+}
+
+/** Start the indeps processes */
+(async (args) => {
+  // get CLI options
+  const { open, port = 8088, quiet } = args;
+
+  // create CLI logger
+  const logger = createLogger({
+    level: quiet ? "warn" : "info"
+  });
+
+  // add notices for disabling-oriented flags
+  if (open === false) {
+    logger.warn("Browser open disabled.");
+  }
+
+  try {
+    let pkgRaw: string;
+    let lockRaw: string;
+
+    // get lockfile info
+    const lock = getLockInfo();
+
+    // get package.json info
+    const pkg = getPkgInfo();
+
+    // get package.json raw data
+    try {
+      pkgRaw = fs.readFileSync(pkg.path, "utf8");
+    } catch (error) {
+      throw new IndepsError(
+        `There was an error reading your package.json file at: ${pkg.path} \n\n Does this file exist?\n\n${error}`
+      );
+    }
+
+    // get lockfile raw data
+    try {
+      lockRaw = fs.readFileSync(lock.path, "utf8");
+    } catch (error) {
+      throw new IndepsError(
+        `There was an error reading your lockfile file at: ${lock.path} \n\n Does this file exist?\n\n${error}`
+      );
+    }
+
+    // parse package.json raw data
+    logger.info("🔍 Parsing your package.json file...");
+    const pkgParsed = parsePkg({ data: pkgRaw });
+
+    // parse lockfile raw data
+    logger.info("🔍 Parsing your lockfile...");
+    const lockParsed = parseLock(
+      { data: lockRaw, type: lock.type },
+      pkgParsed
+    );
+
+    // create DAG from parsed lockfile data
+    logger.info("🔍 Creating your dependency graph...");
+    const lockGraph = createDependencyGraph(lockParsed);
+
+    // normalize & hydrate parsed lockfile data w/ dependency path data && package.json data
+    logger.info("🔍 Finalizing your dependency data...");
+    const dependencyData = createDependencyData({
+      lock: lockParsed,
+      pkg: pkgParsed,
+      graph: lockGraph
+    });
+
+    // create a new Viewer
+    const viewer = createViewer({
+      data: dependencyData,
+      open,
+      packageName: pkgParsed.name,
+      port
+    });
+
+    // start viewer with normalized data
+    await viewer.startServer();
+
+    logger.info(`🏃 Server started.`);
+    logger.info(
+      `🏃 Running at: \x1b[1mhttp://127.0.0.1:${port}\x1b[0m`
+    );
+  } catch (error) {
+    if (error instanceof IndepsError) {
+      logger.error(error.message);
+    } else if (error instanceof Error) {
+      logger.error(error.message);
+    } else {
+      logger.error(error);
+    }
+  }
+})(argv);

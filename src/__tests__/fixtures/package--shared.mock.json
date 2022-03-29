@@ -1,0 +1,16 @@
+{
+  "name": "depviz-t1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "path-to-regexp": "1.2.1 < 1.2.2",
+    "renux": "^1.0.10",
+    "urly": "^0.0.4"
+  }
+}

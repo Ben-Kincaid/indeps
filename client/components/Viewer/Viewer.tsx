@@ -1,12 +1,21 @@
-import React, { useEffect } from "react";
-import useData from "../../hooks/useData";
+import React from "react";
+
+import { Redirect, Route, Switch } from "react-router-dom";
+
+import ListViewer from "client/components/ListViewer";
+import GraphViewer from "client/components/GraphViewer";
+
 import styles from "./Viewer.module.scss";
 
 const Viewer = () => {
-  const data = useData();
-
   return (
-    <pre className={styles.viewerPre}>{JSON.stringify(data, null, "\t")}</pre>
+    <main className={styles.main}>
+      <Switch>
+        <Route path="/graph" component={GraphViewer} />
+        <Route path="/list" component={ListViewer} />
+        <Route render={() => <Redirect to="/list" />} />
+      </Switch>
+    </main>
   );
 };
 

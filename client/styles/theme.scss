@@ -1,0 +1,19 @@
+@import "./mixins";
+
+$primary: #1c4b9e;
+
+$screen-sm: 500px;
+$screen-md: 768px;
+$screen-lg: 1100px;
+$screen-xl: 1275px;
+
+$zIndexNav: 300;
+
+$black: #2d2d2d;
+$yellow: #a2a426;
+$green: #26a441;
+$gray-500: #595959;
+$gray-400: lighten($gray-500, 10%);
+$gray-300: lighten($gray-500, 20%);
+$gray-200: lighten($gray-500, 40%);
+$gray-100: lighten($gray-500, 52%);

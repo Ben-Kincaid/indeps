@@ -1,5 +1,6 @@
 import typescript from "@rollup/plugin-typescript";
 import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 const env = process.env.PKG_ENV || "dev";
@@ -11,10 +12,18 @@ export default [
       dir: "lib",
       format: "cjs",
       sourcemap: env !== "prod",
-      exports: "default",
+      exports: "named",
       name: "main.ts"
     },
-    plugins: [typescript(), commonjs(), nodeResolve()]
+    plugins: [
+      typescript({
+        sourceMap: env !== "prod",
+        include: ["./src/**/*"]
+      }),
+      json(),
+      commonjs(),
+      nodeResolve()
+    ]
   },
   {
     input: `src/cli.ts`,
@@ -26,6 +35,14 @@ export default [
       exports: "none",
       name: "main.ts"
     },
-    plugins: [typescript(), commonjs(), nodeResolve()]
+    plugins: [
+      typescript({
+        sourceMap: env !== "prod",
+        include: ["./src/**/*"]
+      }),
+      json(),
+      commonjs(),
+      nodeResolve()
+    ]
   }
 ];

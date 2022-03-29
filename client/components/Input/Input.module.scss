@@ -1,0 +1,38 @@
+@import "styles/theme.scss";
+
+.container {
+  outline: 1px solid transparent;
+  transition: 0.1s ease-out outline;
+}
+
+.containerFocused {
+  outline: 1px solid $primary;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+.inputStartAdornment {
+  display: block;
+  height: 25px;
+  padding-right: 0.5rem;
+}
+
+.input {
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  &:focus {
+    border: none;
+    outline: none;
+  }
+}
+
+.inputFullWidth {
+  width: 100%;
+}
