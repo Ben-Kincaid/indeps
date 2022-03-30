@@ -1,11 +1,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Ben-Kincaid/indeps">
-    <img src="docs/assets/logo.svg" alt="indeps" width="400" height="216.75">
-  </a>
 
-<h3 align="center">indeps</h3>
+  <h2 align="center"><strong>indeps</strong></h2>
 
   <p align="center">
     🔍 Visualize the dependencies & sub-dependencies in your Javascript application.
@@ -76,7 +73,7 @@ On the surface, **indeps** simply parses both your lockfile (either `yarn.lock` 
 
 ### Installation
 
-indeps can be installed locally or globally.
+**indeps** can be installed locally or globally.
 
 To install indeps on a per-project basis:
 
@@ -102,7 +99,7 @@ yarn global add indeps@0.1.0
 
 ### As a CLI utility
 
-indeps can be used a CLI utility to visualize the dependencies defined within any `yarn.lock` file - even if it is not inside a specific project.
+**indeps** can be used a CLI utility to visualize the dependencies defined within any `yarn.lock` file - even if it is not inside a specific project.
 
 If the package was installed globally, you can simply run **indeps** within any project directory with a valid lockfile & `package.json` file. Alternatively, you can specify the files you want to be used for the visualization through the `--lock`(`-l`) and `--pkg` flags:
 
@@ -129,7 +126,7 @@ The port used to serve the local **indeps** client. Defaults to `8088`.
 
 #### `--open`/`-o`
 
-If the indeps process should automatically open the client in a browser if one is available on the host machine. Defaults to `true`.
+Automatically open the client in a browser if one is available on the host machine on server start. Defaults to `true`.
 
 You may also use `--no-open` as an alias for `--open false`
 
