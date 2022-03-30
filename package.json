@@ -29,6 +29,7 @@
     "node:lint": "eslint ./src/* -c ./src/.eslintrc.json  --no-error-on-unmatched-pattern",
     "node:lint:fix": "yarn node:lint --fix",
     "prepare": "husky install",
+    "prepublish": "yarn build",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --ignore-unknown --write",
     "start": "node lib/cli.js",
