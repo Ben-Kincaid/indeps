@@ -226,6 +226,6 @@ See the [open issues](https://github.com/Ben-Kincaid/indeps/issues) for a full l
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE.txt`.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
