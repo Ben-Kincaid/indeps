@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Ben-Kincaid/indeps">
-    <img src="docs/assets/logo.svg" alt="indeps" width="253" height="68">
+    <img src="docs/assets/logo.svg" alt="indeps" width="400" height="216.75">
   </a>
 
 <h3 align="center">indeps</h3>
