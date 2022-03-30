@@ -17,5 +17,8 @@ public/**/*
 # Ignore generated jest files.
 coverage
 
+# Ignore built typedocs (will be reinstated once finalized)
+docs
+
 # cuz Macos.
 .DS_STORE
