@@ -200,7 +200,7 @@ import {
 })();
 ```
 
-Current focus is CLI usage - the exported method will be expanded with more usable options and defaults as we get closer `v1.0.0`.
+Current focus is CLI usage - the exported methods will be expanded to be more usable & extendable as we reach closer to `v1.0.0`.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 <!-- ROADMAP -->
