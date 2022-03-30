@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="507px" height="135px" viewBox="0 0 507 135" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Main Logosvg</title>
-    <g id="Main-Logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="logo" transform="translate(-30.175505, -13.530366)" fill="#7E90B6" fill-rule="nonzero">
-            <path d="M62.0000015,12.4442806 C83.8494382,12.4442806 101.561906,30.1187726 101.561906,51.9213634 C101.561906,72.5926685 85.639868,89.5531554 65.3658402,91.2575819 L65.543041,119.016144 C65.5550452,120.901807 63.9306436,122.439592 61.9147714,122.450946 C59.9330667,122.461983 58.3107613,120.993765 58.2448695,119.152594 L58.2428555,119.057034 L58.0646356,91.2055848 C38.0627477,89.2345523 22.4380968,72.3987121 22.4380968,51.9213634 C22.4380968,30.1187726 40.1505649,12.4442806 62.0000015,12.4442806 Z M62.0000015,19.9637249 C44.3123623,19.9637249 29.9736977,34.271647 29.9736977,51.9213634 C29.9736977,69.5710798 44.3123623,83.8790019 62.0000015,83.8790019 C79.6876408,83.8790019 94.0263054,69.5710798 94.0263054,51.9213634 C94.0263054,34.271647 79.6876408,19.9637249 62.0000015,19.9637249 Z" id="Combined-Shape" transform="translate(62.000002, 67.447644) rotate(-330.000000) translate(-62.000002, -67.447644) "></path>
+<svg width="658px" height="246px" viewBox="0 0 658 246" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Main Logo w/ BGsvg</title>
+    <defs>
+        <rect id="path-1" x="23" y="26" width="612" height="194" rx="9"></rect>
+        <filter x="-7.4%" y="-23.2%" width="114.7%" height="146.4%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="15" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.494117647   0 0 0 0 0.564705882   0 0 0 0 0.71372549  0 0 0 0.216113964 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Main-Logo-w/-BG" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Rectangle">
+            <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+            <use fill="#ECF0F4" fill-rule="evenodd" xlink:href="#path-1"></use>
+        </g>
+        <g id="logo" transform="translate(41.061200, 55.502016)" fill="#7E90B6" fill-rule="nonzero">
+            <path d="M61.7632963,12.411899 C83.612733,12.411899 101.325201,30.086391 101.325201,51.8889818 C101.325201,72.5602868 85.4031628,89.5207738 65.129135,91.2252003 L65.3063358,118.983763 C65.31834,120.869425 63.6939384,122.40721 61.6780662,122.418564 C59.6963614,122.429602 58.0740561,120.961383 58.0081643,119.120212 L58.0061502,119.024652 L57.8279304,91.1732032 C37.8260425,89.2021707 22.2013916,72.3663305 22.2013916,51.8889818 C22.2013916,30.086391 39.9138597,12.411899 61.7632963,12.411899 Z M61.7632963,19.9313433 C44.0756571,19.9313433 29.7369925,34.2392654 29.7369925,51.8889818 C29.7369925,69.5386982 44.0756571,83.8466203 61.7632963,83.8466203 C79.4509356,83.8466203 93.7896002,69.5386982 93.7896002,51.8889818 C93.7896002,34.2392654 79.4509356,19.9313433 61.7632963,19.9313433 Z" id="Combined-Shape" transform="translate(61.763296, 67.415263) rotate(-330.000000) translate(-61.763296, -67.415263) "></path>
         </g>
         <text id="Indeps" font-family="OpenSansRoman-SemiBold, Open Sans" font-size="135" font-weight="500" letter-spacing="-2.5" fill="#252525">
-            <tspan x="86" y="103">Indeps</tspan>
+            <tspan x="157" y="172">Indeps</tspan>
         </text>
     </g>
 </svg>
